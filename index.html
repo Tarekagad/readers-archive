@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Reader's Archive</title>
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inconsolata:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#1c1a17;--sepia:#f5f0e8;--gold:#b8893a;--rust:#8b4a2a;--faded:#9a9080;--line:#ddd5c0;--paper:#faf7f0;--margin:#f0ebe0;--green:#4a7c59}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--sepia);color:var(--ink);font-family:'Cormorant Garamond',Georgia,serif;font-size:17px;line-height:1.7;min-height:100vh}
+nav{background:var(--ink);color:var(--sepia);display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:52px;position:sticky;top:0;z-index:100}
+.brand{font-family:'IM Fell English',serif;font-size:15px;opacity:.9}
+.tabs{display:flex;height:100%}
+.tab-btn{background:none;border:none;color:rgba(245,240,232,.5);font-family:'Inconsolata',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;padding:0 1.2rem;height:100%;border-bottom:2px solid transparent;transition:all .2s}
+.tab-btn:hover{color:var(--sepia)}.tab-btn.active{color:var(--gold);border-bottom-color:var(--gold)}
+.nav-st{font-family:'Inconsolata',monospace;font-size:10px;opacity:.5;font-style:italic}
+.nav-st.saving{opacity:1;color:var(--gold)}.nav-st.saved{opacity:1;color:#7abf8e}.nav-st.err{opacity:1;color:#e07060}
+.shell{display:grid;grid-template-columns:210px 1fr;min-height:calc(100vh - 52px)}
+.sidebar{background:var(--margin);border-right:1px solid var(--line);padding:1.8rem 1rem;position:sticky;top:52px;height:calc(100vh - 52px);overflow-y:auto}
+.sidebar h3{font-family:'Inconsolata',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--faded);margin-bottom:1rem}
+.book-item{padding:.6rem .8rem;border-radius:4px;cursor:pointer;margin-bottom:.25rem;transition:background .15s;border-left:3px solid transparent}
+.book-item:hover{background:var(--line)}.book-item.active{background:var(--paper);border-left-color:var(--gold)}
+.b-num{font-family:'Inconsolata',monospace;font-size:10px;color:var(--faded)}
+.b-title{font-family:'IM Fell English',serif;font-size:13px;font-style:italic;line-height:1.3;margin-top:2px}
+.b-author{font-size:11px;color:var(--faded);margin-top:1px}
+.add-book-btn{width:100%;margin-top:1rem;padding:.5rem;background:none;border:1px dashed var(--line);border-radius:4px;color:var(--faded);font-family:'Inconsolata',monospace;font-size:11px;cursor:pointer;transition:all .2s}
+.add-book-btn:hover{border-color:var(--gold);color:var(--gold)}
+.content{background:var(--paper);overflow-y:auto}
+.view{display:none}.view.active{display:block}
+.book-header{padding:2.5rem 3.5rem 1.8rem;border-bottom:1px solid var(--line);background:linear-gradient(to bottom,var(--sepia),var(--paper))}
+.book-label{font-family:'Inconsolata',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.4rem}
+.book-header h1{font-family:'IM Fell English',serif;font-size:2.2rem;font-style:italic;line-height:1.2}
+.author-line{margin-top:.3rem;font-size:.95rem;color:var(--faded);font-style:italic}
+.meta-row{margin-top:1rem;display:flex;gap:1.2rem;align-items:center;font-family:'Inconsolata',monospace;font-size:11px;color:var(--faded);flex-wrap:wrap}
+.hdr-btn{background:none;border:1px solid var(--line);border-radius:3px;padding:.3rem .9rem;font-family:'Inconsolata',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--faded);cursor:pointer;transition:all .2s}
+.hdr-btn:hover{border-color:var(--gold);color:var(--gold)}
+.sec-tabs{display:flex;padding:0 3.5rem;border-bottom:1px solid var(--line);background:var(--paper)}
+.sec-tab{background:none;border:none;border-bottom:2px solid transparent;padding:.9rem 1.2rem;font-family:'Inconsolata',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--faded);cursor:pointer;transition:all .2s;margin-bottom:-1px}
+.sec-tab:hover{color:var(--ink)}.sec-tab.active{color:var(--ink);border-bottom-color:var(--ink)}
+.sec-content{padding:2rem 3.5rem}
+.entry{margin-bottom:2rem;padding-bottom:2rem;border-bottom:1px solid var(--line);animation:fi .3s ease}
+.entry:last-child{border-bottom:none}
+@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1}}
+.entry-time{font-family:'Inconsolata',monospace;font-size:10px;color:var(--faded);letter-spacing:.1em;margin-bottom:.4rem}
+.entry-quote{border-left:2px solid var(--gold);padding-left:1.1rem;font-style:italic;color:#3a3530;font-size:.97rem;line-height:1.7;margin-bottom:.5rem}
+.entry-resp{padding-left:1.1rem;font-weight:600;font-size:.97rem;line-height:1.7}
+.entry-act{padding-left:1.1rem;margin-top:.4rem}
+.entry-act button{background:none;border:none;font-family:'Inconsolata',monospace;font-size:10px;letter-spacing:.08em;color:var(--faded);cursor:pointer;text-transform:uppercase}
+.entry-act button:hover{color:var(--rust)}
+.theme-card{margin-bottom:1.3rem;padding:1.2rem 1.4rem;background:var(--sepia);border-radius:4px;border-left:3px solid var(--gold);position:relative}
+.theme-card h3{font-family:'IM Fell English',serif;font-size:1.05rem;color:var(--rust);margin-bottom:.4rem;font-style:italic}
+.theme-card p{font-size:.93rem;color:#4a4540;line-height:1.75}
+.del-t{position:absolute;top:.7rem;right:.7rem;background:none;border:none;font-size:12px;color:var(--faded);cursor:pointer;opacity:.4}
+.del-t:hover{opacity:1;color:var(--rust)}
+.themes-top{margin-bottom:1.3rem;display:flex;gap:1rem;align-items:center;flex-wrap:wrap}
+.gen-btn{background:var(--ink);color:var(--sepia);border:none;padding:.6rem 1.3rem;font-family:'IM Fell English',serif;font-size:14px;font-style:italic;cursor:pointer;border-radius:3px;transition:background .2s}
+.gen-btn:hover{background:#4a7c59}.gen-btn:disabled{opacity:.5;cursor:not-allowed}
+.gen-note{font-family:'Inconsolata',monospace;font-size:10px;color:var(--faded)}
+.ctx-block{max-width:660px;font-size:.97rem;line-height:1.85;color:#3a3530}
+.ctx-block p{margin-bottom:1.1rem}
+.ctx-block blockquote{border-left:2px solid var(--line);padding-left:1.1rem;font-style:italic;color:var(--faded);margin:1rem 0}
+.add-shell{padding:2.5rem 3.5rem;max-width:780px}
+.add-shell h2{font-family:'IM Fell English',serif;font-size:1.5rem;font-style:italic;margin-bottom:.3rem}
+.add-shell .sub{font-size:.9rem;color:var(--faded);font-style:italic;margin-bottom:1.8rem}
+.drop-zone{border:2px dashed var(--line);border-radius:8px;padding:2.2rem;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:1.3rem;position:relative;background:var(--sepia)}
+.drop-zone:hover,.drop-zone.dragover{border-color:var(--gold);background:#f8f2e4}
+.drop-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.dz-icon{font-size:2rem;margin-bottom:.7rem;opacity:.5}
+.dz-title{font-family:'IM Fell English',serif;font-size:1.1rem;font-style:italic;margin-bottom:.3rem}
+.dz-hint{font-family:'Inconsolata',monospace;font-size:11px;color:var(--faded)}
+.dz-hint em{color:var(--gold);font-style:normal}
+.ss-prev{display:none;border:1px solid var(--line);border-radius:6px;overflow:hidden;margin-bottom:1.3rem;background:white}
+.ss-prev.vis{display:flex;align-items:flex-start}
+.ss-prev img{width:120px;object-fit:cover;border-right:1px solid var(--line);flex-shrink:0}
+.prev-info{padding:.9rem 1.1rem;flex:1}
+.pi-lbl{font-family:'Inconsolata',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--faded);margin-bottom:.3rem}
+.pi-st{font-size:.92rem;font-style:italic;color:var(--ink)}
+.pi-st.reading{color:var(--gold)}.pi-st.done{color:var(--green)}.pi-st.error{color:var(--rust)}
+.prev-clr{margin-top:.7rem;display:block;background:none;border:none;font-family:'Inconsolata',monospace;font-size:10px;text-transform:uppercase;color:var(--faded);cursor:pointer}
+.prev-clr:hover{color:var(--rust)}
+.or-div{display:flex;align-items:center;gap:1rem;margin:1.3rem 0;color:var(--faded);font-family:'Inconsolata',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+.or-div::before,.or-div::after{content:'';flex:1;height:1px;background:var(--line)}
+.form-row{margin-bottom:1.2rem}
+.form-row label{display:block;font-family:'Inconsolata',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--faded);margin-bottom:.4rem}
+.form-row input,.form-row textarea,.form-row select{width:100%;background:white;border:1px solid var(--line);border-radius:3px;padding:.7rem .9rem;font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--ink);transition:border-color .2s;outline:none;resize:vertical}
+.form-row input:focus,.form-row textarea:focus,.form-row select:focus{border-color:var(--gold)}
+.form-row textarea{min-height:80px}
+.form-hint{font-family:'Inconsolata',monospace;font-size:10px;color:var(--faded);margin-top:.25rem}
+.form-acts{display:flex;gap:.9rem;align-items:center;margin-top:.4rem}
+.save-btn{background:var(--ink);color:var(--sepia);border:none;padding:.75rem 2rem;font-family:'IM Fell English',serif;font-size:15px;font-style:italic;cursor:pointer;border-radius:3px;transition:background .2s}
+.save-btn:hover{background:var(--rust)}
+.clr-btn{background:none;border:none;font-family:'Inconsolata',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--faded);cursor:pointer}
+.clr-btn:hover{color:var(--rust)}
+.empty{text-align:center;padding:3rem 2rem;color:var(--faded);font-style:italic}
+.tw{position:fixed;inset:0;background:var(--sepia);z-index:500;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1.1rem;padding:2rem;text-align:center}
+.tw h2{font-family:'IM Fell English',serif;font-size:1.8rem;font-style:italic}
+.tw p{font-size:.93rem;color:var(--faded);max-width:400px;line-height:1.7}
+.tw input{width:100%;max-width:400px;padding:.75rem 1rem;border:1px solid var(--line);border-radius:4px;font-family:'Inconsolata',monospace;font-size:13px;outline:none;background:white}
+.tw input:focus{border-color:var(--gold)}
+.tw button{background:var(--ink);color:var(--sepia);border:none;padding:.75rem 2rem;font-family:'IM Fell English',serif;font-size:15px;font-style:italic;cursor:pointer;border-radius:3px}
+.tw button:hover{background:var(--rust)}
+.tw-note{font-family:'Inconsolata',monospace;font-size:10px;color:var(--faded);max-width:400px}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(28,26,23,.6);z-index:200;align-items:center;justify-content:center}
+.modal-bg.open{display:flex}
+.modal{background:var(--paper);border-radius:6px;padding:1.8rem 2.2rem;width:460px;max-width:95vw;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.modal h3{font-family:'IM Fell English',serif;font-size:1.25rem;font-style:italic;margin-bottom:1.2rem}
+.modal-acts{display:flex;gap:.7rem;justify-content:flex-end;margin-top:1.2rem}
+.modal-acts button{padding:.55rem 1.3rem;border-radius:3px;font-family:'Cormorant Garamond',serif;font-size:15px;cursor:pointer;border:1px solid var(--line);background:var(--sepia);color:var(--ink)}
+.modal-acts .pri{background:var(--ink);color:var(--sepia);border-color:var(--ink)}
+.modal-acts .pri:hover{background:var(--rust);border-color:var(--rust)}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px}
+#pf{display:none}
+@media print{
+*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+body>nav,body>.shell,.tw{display:none!important}
+#pf{display:block!important;font-family:'Cormorant Garamond',Georgia,serif;color:#1c1a17;background:white;max-width:620px;margin:0 auto;padding:0 2.5rem}
+.pfc{text-align:center;padding:5rem 2rem 3.5rem;page-break-after:always}
+.pfs{font-family:'Inconsolata',monospace;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:#b8893a;margin-bottom:1.3rem}
+.pft{font-family:'IM Fell English',serif;font-size:2.4rem;font-style:italic;line-height:1.2;margin-bottom:.4rem;color:#1c1a17}
+.pfa{font-size:1rem;color:#666;font-style:italic;margin-bottom:.4rem}
+.pfy{font-family:'Inconsolata',monospace;font-size:9px;color:#aaa;letter-spacing:.08em;margin-bottom:2.5rem}
+.pfr{border:none;border-top:1px solid #ddd5c0;margin:1.8rem auto;width:50px}
+.pfe{font-style:italic;color:#555;font-size:.93rem;line-height:1.85;max-width:380px;margin:0 auto}
+.pfea{font-family:'Inconsolata',monospace;font-size:9px;color:#aaa;letter-spacing:.08em;margin-top:.7rem;text-transform:uppercase}
+.pfsec{padding:2.5rem 0;page-break-inside:avoid}
+.pfst{font-family:'IM Fell English',serif;font-size:1.25rem;color:#1c1a17;padding-bottom:.4rem;border-bottom:1px solid #b8893a;margin-bottom:.4rem}
+.pfsi{font-style:italic;font-size:.87rem;color:#888;margin-bottom:1.8rem}
+.pfen{margin-bottom:1.8rem;padding-bottom:1.8rem;border-bottom:1px solid #eee;page-break-inside:avoid}
+.pfen:last-child{border-bottom:none}
+.pfet{font-family:'Inconsolata',monospace;font-size:8.5px;color:#aaa;letter-spacing:.1em;margin-bottom:.35rem}
+.pfeq{border-left:2px solid #b8893a;padding-left:.9rem;font-style:italic;color:#3a3530;font-size:.9rem;line-height:1.75;margin-bottom:.4rem}
+.pfer{padding-left:.9rem;font-weight:600;font-size:.9rem;line-height:1.75}
+.pfth{margin-bottom:1.2rem;padding:.85rem 1rem;border-left:3px solid #b8893a;background:#faf7f0;page-break-inside:avoid}
+.pftt{font-family:'IM Fell English',serif;font-style:italic;color:#8b4a2a;font-size:.97rem;margin-bottom:.25rem}
+.pftb{font-size:.87rem;color:#4a4540;line-height:1.75}
+.pfctx{font-size:.9rem;line-height:1.85;color:#3a3530}
+.pfctx p{margin-bottom:.9rem}
+.pfco{text-align:center;padding:1.8rem;font-family:'Inconsolata',monospace;font-size:8px;color:#ccc;letter-spacing:.08em;text-transform:uppercase;border-top:1px solid #eee;margin-top:1.8rem}
+}
+</style>
+</head>
+<body>
+<div class="tw" id="tw" style="display:none">
+  <h2>A Reader&rsquo;s Archive</h2>
+  <p>Enter your GitHub token to open your archive. It stays in your browser only.</p>
+  <input type="password" id="tok" placeholder="ghp_...">
+  <button onclick="saveTok()">Open Archive</button>
+  <div class="tw-note">Stored locally in this browser. Never shared.</div>
+</div>
+<nav>
+  <div class="brand">A Reader&rsquo;s Archive</div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="sv('archive',this)">Archive</button>
+    <button class="tab-btn" onclick="sv('add',this)">+ Add Note</button>
+  </div>
+  <div class="nav-st" id="nst">&mdash;</div>
+</nav>
+<div class="shell">
+  <aside class="sidebar">
+    <h3>Books</h3>
+    <div id="blist"></div>
+    <button class="add-book-btn" onclick="openModal()">+ New Book</button>
+  </aside>
+  <main class="content">
+    <div id="view-archive" class="view active">
+      <div class="book-header">
+        <div class="book-label" id="hl"></div>
+        <h1 id="ht"></h1>
+        <div class="author-line" id="ha"></div>
+        <div class="meta-row">
+          <span id="hy"></span><span id="hc"></span>
+          <button class="hdr-btn" onclick="exportBook()">Export PDF</button>
+        </div>
+      </div>
+      <div class="sec-tabs">
+        <button class="sec-tab active" onclick="ss('log',this)">Verbatim Log</button>
+        <button class="sec-tab" onclick="ss('themes',this)">My Reflections</button>
+        <button class="sec-tab" onclick="ss('context',this)">Context</button>
+      </div>
+      <div class="sec-content">
+        <div id="sec-log"></div>
+        <div id="sec-themes" style="display:none"></div>
+        <div id="sec-context" style="display:none"></div>
+      </div>
+    </div>
+    <div id="view-add" class="view">
+      <div class="add-shell">
+        <h2>Add a Reading Note</h2>
+        <p class="sub">Drop a screenshot &mdash; Claude reads it. Or type below.</p>
+        <div class="drop-zone" id="dz" ondragover="dov(event)" ondragleave="dlv()" ondrop="ddr(event)">
+          <input type="file" accept="image/*" onchange="dfs(event)">
+          <div class="dz-icon">&#128247;</div>
+          <div class="dz-title">Drop, tap, or paste a screenshot</div>
+          <div class="dz-hint">Reads Apple Notes screenshots &nbsp;<em>Cmd+V</em> to paste</div>
+        </div>
+        <div class="ss-prev" id="ssp">
+          <img id="ssi" src="" alt="">
+          <div class="prev-info">
+            <div class="pi-lbl">Screenshot</div>
+            <div class="pi-st" id="pist">Ready</div>
+            <button class="prev-clr" onclick="clrSS()">&#215; Remove</button>
+          </div>
+        </div>
+        <div class="or-div">or type manually</div>
+        <div class="form-row"><label>Book</label><select id="nb"></select></div>
+        <div class="form-row"><label>Time / page <span style="opacity:.5;font-size:9px">(optional)</span></label><input type="text" id="nt" placeholder="e.g. 11:42 AM"></div>
+        <div class="form-row"><label>Passage from the book</label><textarea id="nq" rows="3" placeholder="The line that stopped you..."></textarea></div>
+        <div class="form-row"><label>Your response</label><textarea id="nr" rows="4" placeholder="Your words, unfiltered..."></textarea><div class="form-hint">Preserved verbatim.</div></div>
+        <div class="form-acts">
+          <button class="save-btn" onclick="submitNote()">Save to Archive</button>
+          <button class="clr-btn" onclick="clrAll()">Clear</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<div id="pf"></div>
+<div class="modal-bg" id="mbg" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <h3>Add a New Book</h3>
+    <div class="form-row"><label>Title</label><input type="text" id="nt2" placeholder="e.g. The Heart's Invisible Furies"></div>
+    <div class="form-row"><label>Author</label><input type="text" id="na2" placeholder="e.g. John Boyne"></div>
+    <div class="form-row"><label>Year Read</label><input type="text" id="ny2" placeholder="e.g. 2025"></div>
+    <div class="form-row"><label>Why this book? <span style="opacity:.5;font-size:9px">(optional)</span></label><textarea id="nc2" rows="2" placeholder="What brought you to it..."></textarea></div>
+    <div class="modal-acts">
+      <button onclick="closeModal()">Cancel</button>
+      <button class="pri" onclick="addBook()">Add Book</button>
+    </div>
+  </div>
+</div>
+<script>
+const GH={o:'Tarekgad',r:'readers-archive',p:'archive.json'};
+let tok=null,sha=null,D={activeBook:null,activeSection:'log',books:[]};
+
+function getTok(){return localStorage.getItem('ra_tok')||null}
+function saveTok(){const t=document.getElementById('tok').value.trim();if(!t){alert('Please enter your token.');return}localStorage.setItem('ra_tok',t);tok=t;document.getElementById('tw').style.display='none';load()}
+
+function nst(m,c=''){const e=document.getElementById('nst');e.textContent=m;e.className='nav-st '+c}
+
+async function load(){
+  nst('Loading...','saving');
+  try{
+    const r=await fetch('https://api.github.com/repos/'+GH.o+'/'+GH.r+'/contents/'+GH.p,{headers:{Authorization:'token '+tok,Accept:'application/vnd.github.v3+json'}});
+    if(r.status===401){localStorage.removeItem('ra_tok');location.reload();return}
+    if(r.status===404){nst('No archive.json found','err');return}
+    const d=await r.json();sha=d.sha;
+    D=JSON.parse(atob(d.content.replace(/\n/g,'')));
+    if(!D.activeBook&&D.books.length)D.activeBook=D.books[0].id;
+    nst('Loaded','saved');setTimeout(()=>nst('&mdash;'),2000);
+    renderAll();
+  }catch(e){nst('Load failed','err')}
+}
+
+async function save(){
+  nst('Saving...','saving');
+  try{
+    const c=btoa(unescape(encodeURIComponent(JSON.stringify(D,null,2))));
+    const r=await fetch('https://api.github.com/repos/'+GH.o+'/'+GH.r+'/contents/'+GH.p,{method:'PUT',headers:{Authorization:'token '+tok,Accept:'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify({message:'Archive update '+new Date().toISOString(),content:c,sha:sha})});
+    const d=await r.json();sha=d.content?.sha;
+    nst('Saved','saved');setTimeout(()=>nst('&mdash;'),2500);
+  }catch(e){nst('Save failed','err')}
+}
+
+let ib64=null,im='image/jpeg';
+function dov(e){e.preventDefault();document.getElementById('dz').classList.add('dragover')}
+function dlv(){document.getElementById('dz').classList.remove('dragover')}
+function ddr(e){e.preventDefault();dlv();const f=e.dataTransfer.files[0];if(f&&f.type.startsWith('image/'))loadImg(f)}
+function dfs(e){const f=e.target.files[0];if(f)loadImg(f)}
+document.addEventListener('paste',e=>{
+  if(!document.getElementById('view-add').classList.contains('active'))return;
+  for(const i of(e.clipboardData?.items||[])){if(i.type.startsWith('image/')){loadImg(i.getAsFile());break}}
+});
+function loadImg(f){
+  im=f.type||'image/jpeg';
+  const r=new FileReader();
+  r.onload=e=>{ib64=e.target.result.split(',')[1];document.getElementById('ssi').src=e.target.result;document.getElementById('ssp').classList.add('vis');pist('reading','Reading with Claude...');ocr()};
+  r.readAsDataURL(f);
+}
+async function ocr(){
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:im,data:ib64}},{type:'text',text:'Reading notes screenshot. Book passage in blockquote/italic, reader response in bold below. Return ONLY JSON: {"quote":"passage","response":"reader words","time":"timestamp or empty"}. If unclear: {"quote":"","response":"","time":""}'}]}]})});
+    const d=await r.json();
+    const t=d.content?.find(b=>b.type==='text')?.text||'';
+    const p=JSON.parse(t.replace(/```json|```/g,'').trim());
+    if(p.quote||p.response){
+      if(p.quote)document.getElementById('nq').value=p.quote;
+      if(p.response)document.getElementById('nr').value=p.response;
+      if(p.time)document.getElementById('nt').value=p.time;
+      pist('done','Extracted - review and save below');
+    }else{pist('error','Could not detect - type manually')}
+  }catch(e){pist('error','Could not read - type manually')}
+}
+function pist(c,m){const e=document.getElementById('pist');e.className='pi-st '+c;e.textContent=m}
+function clrSS(){ib64=null;document.getElementById('ssp').classList.remove('vis');document.getElementById('ssi').src='';document.getElementById('dz').querySelector('input').value=''}
+function clrAll(){clrSS();['nt','nq','nr'].forEach(i=>document.getElementById(i).value='')}
+
+async function genThemes(){
+  const b=book();if(!b.entries.length){alert('Add reading notes first.');return}
+  const btn=document.querySelector('.gen-btn');btn.disabled=true;btn.textContent='Thinking...';
+  const es=b.entries.map(e=>'Passage: "'+e.quote+'"\nMy response: "'+e.response+'"').join('\n\n');
+  const ex=b.themes.map(t=>t.title).join(', ');
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2000,messages:[{role:'user',content:'Help Tarek build a personal literary archive. These are his reading notes for "'+b.title+'" by '+b.author+'.\n\nWrite 3-5 themes IN HIS VOICE - first person, as if he speaks. Use I, me, my. Write AS him.\n'+(ex?'Existing themes: '+ex+'. Add NEW ones only.\n\n':'')+'His notes:\n'+es+'\n\nReturn ONLY JSON array:\n[{"title":"Theme title","body":"2-4 sentences first person"},...]'}]})});
+    const d=await r.json();
+    const t=d.content?.find(b=>b.type==='text')?.text||'';
+    const p=JSON.parse(t.replace(/```json|```/g,'').trim());
+    p.forEach(t=>b.themes.push({title:t.title,body:t.body}));
+    renderAll();ss('themes',document.querySelectorAll('.sec-tab')[1]);
+    await save();
+  }catch(e){alert('Could not generate. Check connection.')}
+  btn.disabled=false;btn.textContent='Generate my reflections';
+}
+
+function exportBook(){
+  const b=book();
+  const ep=(b.entries[0]?.response||'').substring(0,140);
+  document.getElementById('pf').innerHTML='<div class="pfc"><div class="pfs">A Reader\'s Archive &middot; '+b.num+'</div><div class="pft">'+b.title+'</div><div class="pfa">'+b.author+'</div><div class="pfy">'+b.year+'</div><hr class="pfr"><div class="pfe">"'+ep+(ep.length>=140?'...':'')+'"</div><div class="pfea">&mdash; Tarek</div></div><div class="pfsec"><div class="pfst">Verbatim Notes</div><div class="pfsi">Exact words, written in the moment.</div>'+(b.entries.map(e=>'<div class="pfen"><div class="pfet">'+(e.time||'')+'</div><div class="pfeq">"'+e.quote+'"</div><div class="pfer">'+e.response+'</div></div>').join('')||'<p style="color:#aaa;font-style:italic">No entries.</p>')+'</div><div class="pfsec"><div class="pfst">My Reflections</div>'+(b.themes.map(t=>'<div class="pfth"><div class="pftt">'+t.title+'</div><div class="pftb">'+t.body+'</div></div>').join('')||'<p style="color:#aaa;font-style:italic">No reflections yet.</p>')+'</div><div class="pfsec"><div class="pfst">Context</div><div class="pfctx"><p>'+b.context+'</p></div></div><div class="pfco">A Reader\'s Archive &middot; '+b.title+' &middot; '+new Date().toLocaleDateString('en-GB',{year:'numeric',month:'long',day:'numeric'})+'</div>';
+  setTimeout(()=>window.print(),150);
+}
+
+function sv(v,btn){
+  document.querySelectorAll('.view').forEach(e=>e.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(e=>e.classList.remove('active'));
+  document.getElementById('view-'+v).classList.add('active');
+  if(btn)btn.classList.add('active');
+  if(v==='add'){document.getElementById('nb').innerHTML=D.books.map(b=>'<option value="'+b.id+'" '+(b.id===D.activeBook?'selected':'')+'>'+b.title+'</option>').join('')}
+}
+function ss(s,btn){
+  D.activeSection=s;
+  ['log','themes','context'].forEach(i=>document.getElementById('sec-'+i).style.display=i===s?'block':'none');
+  document.querySelectorAll('.sec-tab').forEach(e=>e.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+}
+function selBook(id){D.activeBook=id;renderAll();['log','themes','context'].forEach(i=>document.getElementById('sec-'+i).style.display=i===D.activeSection?'block':'none')}
+function book(){return D.books.find(b=>b.id===D.activeBook)}
+
+function renderAll(){
+  if(!D.books.length){document.getElementById('blist').innerHTML='';return}
+  if(!D.activeBook)D.activeBook=D.books[0].id;
+  document.getElementById('blist').innerHTML=D.books.map(b=>'<div class="book-item '+(b.id===D.activeBook?'active':'')+'" onclick="selBook(\''+b.id+'\')"><div class="b-num">'+b.num+'</div><div class="b-title">'+b.title+'</div><div class="b-author">'+b.author+'</div></div>').join('');
+  const b=book();if(!b)return;
+  document.getElementById('hl').textContent=b.num;
+  document.getElementById('ht').textContent=b.title;
+  document.getElementById('ha').textContent=b.author;
+  document.getElementById('hy').textContent=b.year;
+  document.getElementById('hc').textContent=b.entries.length+' '+(b.entries.length===1?'entry':'entries');
+  document.getElementById('sec-log').innerHTML=b.entries.length?b.entries.map((e,i)=>'<div class="entry"><div class="entry-time">'+(e.time||'&mdash;')+'</div><div class="entry-quote">&ldquo;'+e.quote+'&rdquo;</div><div class="entry-resp">'+e.response+'</div><div class="entry-act"><button onclick="delE(\''+b.id+'\','+i+')">Remove</button></div></div>').join(''):'<div class="empty">No notes yet.</div>';
+  document.getElementById('sec-themes').innerHTML='<div class="themes-top"><button class="gen-btn" onclick="genThemes()">&#10024; Generate my reflections</button><span class="gen-note">Claude writes in your voice</span></div>'+(b.themes.length?b.themes.map((t,i)=>'<div class="theme-card"><button class="del-t" onclick="delT(\''+b.id+'\','+i+')">&#215;</button><h3>'+t.title+'</h3><p>'+t.body+'</p></div>').join(''):'<div class="empty" style="padding:1rem 0">No reflections yet. Add notes then generate above.</div>');
+  document.getElementById('sec-context').innerHTML='<div class="ctx-block"><p>'+b.context+'</p></div>';
+}
+
+async function submitNote(){
+  const bi=document.getElementById('nb').value;
+  const ti=document.getElementById('nt').value.trim();
+  const q=document.getElementById('nq').value.trim();
+  const rp=document.getElementById('nr').value.trim();
+  if(!q||!rp){alert('Please fill in both the passage and your response.');return}
+  D.books.find(b=>b.id===bi).entries.push({time:ti||new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),quote:q,response:rp});
+  clrAll();D.activeBook=bi;renderAll();
+  document.querySelectorAll('.view').forEach(e=>e.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(e=>e.classList.remove('active'));
+  document.getElementById('view-archive').classList.add('active');
+  document.querySelector('.tab-btn').classList.add('active');
+  ss('log',document.querySelector('.sec-tab'));
+  setTimeout(()=>document.getElementById('sec-log').lastElementChild?.scrollIntoView({behavior:'smooth'}),150);
+  await save();
+}
+async function delE(bi,i){if(!confirm('Remove this entry?'))return;D.books.find(b=>b.id===bi).entries.splice(i,1);renderAll();await save()}
+async function delT(bi,i){if(!confirm('Remove this reflection?'))return;D.books.find(b=>b.id===bi).themes.splice(i,1);renderAll();await save()}
+function openModal(){document.getElementById('mbg').classList.add('open');document.getElementById('nt2').focus()}
+function closeModal(){document.getElementById('mbg').classList.remove('open')}
+async function addBook(){
+  const ti=document.getElementById('nt2').value.trim();
+  const au=document.getElementById('na2').value.trim();
+  const yr=document.getElementById('ny2').value.trim();
+  const cx=document.getElementById('nc2').value.trim();
+  if(!ti){alert('Please enter a title.');return}
+  const ns=['I','II','III','IV','V','VI','VII','VIII','IX','X'];
+  const id='b'+Date.now();
+  D.books.push({id,num:'Book '+(ns[D.books.length]||D.books.length+1),title:ti,author:au||'',year:yr?'Read '+yr:'Reading',context:cx||'Added to the archive.',themes:[],entries:[]});
+  closeModal();['nt2','na2','ny2','nc2'].forEach(i=>document.getElementById(i).value='');
+  selBook(id);await save();
+}
+tok=getTok();
+if(!tok)document.getElementById('tw').style.display='flex';
+else load();
+</script>
+</body>
+</html>
