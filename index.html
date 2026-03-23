@@ -279,7 +279,7 @@ function loadImg(f){
 }
 async function ocr(){
   try{
-    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:im,data:ib64}},{type:'text',text:'Reading notes screenshot. Book passage in blockquote/italic, reader response in bold below. Return ONLY JSON: {"quote":"passage","response":"reader words","time":"timestamp or empty"}. If unclear: {"quote":"","response":"","time":""}'}]}]})});
+    const r=await fetch('https://readers-archive-proxyf.ttawab.workers.dev',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:im,data:ib64}},{type:'text',text:'Reading notes screenshot. Book passage in blockquote/italic, reader response in bold below. Return ONLY JSON: {"quote":"passage","response":"reader words","time":"timestamp or empty"}. If unclear: {"quote":"","response":"","time":""}'}]}]})});
     const d=await r.json();
     const t=d.content?.find(b=>b.type==='text')?.text||'';
     const p=JSON.parse(t.replace(/```json|```/g,'').trim());
@@ -301,7 +301,7 @@ async function genThemes(){
   const es=b.entries.map(e=>'Passage: "'+e.quote+'"\nMy response: "'+e.response+'"').join('\n\n');
   const ex=b.themes.map(t=>t.title).join(', ');
   try{
-    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2000,messages:[{role:'user',content:'Help Tarek build a personal literary archive. These are his reading notes for "'+b.title+'" by '+b.author+'.\n\nWrite 3-5 themes IN HIS VOICE - first person, as if he speaks. Use I, me, my. Write AS him.\n'+(ex?'Existing themes: '+ex+'. Add NEW ones only.\n\n':'')+'His notes:\n'+es+'\n\nReturn ONLY JSON array:\n[{"title":"Theme title","body":"2-4 sentences first person"},...]'}]})});
+    const r=await fetch('https://readers-archive-proxyf.ttawab.workers.dev',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2000,messages:[{role:'user',content:'Help Tarek build a personal literary archive. These are his reading notes for "'+b.title+'" by '+b.author+'.\n\nWrite 3-5 themes IN HIS VOICE - first person, as if he speaks. Use I, me, my. Write AS him.\n'+(ex?'Existing themes: '+ex+'. Add NEW ones only.\n\n':'')+'His notes:\n'+es+'\n\nReturn ONLY JSON array:\n[{"title":"Theme title","body":"2-4 sentences first person"},...]'}]})});
     const d=await r.json();
     const t=d.content?.find(b=>b.type==='text')?.text||'';
     const p=JSON.parse(t.replace(/```json|```/g,'').trim());
@@ -388,4 +388,5 @@ else load();
 </script>
 </body>
 </html>
+
 
