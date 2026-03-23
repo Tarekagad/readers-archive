@@ -1,0 +1,78 @@
+{
+  "activeBook": "omas",
+  "activeSection": "log",
+  "books": [
+    {
+      "id": "omas",
+      "num": "Book I",
+      "title": "The Old Man and the Sea",
+      "author": "Ernest Hemingway",
+      "year": "Read 2025",
+      "context": "I came to this after abandoning Henry James at chapter 15. The Portrait of a Lady left me cold — characters hooked to their ideas, nobody real, nobody moving. I needed a calibration reset. A man alone with his craft. No noise. This is what I found.",
+      "themes": [
+        {
+          "title": "Age as clarification",
+          "body": "I keep returning to what gets stripped away with age and what stays. Pride goes first — it becomes a luxury I can no longer afford. Humility is not weakness; it is the actual legs I walk on now. When I read about the old man's eyes — unchanged, cheerful, undefeated — I felt seen. The soul holds its life better than the flesh does."
+        },
+        {
+          "title": "Memory and distillation",
+          "body": "I question my own memories the older I get. Did I remember that, or did someone tell me? But I have come to think accuracy is not really the point. What matters is what gets distilled — what remains after the rest falls away. That is what memoir is, for me. Not the record. The residue."
+        },
+        {
+          "title": "Dreams and ownership",
+          "body": "The old man no longer dreams of storms or women or great fish. He dreams of places. I read that and thought: this is what maturity looks like in the interior life. No more wanting things that can be owned. The bigger themes — those can never be owned, only shared."
+        },
+        {
+          "title": "The Swiss knife of age",
+          "body": "I made a list of what the old man actually has: luck, humility, experience, trickery, mysticism, resolution, empathy, sympathy, and lions in dreams. That is not a catalogue of losses. That is a toolkit. I recognise most of those things in myself now, and I did not have them when I was young."
+        },
+        {
+          "title": "The big fish",
+          "body": "Would he go out at all if there were no fish to hope for? I did not answer that when I read it. I still have not answered it. It is the question underneath everything — about what keeps a person moving, what faith actually is when you strip the word down."
+        }
+      ],
+      "entries": [
+        {
+          "time": "11:39 AM",
+          "quote": "Everything about him was old except his eyes and they were the same color as the sea and were cheerful and undefeated.",
+          "response": "And the eyes are the doors to the soul, it changes and matures but it holds its life better than the flesh.."
+        },
+        {
+          "time": "11:42 AM",
+          "quote": "Can you really remember that or did I just tell it to you? / I remember everything from when we first went together.",
+          "response": "The younger you are, the more sure about you memories. The older I become I question the memory from the memoirs.. but does it matter?! Not really, it's what is distilled that matters.."
+        },
+        {
+          "time": "11:45 AM",
+          "quote": "Thank you, the old man said. He was too simple to wonder when he had attained humility. But he knew he had attained it and he knew it was not disgraceful...",
+          "response": "Wow.. how true.. Pride is a luxury for the young, humility the legs of aging.. life do nibble on pride, a survival mechanism is it?!"
+        },
+        {
+          "time": "12:20 PM",
+          "quote": "He no longer dreamed of storms, nor of women, nor of great occurrences, nor of great fish, nor fights, nor contests of strength, nor of his wife. He only dreamed of places...",
+          "response": "Of man and his dreams.. no more for wants and ownerships.. it's dreams of the bigger themes that can never be owned, but shared."
+        },
+        {
+          "time": "12:34 PM",
+          "quote": "My big fish must be somewhere.",
+          "response": "The hope of a big fish, would he go out if it's none.."
+        },
+        {
+          "time": "1:40 PM",
+          "quote": "I am a strange old man. / But are you strong enough now for a truly big fish? / I think so. And there are many tricks.",
+          "response": "Let's count the Swiss knife tools of the aged as Hemingway thinks; luck, humility, experience, trickery, mysticism, resolution, empathy, sympathy and lions in dreams."
+        }
+      ]
+    },
+    {
+      "id": "thif",
+      "num": "Book II",
+      "title": "The Heart's Invisible Furies",
+      "author": "John Boyne",
+      "year": "Reading 2025",
+      "context": "Recommended to me as East of Eden crossed with Covenant of Water — modern, sharper, faster. Life across decades. Identity, family, exile, belonging. I started it after Hemingway.",
+      "themes": [],
+      "entries": []
+    }
+  ]
+}
