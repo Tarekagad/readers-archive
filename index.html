@@ -69,6 +69,8 @@ nav{background:var(--ink);color:var(--sepia);display:flex;align-items:center;jus
 .gen-btn{background:var(--ink);color:var(--sepia);border:none;padding:.7rem 1.5rem;font-family:'IM Fell English',serif;font-size:16px;font-style:italic;cursor:pointer;border-radius:3px;transition:background .2s}
 .gen-btn:hover{background:#4a7c59}.gen-btn:disabled{opacity:.5;cursor:not-allowed}
 .save-snap-btn{background:none;border:1px solid var(--gold);border-radius:3px;padding:.7rem 1.5rem;font-family:'IM Fell English',serif;font-size:16px;font-style:italic;cursor:pointer;color:var(--gold);transition:all .2s;display:none}
+.print-refl-btn{background:none;border:1px solid var(--faded);border-radius:3px;padding:.7rem 1.5rem;font-family:'IM Fell English',serif;font-size:16px;font-style:italic;cursor:pointer;color:var(--faded);transition:all .2s;display:none}
+.print-refl-btn:hover{border-color:var(--ink);color:var(--ink)}
 .save-snap-btn:hover{background:var(--gold);color:white}
 .refl-note{font-family:'Inconsolata',monospace;font-size:11px;color:var(--faded)}
 
@@ -308,7 +310,7 @@ async function load(){
     if(r.status===401){localStorage.removeItem('ra_tok');location.reload();return}
     if(r.status===404){nst('No archive.json found','err');return}
     const d=await r.json();sha=d.sha;
-    D=JSON.parse(atob(d.content.replace(/\n/g,'')));
+    const raw=atob(d.content.replace(/\n/g,''));const bytes=new Uint8Array(raw.length);for(let i=0;i<raw.length;i++)bytes[i]=raw.charCodeAt(i);D=JSON.parse(new TextDecoder().decode(bytes));
     if(!D.activeBook&&D.books.length)D.activeBook=D.books[0].id;
     // migrate old themes to new reflection format
     D.books.forEach(b=>{
@@ -323,7 +325,7 @@ async function load(){
 async function save(){
   nst('Saving...','saving');
   try{
-    const c=btoa(unescape(encodeURIComponent(JSON.stringify(D,null,2))));
+    const j=JSON.stringify(D,null,2);const c=btoa(Array.from(new TextEncoder().encode(j)).map(b=>String.fromCharCode(b)).join(''));
     const r=await fetch('https://api.github.com/repos/'+GH.o+'/'+GH.r+'/contents/'+GH.p,{method:'PUT',headers:{Authorization:'token '+tok,Accept:'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify({message:'Archive update '+new Date().toISOString(),content:c,sha:sha})});
     const d=await r.json();sha=d.content?.sha;
     nst('Saved','saved');setTimeout(()=>nst('\u2014'),2500);
@@ -364,6 +366,20 @@ function pist(c,m){const e=document.getElementById('pist');e.className='pi-st '+
 function clrSS(){ib64=null;document.getElementById('ssp').classList.remove('vis');document.getElementById('ssi').src='';document.getElementById('dz').querySelector('input').value=''}
 function clrAll(){clrSS();['nt','nq','nr'].forEach(i=>document.getElementById(i).value='')}
 
+// PRINT REFLECTION ONLY
+function printRefl(){
+  const b=book();
+  if(!b.reflection)return;
+  const w=window.open('','_blank');
+  w.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+b.title+' - Reflection</title><link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cormorant+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet"><style>body{font-family:"Cormorant Garamond",Georgia,serif;font-size:20px;line-height:1.85;max-width:680px;margin:3rem auto;padding:0 2rem;color:#1c1a17;background:white}.title{font-family:"IM Fell English",serif;font-size:2rem;font-style:italic;margin-bottom:.3rem}.author{color:#9a9080;font-style:italic;margin-bottom:2rem}.date{font-family:monospace;font-size:11px;color:#aaa;letter-spacing:.1em;margin-bottom:1.5rem;text-transform:uppercase}.body{border-left:2px solid #b8893a;padding-left:1.5rem}.footer{margin-top:3rem;font-family:monospace;font-size:10px;color:#ccc;letter-spacing:.1em;text-transform:uppercase;border-top:1px solid #eee;padding-top:1rem}@media print{body{margin:1.5rem auto}}</style></head><body>');
+  w.document.write('<div class="title">'+b.title+'</div><div class="author">'+b.author+'</div><div class="date">Reflection — '+b.reflection.date+'</div><div class="body">'+b.reflection.text.replace(/
+
+/g,'</p><p>').replace(/
+/g,'<br>')+'</div><div class="footer">readingsof.tarekofcairo.com · A Reader’s Archive</div></body></html>');
+  w.document.close();
+  setTimeout(()=>w.print(),500);
+}
+
 // REFLECTIONS — living document, replace not accumulate
 async function genRefl(){
   const b=book();
@@ -382,7 +398,7 @@ async function genRefl(){
       b.reflection={text:text,date:new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})};
       renderAll();
       ss('refl',document.querySelectorAll('.sec-tab')[1]);
-      document.querySelector('.save-snap-btn').style.display='inline-block';
+      document.querySelector('.save-snap-btn').style.display='inline-block';document.querySelector('.print-refl-btn').style.display='inline-block';
       await save();
     }else{alert('Could not generate. Try again.')}
   }catch(e){alert('Could not generate. Check connection.')}
@@ -456,7 +472,8 @@ function renderAll(){
   const reflContent=hasRefl?'<div class="current-refl"><div class="refl-date">'+b.reflection.date+'</div><div>'+b.reflection.text.replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>')+'</div></div>':'<div class="empty" style="padding:1.5rem 0">No reflection yet. Add notes then generate below.</div>';
   const snapsContent=b.snapshots&&b.snapshots.length?'<div class="snapshots-section"><div class="snapshots-title">Saved snapshots</div>'+b.snapshots.map((s,i)=>'<div class="snapshot"><button class="snap-del" onclick="delSnap(\''+b.id+'\','+i+')">&#215;</button><div class="snap-date">'+s.date+'</div><div class="snap-preview">'+s.text.substring(0,200)+'...</div></div>').join('')+'</div>':'';
 
-  document.getElementById('sec-refl').innerHTML='<div class="refl-top"><p class="refl-intro">A living reflection \u2014 rewrites itself as you read. Save a snapshot anytime to keep a record of where you were.</p><div class="refl-actions"><button class="gen-btn" onclick="genRefl()">'+(hasRefl?'Regenerate reflection':'Generate my reflection')+'</button><button class="save-snap-btn" onclick="saveSnapshot()" style="display:'+(hasRefl?'inline-block':'none')+'">Save snapshot</button><span class="refl-note">Replaces previous \u2014 save first if you want to keep it</span></div></div>'+reflContent+snapsContent;
+  document.getElementById('sec-refl').innerHTML='<div class="refl-top"><p class="refl-intro">A living reflection \u2014 rewrites itself as you read. Save a snapshot anytime to keep a record of where you were.</p><div class="refl-actions"><button class="gen-btn" onclick="genRefl()">'+(hasRefl?'Regenerate reflection':'Generate my reflection')+'</button><button class="print-refl-btn" onclick="printRefl()" style="display:'+(hasRefl?'inline-block':'none')+'">Download reflection</button>
+        <button class="save-snap-btn" onclick="saveSnapshot()" style="display:'+(hasRefl?'inline-block':'none')+'">Save snapshot</button><span class="refl-note">Replaces previous \u2014 save first if you want to keep it</span></div></div>'+reflContent+snapsContent;
 
   // Context
   document.getElementById('sec-context').innerHTML='<div class="ctx-block"><p>'+b.context+'</p></div>';
