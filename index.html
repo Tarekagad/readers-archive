@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!-- v4 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -9,9 +8,9 @@
 <style>
 :root{--ink:#1c1a17;--sepia:#f5f0e8;--gold:#b8893a;--rust:#8b4a2a;--faded:#9a9080;--line:#ddd5c0;--paper:#faf7f0;--margin:#f0ebe0;--green:#4a7c59}
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--sepia);color:var(--ink);font-family:'Cormorant Garamond',Georgia,serif;font-size:20px;line-height:1.75;min-height:100vh}
+body{background:var(--sepia);color:var(--ink);font-family:'Cormorant Garamond',Georgia,serif;font-size:24px;line-height:1.75;min-height:100vh}
 nav{background:var(--ink);color:var(--sepia);display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:56px;position:sticky;top:0;z-index:100}
-.brand{font-family:'IM Fell English',serif;font-size:17px;opacity:.9}
+.brand{font-family:'IM Fell English',serif;font-size:19px;opacity:.9}
 .tabs{display:flex;height:100%}
 .tab-btn{background:none;border:none;color:rgba(245,240,232,.5);font-family:'Inconsolata',monospace;font-size:12px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;padding:0 1.2rem;height:100%;border-bottom:2px solid transparent;transition:all .2s}
 .tab-btn:hover{color:var(--sepia)}.tab-btn.active{color:var(--gold);border-bottom-color:var(--gold)}
@@ -27,14 +26,14 @@ nav{background:var(--ink);color:var(--sepia);display:flex;align-items:center;jus
 .b-author{font-size:13px;color:var(--faded);margin-top:2px}
 .add-book-btn{width:100%;margin-top:1rem;padding:.6rem;background:none;border:1px dashed var(--line);border-radius:4px;color:var(--faded);font-family:'Inconsolata',monospace;font-size:12px;cursor:pointer;transition:all .2s}
 .add-book-btn:hover{border-color:var(--gold);color:var(--gold)}
-.mobile-book-select{display:none;padding:.8rem 1.2rem;background:var(--margin);border-bottom:1px solid var(--line)}
-.mobile-book-select select{width:100%;padding:.6rem .8rem;font-family:'IM Fell English',serif;font-size:17px;font-style:italic;border:1px solid var(--line);border-radius:4px;background:var(--paper);color:var(--ink);outline:none}
+.mbs{display:none;padding:.8rem 1.2rem;background:var(--margin);border-bottom:1px solid var(--line)}
+.mbs select{width:100%;padding:.6rem .8rem;font-family:'IM Fell English',serif;font-size:19px;font-style:italic;border:1px solid var(--line);border-radius:4px;background:var(--paper);color:var(--ink);outline:none}
 .content{background:var(--paper);overflow-y:auto}
 .view{display:none}.view.active{display:block}
 .book-header{padding:2.5rem 3.5rem 1.8rem;border-bottom:1px solid var(--line);background:linear-gradient(to bottom,var(--sepia),var(--paper))}
 .book-label{font-family:'Inconsolata',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.4rem}
-.book-header h1{font-family:'IM Fell English',serif;font-size:2.4rem;font-style:italic;line-height:1.2}
-.author-line{margin-top:.4rem;font-size:1.1rem;color:var(--faded);font-style:italic}
+.book-header h1{font-family:'IM Fell English',serif;font-size:2.6rem;font-style:italic;line-height:1.2}
+.author-line{margin-top:.4rem;font-size:1.2rem;color:var(--faded);font-style:italic}
 .meta-row{margin-top:1rem;display:flex;gap:1.2rem;align-items:center;font-family:'Inconsolata',monospace;font-size:12px;color:var(--faded);flex-wrap:wrap}
 .hdr-btn{background:none;border:1px solid var(--line);border-radius:3px;padding:.4rem 1rem;font-family:'Inconsolata',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--faded);cursor:pointer;transition:all .2s}
 .hdr-btn:hover{border-color:var(--gold);color:var(--gold)}
@@ -45,88 +44,88 @@ nav{background:var(--ink);color:var(--sepia);display:flex;align-items:center;jus
 .entry{margin-bottom:2.2rem;padding-bottom:2.2rem;border-bottom:1px solid var(--line);animation:fi .3s ease}
 .entry:last-child{border-bottom:none}
 @keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1}}
-.entry-time{font-family:'Inconsolata',monospace;font-size:11px;color:var(--faded);letter-spacing:.1em;margin-bottom:.5rem}
-.entry-quote{border-left:2px solid var(--gold);padding-left:1.2rem;font-style:italic;color:#3a3530;font-size:1.05rem;line-height:1.75;margin-bottom:.6rem}
-.entry-resp{padding-left:1.2rem;font-weight:600;font-size:1.05rem;line-height:1.75}
+.entry-time{font-family:'Inconsolata',monospace;font-size:11px;color:var(--faded);margin-bottom:.5rem}
+.entry-quote{border-left:2px solid var(--gold);padding-left:1.2rem;font-style:italic;color:#3a3530;font-size:1.2rem;line-height:1.75;margin-bottom:.6rem}
+.entry-resp{padding-left:1.2rem;font-weight:600;font-size:1.2rem;line-height:1.75}
 .entry-act{padding-left:1.2rem;margin-top:.5rem}
 .entry-act button{background:none;border:none;font-family:'Inconsolata',monospace;font-size:11px;color:var(--faded);cursor:pointer;text-transform:uppercase}
 .entry-act button:hover{color:var(--rust)}
-.refl-intro{font-size:.95rem;color:var(--faded);font-style:italic;margin-bottom:1.2rem;line-height:1.6}
+.refl-intro{font-size:1rem;color:var(--faded);font-style:italic;margin-bottom:1.2rem}
 .refl-actions{display:flex;gap:.8rem;flex-wrap:wrap;align-items:center;margin-bottom:1.5rem}
-.gen-btn{background:var(--ink);color:var(--sepia);border:none;padding:.7rem 1.5rem;font-family:'IM Fell English',serif;font-size:16px;font-style:italic;cursor:pointer;border-radius:3px;transition:background .2s}
+.gen-btn{background:var(--ink);color:var(--sepia);border:none;padding:.7rem 1.5rem;font-family:'IM Fell English',serif;font-size:18px;font-style:italic;cursor:pointer;border-radius:3px}
 .gen-btn:hover{background:#4a7c59}.gen-btn:disabled{opacity:.5;cursor:not-allowed}
-.dl-refl-btn{background:none;border:1px solid var(--faded);border-radius:3px;padding:.7rem 1.5rem;font-family:'IM Fell English',serif;font-size:16px;font-style:italic;cursor:pointer;color:var(--faded);transition:all .2s}
-.dl-refl-btn:hover{border-color:var(--ink);color:var(--ink)}
-.save-snap-btn{background:none;border:1px solid var(--gold);border-radius:3px;padding:.7rem 1.5rem;font-family:'IM Fell English',serif;font-size:16px;font-style:italic;cursor:pointer;color:var(--gold);transition:all .2s}
-.save-snap-btn:hover{background:var(--gold);color:white}
+.dl-btn{background:none;border:1px solid var(--faded);border-radius:3px;padding:.7rem 1.5rem;font-family:'IM Fell English',serif;font-size:18px;font-style:italic;cursor:pointer;color:var(--faded)}
+.dl-btn:hover{border-color:var(--ink);color:var(--ink)}
+.snap-btn{background:none;border:1px solid var(--gold);border-radius:3px;padding:.7rem 1.5rem;font-family:'IM Fell English',serif;font-size:18px;font-style:italic;cursor:pointer;color:var(--gold)}
+.snap-btn:hover{background:var(--gold);color:white}
 .refl-note{font-family:'Inconsolata',monospace;font-size:11px;color:var(--faded)}
-.current-refl{background:var(--sepia);border-radius:6px;border-left:3px solid var(--gold);padding:1.6rem 1.8rem;margin-bottom:2rem;line-height:1.85;font-size:1.05rem;color:#3a3530}
-.refl-date{font-family:'Inconsolata',monospace;font-size:10px;color:var(--faded);margin-bottom:1rem;letter-spacing:.1em}
-.snapshots-section{margin-top:2rem;border-top:1px solid var(--line);padding-top:1.5rem}
-.snapshots-title{font-family:'Inconsolata',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--faded);margin-bottom:1rem}
+.cur-refl{background:var(--sepia);border-radius:6px;border-left:3px solid var(--gold);padding:1.6rem 1.8rem;margin-bottom:2rem;line-height:1.85;font-size:1.2rem;color:#3a3530}
+.refl-date{font-family:'Inconsolata',monospace;font-size:10px;color:var(--faded);margin-bottom:1rem}
+.snaps-sec{margin-top:2rem;border-top:1px solid var(--line);padding-top:1.5rem}
+.snaps-title{font-family:'Inconsolata',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--faded);margin-bottom:1rem}
 .snapshot{background:white;border:1px solid var(--line);border-radius:4px;padding:1.2rem 1.4rem;margin-bottom:1rem;position:relative}
-.snap-date{font-family:'Inconsolata',monospace;font-size:10px;color:var(--faded);letter-spacing:.1em;margin-bottom:.6rem}
-.snap-preview{font-size:.93rem;color:#555;line-height:1.7;font-style:italic}
+.snap-date{font-family:'Inconsolata',monospace;font-size:10px;color:var(--faded);margin-bottom:.6rem}
+.snap-prev{font-size:.98rem;color:#555;line-height:1.7;font-style:italic}
 .snap-del{position:absolute;top:.8rem;right:.8rem;background:none;border:none;font-size:13px;color:var(--faded);cursor:pointer;opacity:.4}
 .snap-del:hover{opacity:1;color:var(--rust)}
-.ctx-block{max-width:680px;font-size:1.05rem;line-height:1.85;color:#3a3530}
+.ctx-block{max-width:680px;font-size:1.2rem;line-height:1.85;color:#3a3530}
 .ctx-block p{margin-bottom:1.2rem}
 .add-shell{padding:2.5rem 3.5rem;max-width:800px}
-.add-shell h2{font-family:'IM Fell English',serif;font-size:1.8rem;font-style:italic;margin-bottom:.3rem}
-.add-shell .sub{font-size:1rem;color:var(--faded);font-style:italic;margin-bottom:2rem}
-.drop-zone{border:2px dashed var(--line);border-radius:8px;padding:2.5rem;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:1.5rem;position:relative;background:var(--sepia)}
-.drop-zone:hover,.drop-zone.dragover{border-color:var(--gold);background:#f8f2e4}
-.drop-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
-.dz-icon{font-size:2.4rem;margin-bottom:.8rem;opacity:.5}
+.add-shell h2{font-family:'IM Fell English',serif;font-size:2rem;font-style:italic;margin-bottom:.3rem}
+.add-sub{font-size:1.05rem;color:var(--faded);font-style:italic;margin-bottom:2rem}
+.dz{border:2px dashed var(--line);border-radius:8px;padding:2.5rem;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:1.5rem;position:relative;background:var(--sepia)}
+.dz:hover,.dz.over{border-color:var(--gold);background:#f8f2e4}
+.dz input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.dz-icon{font-size:2.6rem;margin-bottom:.8rem;opacity:.5}
 .dz-title{font-family:'IM Fell English',serif;font-size:1.2rem;font-style:italic;margin-bottom:.4rem}
 .dz-hint{font-family:'Inconsolata',monospace;font-size:12px;color:var(--faded)}
 .dz-hint em{color:var(--gold);font-style:normal}
 .ss-prev{display:none;border:1px solid var(--line);border-radius:6px;overflow:hidden;margin-bottom:1.5rem;background:white}
 .ss-prev.vis{display:flex;align-items:flex-start}
 .ss-prev img{width:130px;object-fit:cover;border-right:1px solid var(--line);flex-shrink:0}
-.prev-info{padding:1rem 1.2rem;flex:1}
+.pi{padding:1rem 1.2rem;flex:1}
 .pi-lbl{font-family:'Inconsolata',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--faded);margin-bottom:.3rem}
-.pi-st{font-size:1rem;font-style:italic;color:var(--ink)}
+.pi-st{font-size:1.05rem;font-style:italic;color:var(--ink)}
 .pi-st.reading{color:var(--gold)}.pi-st.done{color:var(--green)}.pi-st.error{color:var(--rust)}
-.prev-clr{margin-top:.7rem;display:block;background:none;border:none;font-family:'Inconsolata',monospace;font-size:11px;text-transform:uppercase;color:var(--faded);cursor:pointer}
-.prev-clr:hover{color:var(--rust)}
+.pi-clr{margin-top:.7rem;display:block;background:none;border:none;font-family:'Inconsolata',monospace;font-size:11px;text-transform:uppercase;color:var(--faded);cursor:pointer}
+.pi-clr:hover{color:var(--rust)}
 .or-div{display:flex;align-items:center;gap:1rem;margin:1.5rem 0;color:var(--faded);font-family:'Inconsolata',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase}
 .or-div::before,.or-div::after{content:'';flex:1;height:1px;background:var(--line)}
-.form-row{margin-bottom:1.4rem}
-.form-row label{display:block;font-family:'Inconsolata',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--faded);margin-bottom:.5rem}
-.form-row input,.form-row textarea,.form-row select{width:100%;background:white;border:1px solid var(--line);border-radius:3px;padding:.8rem 1rem;font-family:'Cormorant Garamond',serif;font-size:19px;color:var(--ink);transition:border-color .2s;outline:none;resize:vertical}
-.form-row input:focus,.form-row textarea:focus,.form-row select:focus{border-color:var(--gold)}
-.form-row textarea{min-height:100px}
-.form-hint{font-family:'Inconsolata',monospace;font-size:11px;color:var(--faded);margin-top:.3rem}
-.form-acts{display:flex;gap:.9rem;align-items:center;margin-top:.5rem;flex-wrap:wrap}
-.save-btn{background:var(--ink);color:var(--sepia);border:none;padding:.8rem 2rem;font-family:'IM Fell English',serif;font-size:17px;font-style:italic;cursor:pointer;border-radius:3px;transition:background .2s}
-.save-btn:hover{background:var(--rust)}
-.clr-btn{background:none;border:none;font-family:'Inconsolata',monospace;font-size:12px;color:var(--faded);cursor:pointer;text-transform:uppercase}
-.clr-btn:hover{color:var(--rust)}
-.empty{text-align:center;padding:3rem 2rem;color:var(--faded);font-style:italic;font-size:1.05rem}
+.fr{margin-bottom:1.4rem}
+.fr label{display:block;font-family:'Inconsolata',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--faded);margin-bottom:.5rem}
+.fr input,.fr textarea,.fr select{width:100%;background:white;border:1px solid var(--line);border-radius:3px;padding:.8rem 1rem;font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--ink);transition:border-color .2s;outline:none;resize:vertical}
+.fr input:focus,.fr textarea:focus,.fr select:focus{border-color:var(--gold)}
+.fr textarea{min-height:100px}
+.fr-hint{font-family:'Inconsolata',monospace;font-size:11px;color:var(--faded);margin-top:.3rem}
+.fr-acts{display:flex;gap:.9rem;align-items:center;margin-top:.5rem;flex-wrap:wrap}
+.sv-btn{background:var(--ink);color:var(--sepia);border:none;padding:.8rem 2rem;font-family:'IM Fell English',serif;font-size:19px;font-style:italic;cursor:pointer;border-radius:3px}
+.sv-btn:hover{background:var(--rust)}
+.cl-btn{background:none;border:none;font-family:'Inconsolata',monospace;font-size:12px;color:var(--faded);cursor:pointer;text-transform:uppercase}
+.cl-btn:hover{color:var(--rust)}
+.empty{text-align:center;padding:3rem 2rem;color:var(--faded);font-style:italic;font-size:1.2rem}
 .tw{position:fixed;inset:0;background:var(--sepia);z-index:500;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1.2rem;padding:2rem;text-align:center}
 .tw h2{font-family:'IM Fell English',serif;font-size:2rem;font-style:italic}
-.tw p{font-size:1rem;color:var(--faded);max-width:420px;line-height:1.75}
+.tw p{font-size:1.05rem;color:var(--faded);max-width:420px;line-height:1.75}
 .tw input{width:100%;max-width:420px;padding:.85rem 1rem;border:1px solid var(--line);border-radius:4px;font-family:'Inconsolata',monospace;font-size:14px;outline:none;background:white}
 .tw input:focus{border-color:var(--gold)}
-.tw button{background:var(--ink);color:var(--sepia);border:none;padding:.85rem 2rem;font-family:'IM Fell English',serif;font-size:17px;font-style:italic;cursor:pointer;border-radius:3px}
+.tw button{background:var(--ink);color:var(--sepia);border:none;padding:.85rem 2rem;font-family:'IM Fell English',serif;font-size:19px;font-style:italic;cursor:pointer;border-radius:3px}
 .tw button:hover{background:var(--rust)}
 .tw-note{font-family:'Inconsolata',monospace;font-size:11px;color:var(--faded);max-width:420px}
-.modal-bg{display:none;position:fixed;inset:0;background:rgba(28,26,23,.6);z-index:200;align-items:center;justify-content:center}
-.modal-bg.open{display:flex}
+.mbg{display:none;position:fixed;inset:0;background:rgba(28,26,23,.6);z-index:200;align-items:center;justify-content:center}
+.mbg.open{display:flex}
 .modal{background:var(--paper);border-radius:6px;padding:2rem 2.4rem;width:480px;max-width:95vw;box-shadow:0 20px 60px rgba(0,0,0,.3)}
 .modal h3{font-family:'IM Fell English',serif;font-size:1.4rem;font-style:italic;margin-bottom:1.3rem}
-.modal-acts{display:flex;gap:.7rem;justify-content:flex-end;margin-top:1.3rem}
-.modal-acts button{padding:.65rem 1.4rem;border-radius:3px;font-family:'Cormorant Garamond',serif;font-size:17px;cursor:pointer;border:1px solid var(--line);background:var(--sepia);color:var(--ink)}
-.modal-acts .pri{background:var(--ink);color:var(--sepia);border-color:var(--ink)}
-.modal-acts .pri:hover{background:var(--rust);border-color:var(--rust)}
+.m-acts{display:flex;gap:.7rem;justify-content:flex-end;margin-top:1.3rem}
+.m-acts button{padding:.65rem 1.4rem;border-radius:3px;font-family:'Cormorant Garamond',serif;font-size:19px;cursor:pointer;border:1px solid var(--line);background:var(--sepia);color:var(--ink)}
+.m-acts .pri{background:var(--ink);color:var(--sepia);border-color:var(--ink)}
+.m-acts .pri:hover{background:var(--rust);border-color:var(--rust)}
 ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px}
 @media(max-width:700px){
   .shell{grid-template-columns:1fr}
   .sidebar{display:none}
-  .mobile-book-select{display:block}
+  .mbs{display:block}
   .book-header{padding:1.5rem 1.2rem 1.2rem}
-  .book-header h1{font-size:1.8rem}
+  .book-header h1{font-size:2rem}
   .sec-tabs{padding:0 1.2rem}
   .sec-content{padding:1.5rem 1.2rem}
   .add-shell{padding:1.5rem 1.2rem}
@@ -135,28 +134,28 @@ nav{background:var(--ink);color:var(--sepia);display:flex;align-items:center;jus
 #pf{display:none}
 @media print{
   *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
-  body>nav,body>.shell,.tw,.mobile-book-select{display:none!important}
+  body>nav,body>.shell,.tw,.mbs{display:none!important}
   #pf{display:block!important;font-family:'Cormorant Garamond',Georgia,serif;color:#1c1a17;background:white;max-width:620px;margin:0 auto;padding:0 2.5rem}
   .pfc{text-align:center;padding:5rem 2rem 3.5rem;page-break-after:always}
   .pfs{font-family:'Inconsolata',monospace;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:#b8893a;margin-bottom:1.3rem}
-  .pft{font-family:'IM Fell English',serif;font-size:2.4rem;font-style:italic;line-height:1.2;margin-bottom:.4rem}
-  .pfa{font-size:1rem;color:#666;font-style:italic;margin-bottom:.4rem}
-  .pfy{font-family:'Inconsolata',monospace;font-size:9px;color:#aaa;letter-spacing:.08em;margin-bottom:2.5rem}
+  .pft{font-family:'IM Fell English',serif;font-size:2.6rem;font-style:italic;line-height:1.2;margin-bottom:.4rem}
+  .pfa{font-size:1.05rem;color:#666;font-style:italic}
+  .pfy{font-family:'Inconsolata',monospace;font-size:9px;color:#aaa;margin-bottom:2.5rem}
   .pfr{border:none;border-top:1px solid #ddd5c0;margin:1.8rem auto;width:50px}
-  .pfe{font-style:italic;color:#555;font-size:.93rem;line-height:1.85;max-width:380px;margin:0 auto}
-  .pfea{font-family:'Inconsolata',monospace;font-size:9px;color:#aaa;letter-spacing:.08em;margin-top:.7rem;text-transform:uppercase}
+  .pfe{font-style:italic;color:#555;font-size:.98rem;line-height:1.85;max-width:380px;margin:0 auto}
+  .pfea{font-family:'Inconsolata',monospace;font-size:9px;color:#aaa;margin-top:.7rem;text-transform:uppercase}
   .pfsec{padding:2.5rem 0}
-  .pfst{font-family:'IM Fell English',serif;font-size:1.25rem;color:#1c1a17;padding-bottom:.4rem;border-bottom:1px solid #b8893a;margin-bottom:.4rem}
+  .pfst{font-family:'IM Fell English',serif;font-size:1.25rem;padding-bottom:.4rem;border-bottom:1px solid #b8893a;margin-bottom:.4rem}
   .pfsi{font-style:italic;font-size:.87rem;color:#888;margin-bottom:1.8rem}
   .pfen{margin-bottom:1.8rem;padding-bottom:1.8rem;border-bottom:1px solid #eee;page-break-inside:avoid}
   .pfen:last-child{border-bottom:none}
   .pfet{font-family:'Inconsolata',monospace;font-size:8.5px;color:#aaa;margin-bottom:.35rem}
-  .pfeq{border-left:2px solid #b8893a;padding-left:.9rem;font-style:italic;color:#3a3530;font-size:.9rem;line-height:1.75;margin-bottom:.4rem}
-  .pfer{padding-left:.9rem;font-weight:600;font-size:.9rem;line-height:1.75}
-  .pfrefl{margin-bottom:1.2rem;padding:.85rem 1rem;border-left:3px solid #b8893a;background:#faf7f0;page-break-inside:avoid}
-  .pfrdate{font-family:'Inconsolata',monospace;font-size:8px;color:#aaa;margin-bottom:.4rem}
-  .pfrbody{font-size:.9rem;color:#3a3530;line-height:1.8}
-  .pfctx{font-size:.9rem;line-height:1.85;color:#3a3530}
+  .pfeq{border-left:2px solid #b8893a;padding-left:.9rem;font-style:italic;color:#3a3530;font-size:.95rem;line-height:1.75;margin-bottom:.4rem}
+  .pfer{padding-left:.9rem;font-weight:600;font-size:.95rem;line-height:1.75}
+  .pfrl{margin-bottom:1.2rem;padding:.85rem 1rem;border-left:3px solid #b8893a;background:#faf7f0;page-break-inside:avoid}
+  .pfrd{font-family:'Inconsolata',monospace;font-size:8px;color:#aaa;margin-bottom:.4rem}
+  .pfrb{font-size:.95rem;color:#3a3530;line-height:1.8}
+  .pfctx{font-size:.95rem;line-height:1.85;color:#3a3530}
   .pfctx p{margin-bottom:.9rem}
   .pfco{text-align:center;padding:1.8rem;font-family:'Inconsolata',monospace;font-size:8px;color:#ccc;border-top:1px solid #eee;margin-top:1.8rem}
 }
@@ -178,42 +177,42 @@ nav{background:var(--ink);color:var(--sepia);display:flex;align-items:center;jus
   </div>
   <div class="nav-st" id="nst">&#8212;</div>
 </nav>
-<div class="mobile-book-select" id="mbs" style="display:none">
+<div class="mbs" id="mbs" style="display:none">
   <select id="msb" onchange="selBook(this.value)"></select>
 </div>
 <div class="shell">
   <aside class="sidebar">
     <h3>Books</h3>
     <div id="blist"></div>
-    <button class="add-book-btn" onclick="openModal()">+ New Book</button>
+    <button class="add-book-btn" onclick="openM()">+ New Book</button>
   </aside>
   <main class="content">
-    <div id="view-archive" class="view active">
+    <div id="va" class="view active">
       <div class="book-header">
         <div class="book-label" id="hl"></div>
         <h1 id="ht"></h1>
         <div class="author-line" id="ha"></div>
         <div class="meta-row">
           <span id="hy"></span><span id="hc"></span>
-          <button class="hdr-btn" onclick="exportBook()">Export PDF</button>
+          <button class="hdr-btn" onclick="expBook()">Export PDF</button>
         </div>
       </div>
       <div class="sec-tabs">
         <button class="sec-tab active" onclick="ss('log',this)">Verbatim Log</button>
         <button class="sec-tab" onclick="ss('refl',this)">My Reflections</button>
-        <button class="sec-tab" onclick="ss('context',this)">Context</button>
+        <button class="sec-tab" onclick="ss('ctx',this)">Context</button>
       </div>
       <div class="sec-content">
-        <div id="sec-log"></div>
-        <div id="sec-refl" style="display:none"></div>
-        <div id="sec-context" style="display:none"></div>
+        <div id="s-log"></div>
+        <div id="s-refl" style="display:none"></div>
+        <div id="s-ctx" style="display:none"></div>
       </div>
     </div>
-    <div id="view-add" class="view">
+    <div id="vadd" class="view">
       <div class="add-shell">
         <h2>Add a Reading Note</h2>
-        <p class="sub">Drop a screenshot &#8212; Claude reads it. Or type below.</p>
-        <div class="drop-zone" id="dz" ondragover="dov(event)" ondragleave="dlv()" ondrop="ddr(event)">
+        <p class="add-sub">Drop a screenshot &#8212; Claude reads it. Or type below.</p>
+        <div class="dz" id="dz" ondragover="dov(event)" ondragleave="dlv()" ondrop="ddr(event)">
           <input type="file" accept="image/*" onchange="dfs(event)">
           <div class="dz-icon">&#128247;</div>
           <div class="dz-title">Drop, tap, or paste a screenshot</div>
@@ -221,101 +220,114 @@ nav{background:var(--ink);color:var(--sepia);display:flex;align-items:center;jus
         </div>
         <div class="ss-prev" id="ssp">
           <img id="ssi" src="" alt="">
-          <div class="prev-info">
+          <div class="pi">
             <div class="pi-lbl">Screenshot</div>
             <div class="pi-st" id="pist">Ready</div>
-            <button class="prev-clr" onclick="clrSS()">&#215; Remove</button>
+            <button class="pi-clr" onclick="clrSS()">&#215; Remove</button>
           </div>
         </div>
         <div class="or-div">or type manually</div>
-        <div class="form-row"><label>Book</label><select id="nb"></select></div>
-        <div class="form-row"><label>Time / page <span style="opacity:.5;font-size:11px">(optional)</span></label><input type="text" id="nt" placeholder="e.g. 11:42 AM"></div>
-        <div class="form-row"><label>Passage from the book</label><textarea id="nq" rows="3" placeholder="The line that stopped you..."></textarea></div>
-        <div class="form-row"><label>Your response</label><textarea id="nr" rows="4" placeholder="Your words, unfiltered..."></textarea><div class="form-hint">Preserved verbatim.</div></div>
-        <div class="form-acts">
-          <button class="save-btn" onclick="submitNote()">Save to Archive</button>
-          <button class="clr-btn" onclick="clrAll()">Clear</button>
+        <div class="fr"><label>Book</label><select id="nb"></select></div>
+        <div class="fr"><label>Time / page <span style="opacity:.5;font-size:11px">(optional)</span></label><input type="text" id="nt" placeholder="e.g. 11:42 AM"></div>
+        <div class="fr"><label>Passage from the book</label><textarea id="nq" rows="3" placeholder="The line that stopped you..."></textarea></div>
+        <div class="fr"><label>Your response</label><textarea id="nr" rows="4" placeholder="Your words, unfiltered..."></textarea><div class="fr-hint">Preserved verbatim.</div></div>
+        <div class="fr-acts">
+          <button class="sv-btn" onclick="subNote()">Save to Archive</button>
+          <button class="cl-btn" onclick="clrAll()">Clear</button>
         </div>
       </div>
     </div>
   </main>
 </div>
 <div id="pf"></div>
-<div class="modal-bg" id="mbg" onclick="if(event.target===this)closeModal()">
+<div class="mbg" id="mbg" onclick="if(event.target===this)closeM()">
   <div class="modal">
     <h3>Add a New Book</h3>
-    <div class="form-row"><label>Title</label><input type="text" id="nt2" placeholder="e.g. The Heart's Invisible Furies"></div>
-    <div class="form-row"><label>Author</label><input type="text" id="na2" placeholder="e.g. John Boyne"></div>
-    <div class="form-row"><label>Year Read</label><input type="text" id="ny2" placeholder="e.g. 2026"></div>
-    <div class="form-row"><label>Why this book?</label><textarea id="nc2" rows="2" placeholder="What brought you to it..."></textarea></div>
-    <div class="modal-acts">
-      <button onclick="closeModal()">Cancel</button>
+    <div class="fr"><label>Title</label><input type="text" id="mt" placeholder="Title"></div>
+    <div class="fr"><label>Author</label><input type="text" id="ma" placeholder="Author"></div>
+    <div class="fr"><label>Year</label><input type="text" id="my" placeholder="2026"></div>
+    <div class="fr"><label>Why this book?</label><textarea id="mc" rows="2" placeholder="What brought you to it..."></textarea></div>
+    <div class="m-acts">
+      <button onclick="closeM()">Cancel</button>
       <button class="pri" onclick="addBook()">Add Book</button>
     </div>
   </div>
 </div>
 <script>
-const GH={o:'Tarekagad',r:'readers-archive',p:'archive.json'};
-const PROXY='https://readers-archive-proxyf.ttawab.workers.dev';
-let tok=null,sha=null,D={activeBook:null,activeSection:'log',books:[]};
+var GH={o:'Tarekagad',r:'readers-archive',p:'archive.json'};
+var PROXY='https://readers-archive-proxyf.ttawab.workers.dev';
+var tok=null,sha=null,D={activeBook:null,activeSection:'log',books:[]};
 
-function getTok(){return localStorage.getItem('ra_tok')||null}
+function getTok(){return localStorage.getItem('ra_tok')||null;}
 function saveTok(){
   var t=document.getElementById('tok').value.trim();
-  if(!t){alert('Please enter your token.');return}
+  if(!t){alert('Please enter your token.');return;}
   localStorage.setItem('ra_tok',t);tok=t;
-  document.getElementById('tw').style.display='none';load();
-}
-function nst(m,c){
-  var e=document.getElementById('nst');e.textContent=m;e.className='nav-st'+(c?' '+c:'');
-}
-function enc(s){
-  var bytes=new TextEncoder().encode(s);
-  var bin='';for(var i=0;i<bytes.length;i++)bin+=String.fromCharCode(bytes[i]);
-  return btoa(bin);
-}
-function dec(s){
-  var bin=atob(s.replace(/\n/g,''));
-  var bytes=new Uint8Array(bin.length);
-  for(var i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);
-  return new TextDecoder().decode(bytes);
-}
-async function load(){
-  nst('Loading...','saving');
-  try{
-    var r=await fetch('https://api.github.com/repos/'+GH.o+'/'+GH.r+'/contents/'+GH.p,{headers:{Authorization:'token '+tok,Accept:'application/vnd.github.v3+json'}});
-    if(r.status===401){localStorage.removeItem('ra_tok');location.reload();return}
-    if(r.status===404){nst('No archive.json','err');return}
-    var d=await r.json();sha=d.sha;
-    D=JSON.parse(dec(d.content));
-    if(!D.activeBook&&D.books.length)D.activeBook=D.books[0].id;
-    D.books.forEach(function(b){if(!b.reflection)b.reflection=null;if(!b.snapshots)b.snapshots=[];});
-    nst('Loaded','saved');setTimeout(function(){nst('\u2014');},2000);
-    renderAll();
-  }catch(e){nst('Load failed','err');console.error(e);}
-}
-async function save(){
-  nst('Saving...','saving');
-  try{
-    var c=enc(JSON.stringify(D,null,2));
-    var r=await fetch('https://api.github.com/repos/'+GH.o+'/'+GH.r+'/contents/'+GH.p,{
-      method:'PUT',
-      headers:{Authorization:'token '+tok,Accept:'application/vnd.github.v3+json','Content-Type':'application/json'},
-      body:JSON.stringify({message:'Archive update '+new Date().toISOString(),content:c,sha:sha})
-    });
-    var d=await r.json();sha=d.content&&d.content.sha;
-    nst('Saved','saved');setTimeout(function(){nst('\u2014');},2500);
-  }catch(e){nst('Save failed','err');}
+  document.getElementById('tw').style.display='none';
+  load();
 }
 
-// Screenshot
+function nst(m,c){
+  var e=document.getElementById('nst');
+  e.textContent=m;
+  e.className='nav-st'+(c?' '+c:'');
+}
+
+function enc(s){
+  var b=new TextEncoder().encode(s),r='';
+  for(var i=0;i<b.length;i++)r+=String.fromCharCode(b[i]);
+  return btoa(r);
+}
+
+function dec(s){
+  var b=atob(s.replace(/\n/g,'')),a=new Uint8Array(b.length);
+  for(var i=0;i<b.length;i++)a[i]=b.charCodeAt(i);
+  return new TextDecoder().decode(a);
+}
+
+function load(){
+  nst('Loading...','saving');
+  fetch('https://api.github.com/repos/'+GH.o+'/'+GH.r+'/contents/'+GH.p,{
+    headers:{Authorization:'token '+tok,Accept:'application/vnd.github.v3+json'}
+  }).then(function(r){
+    if(r.status===401){localStorage.removeItem('ra_tok');location.reload();return null;}
+    if(r.status===404){nst('No archive.json found','err');return null;}
+    return r.json();
+  }).then(function(d){
+    if(!d)return;
+    sha=d.sha;
+    D=JSON.parse(dec(d.content));
+    if(!D.activeBook&&D.books.length)D.activeBook=D.books[0].id;
+    D.books.forEach(function(b){
+      if(!b.reflection)b.reflection=null;
+      if(!b.snapshots)b.snapshots=[];
+    });
+    nst('Loaded','saved');
+    setTimeout(function(){nst('&#8212;');},2000);
+    renderAll();
+  }).catch(function(e){nst('Load failed','err');console.error(e);});
+}
+
+function doSave(){
+  nst('Saving...','saving');
+  fetch('https://api.github.com/repos/'+GH.o+'/'+GH.r+'/contents/'+GH.p,{
+    method:'PUT',
+    headers:{Authorization:'token '+tok,Accept:'application/vnd.github.v3+json','Content-Type':'application/json'},
+    body:JSON.stringify({message:'Archive update',content:enc(JSON.stringify(D,null,2)),sha:sha})
+  }).then(function(r){return r.json();}).then(function(d){
+    if(d.content)sha=d.content.sha;
+    nst('Saved','saved');
+    setTimeout(function(){nst('&#8212;');},2500);
+  }).catch(function(){nst('Save failed','err');});
+}
+
 var ib64=null,im='image/jpeg';
-function dov(e){e.preventDefault();document.getElementById('dz').classList.add('dragover');}
-function dlv(){document.getElementById('dz').classList.remove('dragover');}
+function dov(e){e.preventDefault();document.getElementById('dz').classList.add('over');}
+function dlv(){document.getElementById('dz').classList.remove('over');}
 function ddr(e){e.preventDefault();dlv();var f=e.dataTransfer.files[0];if(f&&f.type.startsWith('image/'))loadImg(f);}
 function dfs(e){var f=e.target.files[0];if(f)loadImg(f);}
 document.addEventListener('paste',function(e){
-  if(!document.getElementById('view-add').classList.contains('active'))return;
+  if(!document.getElementById('vadd').classList.contains('active'))return;
   var items=e.clipboardData&&e.clipboardData.items;
   if(!items)return;
   for(var i=0;i<items.length;i++){if(items[i].type.startsWith('image/')){loadImg(items[i].getAsFile());break;}}
@@ -323,217 +335,260 @@ document.addEventListener('paste',function(e){
 function loadImg(f){
   im=f.type||'image/jpeg';
   var r=new FileReader();
-  r.onload=function(e){
-    ib64=e.target.result.split(',')[1];
-    document.getElementById('ssi').src=e.target.result;
+  r.onload=function(ev){
+    ib64=ev.target.result.split(',')[1];
+    document.getElementById('ssi').src=ev.target.result;
     document.getElementById('ssp').classList.add('vis');
-    pist('reading','Reading with Claude...');
-    ocr();
+    setPist('reading','Reading with Claude...');
+    doOcr();
   };
   r.readAsDataURL(f);
 }
-async function ocr(){
-  try{
-    var prompt='Reading notes screenshot. Book passage in blockquote or italic block, reader response in bold. Return ONLY JSON: {'+'"'+'quote'+'"'+':'+'"'+'passage'+'"'+','+'"'+'response'+'"'+':'+'"'+'reader words'+'"'+','+'"'+'time'+'"'+':'+'"'+'timestamp or empty'+'"'+'} If unclear return all empty strings.';
-    var r=await fetch(PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:im,data:ib64}},{type:'text',text:prompt}]}]})});
-    var d=await r.json();
-    var t=d.content&&d.content.find(function(x){return x.type==='text';});
+function doOcr(){
+  var body={
+    model:'claude-sonnet-4-20250514',
+    max_tokens:1000,
+    messages:[{role:'user',content:[
+      {type:'image',source:{type:'base64',media_type:im,data:ib64}},
+      {type:'text',text:'This is a reading notes screenshot. It has a book passage (in a blockquote or italic block) and the reader response (in bold). Return ONLY a JSON object with keys quote, response, time. No other text.'}
+    ]}]
+  };
+  fetch(PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
+  .then(function(r){return r.json();})
+  .then(function(d){
+    var t=d.content&&d.content.filter(function(x){return x.type==='text';})[0];
     var txt=t?t.text:'';
-    var p=JSON.parse(txt.replace(/```json|```/g,'').trim());
+    var clean=txt.replace(/```json/g,'').replace(/```/g,'').trim();
+    var p=JSON.parse(clean);
     if(p.quote||p.response){
       if(p.quote)document.getElementById('nq').value=p.quote;
       if(p.response)document.getElementById('nr').value=p.response;
       if(p.time)document.getElementById('nt').value=p.time;
-      pist('done','Extracted \u2014 review and save');
-    }else{pist('error','Could not detect \u2014 type manually');}
-  }catch(e){pist('error','Could not read \u2014 type manually');}
+      setPist('done','Extracted \u2014 review and save');
+    }else{setPist('error','Could not detect \u2014 type manually');}
+  }).catch(function(){setPist('error','Could not read \u2014 type manually');});
 }
-function pist(c,m){var e=document.getElementById('pist');e.className='pi-st '+c;e.textContent=m;}
+function setPist(c,m){var e=document.getElementById('pist');e.className='pi-st '+c;e.textContent=m;}
 function clrSS(){ib64=null;document.getElementById('ssp').classList.remove('vis');document.getElementById('ssi').src='';document.getElementById('dz').querySelector('input').value='';}
 function clrAll(){clrSS();['nt','nq','nr'].forEach(function(i){document.getElementById(i).value='';});}
 
-// Reflections
-async function genRefl(){
-  var b=book();
+function doGenRefl(){
+  var b=curBook();
   if(!b.entries.length){alert('Add reading notes first.');return;}
   var btn=document.querySelector('.gen-btn');
   btn.disabled=true;btn.textContent='Thinking...';
   var es=b.entries.map(function(e,i){return 'Note '+(i+1)+':\nPassage: "'+e.quote+'"\nMy response: "'+e.response+'"';}).join('\n\n');
-  var prev=b.reflection?'Previous reflection (note what has evolved):\n'+b.reflection.text+'\n\n':'';
-  try{
-    var r=await fetch(PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2500,messages:[{role:'user',content:'You are helping Tarek maintain a living reflection on "'+b.title+'" by '+b.author+'. He is reading this book and taking notes as he goes.\n\n'+prev+'His reading notes so far:\n\n'+es+'\n\nWrite a FRESH synthesis of where his reading stands right now. This is NOT a list of themes. It is a flowing personal reflection written in first person as Tarek speaking - I, me, my. Write AS him.\n\nCapture: what is gripping him, what ideas are forming, what has surprised him, how his thinking has shifted from earlier notes if at all. Keep it between 3-5 paragraphs. Maximum 400 words. Make it feel like a letter to himself mid-book - honest, unresolved, alive.\n\nReturn ONLY the reflection text. No title, no labels, no JSON.'}]})});
-    var d=await r.json();
-    var t=d.content&&d.content.find(function(x){return x.type==='text';});
+  var prev=b.reflection?'Previous reflection:\n'+b.reflection.text+'\n\n':'';
+  var prompt='You are helping Tarek build a personal literary archive. These are his reading notes for "'+b.title+'" by '+b.author+'.\n\n'+prev+'His notes so far:\n\n'+es+'\n\nWrite a fresh personal reflection in first person as Tarek. Write AS him using I, me, my. 3-5 paragraphs, max 400 words. Capture what is gripping him, what ideas are forming, how his thinking has evolved. Like a letter to himself mid-book. Return only the reflection text, no labels.';
+  var body={model:'claude-sonnet-4-20250514',max_tokens:2500,messages:[{role:'user',content:prompt}]};
+  fetch(PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
+  .then(function(r){return r.json();})
+  .then(function(d){
+    var t=d.content&&d.content.filter(function(x){return x.type==='text';})[0];
     var text=t?t.text:'';
     if(text){
       b.reflection={text:text,date:new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})};
       renderAll();
       ss('refl',document.querySelectorAll('.sec-tab')[1]);
-      await save();
+      doSave();
     }else{alert('Could not generate. Try again.');}
-  }catch(e){alert('Could not generate. Check connection.');}
-  btn.disabled=false;btn.textContent='Regenerate reflection';
+    btn.disabled=false;btn.textContent='Regenerate reflection';
+  }).catch(function(){
+    alert('Could not generate. Check connection.');
+    btn.disabled=false;btn.textContent='Regenerate reflection';
+  });
 }
 
-function dlRefl(){
-  var b=book();
+function doDlRefl(){
+  var b=curBook();
   if(!b||!b.reflection)return;
-  var html='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+b.title+' - Reflection</title>'
+  var body=b.reflection.text.replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>');
+  var html='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+b.title+' Reflection</title>'
     +'<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cormorant+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">'
-    +'<style>body{font-family:"Cormorant Garamond",Georgia,serif;font-size:20px;line-height:1.85;max-width:680px;margin:3rem auto;padding:0 2rem;color:#1c1a17}'
-    +'.title{font-family:"IM Fell English",serif;font-size:2rem;font-style:italic;margin-bottom:.3rem}'
-    +'.author{color:#9a9080;font-style:italic;margin-bottom:2rem}'
-    +'.date{font-family:monospace;font-size:11px;color:#aaa;letter-spacing:.1em;margin-bottom:1.5rem;text-transform:uppercase}'
-    +'.body{border-left:2px solid #b8893a;padding-left:1.5rem}'
-    +'.footer{margin-top:3rem;font-family:monospace;font-size:10px;color:#ccc;letter-spacing:.08em;text-transform:uppercase;border-top:1px solid #eee;padding-top:1rem}'
-    +'@media print{body{margin:1.5rem auto}}</style></head><body>'
-    +'<div class="title">'+b.title+'</div>'
-    +'<div class="author">'+b.author+'</div>'
-    +'<div class="date">Reflection \u2014 '+b.reflection.date+'</div>'
-    +'<div class="body">'+b.reflection.text.replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>')+'</div>'
-    +'<div class="footer">readingsof.tarekofcairo.com \u00b7 A Reader\u2019s Archive</div>'
+    +'<style>body{font-family:"Cormorant Garamond",Georgia,serif;font-size:24px;line-height:1.85;max-width:680px;margin:3rem auto;padding:0 2rem;color:#1c1a17}'
+    +'.t{font-family:"IM Fell English",serif;font-size:2rem;font-style:italic;margin-bottom:.3rem}'
+    +'.a{color:#9a9080;font-style:italic;margin-bottom:2rem}'
+    +'.d{font-family:monospace;font-size:11px;color:#aaa;letter-spacing:.1em;margin-bottom:1.5rem;text-transform:uppercase}'
+    +'.b{border-left:2px solid #b8893a;padding-left:1.5rem}'
+    +'.f{margin-top:3rem;font-family:monospace;font-size:10px;color:#ccc;letter-spacing:.08em;text-transform:uppercase;border-top:1px solid #eee;padding-top:1rem}'
+    +'@media print{body{margin:1rem auto}}</style></head><body>'
+    +'<div class="t">'+b.title+'</div>'
+    +'<div class="a">'+b.author+'</div>'
+    +'<div class="d">Reflection \u2014 '+b.reflection.date+'</div>'
+    +'<div class="b"><p>'+body+'</p></div>'
+    +'<div class="f">readingsof.tarekofcairo.com</div>'
     +'</body></html>';
   var w=window.open('','_blank');
-  w.document.write(html);
-  w.document.close();
-  setTimeout(function(){w.print();},600);
+  if(w){w.document.write(html);w.document.close();setTimeout(function(){w.print();},600);}
 }
 
-function saveSnapshot(){
-  var b=book();
+function doSaveSnap(){
+  var b=curBook();
   if(!b.reflection)return;
   if(!b.snapshots)b.snapshots=[];
   b.snapshots.unshift({text:b.reflection.text,date:b.reflection.date});
   renderAll();
   ss('refl',document.querySelectorAll('.sec-tab')[1]);
-  save();
+  doSave();
 }
 
-function exportBook(){
-  var b=book();
+function expBook(){
+  var b=curBook();
   var ep=(b.entries[0]&&b.entries[0].response||'').substring(0,140);
-  var entriesHtml=b.entries.map(function(e){
-    return '<div class="pfen"><div class="pfet">'+(e.time||'')+'</div><div class="pfeq">"'+e.quote+'"</div><div class="pfer">'+e.response+'</div></div>';
+  var el=b.entries.map(function(e){
+    return '<div class="pfen"><div class="pfet">'+(e.time||'')+'</div><div class="pfeq">\u201C'+e.quote+'\u201D</div><div class="pfer">'+e.response+'</div></div>';
   }).join('')||'<p style="color:#aaa;font-style:italic">No entries.</p>';
-  var reflHtml=b.reflection
-    ?'<div class="pfrefl"><div class="pfrdate">'+b.reflection.date+'</div><div class="pfrbody">'+b.reflection.text.replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>')+'</div></div>'
+  var rl=b.reflection
+    ?'<div class="pfrl"><div class="pfrd">'+b.reflection.date+'</div><div class="pfrb">'+b.reflection.text.replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>')+'</div></div>'
     :'<p style="color:#aaa;font-style:italic">No reflection yet.</p>';
-  var snapsHtml=(b.snapshots&&b.snapshots.length)
-    ?b.snapshots.map(function(s){return '<div class="pfrefl"><div class="pfrdate">Saved \u2014 '+s.date+'</div><div class="pfrbody">'+s.text.replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>')+'</div></div>';}).join('')
-    :'';
+  var sl=(b.snapshots&&b.snapshots.length)
+    ?b.snapshots.map(function(s){return '<div class="pfrl"><div class="pfrd">Saved \u2014 '+s.date+'</div><div class="pfrb">'+s.text.replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>')+'</div></div>';}).join(''):'';
   document.getElementById('pf').innerHTML=
-    '<div class="pfc"><div class="pfs">A Reader\'s Archive \u00b7 '+b.num+'</div>'
+    '<div class="pfc"><div class="pfs">A Reader's Archive \u00B7 '+b.num+'</div>'
     +'<div class="pft">'+b.title+'</div><div class="pfa">'+b.author+'</div>'
     +'<div class="pfy">'+b.year+'</div><hr class="pfr">'
-    +'<div class="pfe">"'+ep+(ep.length>=140?'...':'')+'"</div>'
+    +'<div class="pfe">\u201C'+ep+(ep.length>=140?'...':'')+'\u201D</div>'
     +'<div class="pfea">\u2014 Tarek</div></div>'
-    +'<div class="pfsec"><div class="pfst">Verbatim Notes</div>'
-    +'<div class="pfsi">Exact words, written in the moment.</div>'+entriesHtml+'</div>'
-    +'<div class="pfsec"><div class="pfst">My Reflection</div>'+reflHtml
-    +(snapsHtml?'<div class="pfst" style="margin-top:2rem;font-size:1rem">Saved Snapshots</div>'+snapsHtml:'')+'</div>'
+    +'<div class="pfsec"><div class="pfst">Verbatim Notes</div><div class="pfsi">Exact words, written in the moment.</div>'+el+'</div>'
+    +'<div class="pfsec"><div class="pfst">My Reflection</div>'+rl+(sl?'<div class="pfst" style="margin-top:1.5rem;font-size:1.05rem">Saved Snapshots</div>'+sl:'')+'</div>'
     +'<div class="pfsec"><div class="pfst">Context</div><div class="pfctx"><p>'+b.context+'</p></div></div>'
-    +'<div class="pfco">A Reader\'s Archive \u00b7 '+b.title+' \u00b7 '+new Date().toLocaleDateString('en-GB',{year:'numeric',month:'long',day:'numeric'})+'</div>';
+    +'<div class="pfco">A Reader's Archive \u00B7 '+b.title+' \u00B7 '+new Date().toLocaleDateString('en-GB',{year:'numeric',month:'long',day:'numeric'})+'</div>';
   setTimeout(function(){window.print();},150);
 }
 
-// Nav
 function sv(v,btn){
   document.querySelectorAll('.view').forEach(function(e){e.classList.remove('active');});
   document.querySelectorAll('.tab-btn').forEach(function(e){e.classList.remove('active');});
-  document.getElementById('view-'+v).classList.add('active');
+  document.getElementById(v==='archive'?'va':'vadd').classList.add('active');
   if(btn)btn.classList.add('active');
   if(v==='add'){
     document.getElementById('nb').innerHTML=D.books.map(function(b){return '<option value="'+b.id+'" '+(b.id===D.activeBook?'selected':'')+'>'+b.title+'</option>';}).join('');
   }
 }
+
 function ss(s,btn){
   D.activeSection=s;
-  ['log','refl','context'].forEach(function(i){document.getElementById('sec-'+i).style.display=i===s?'block':'none';});
+  ['log','refl','ctx'].forEach(function(i){document.getElementById('s-'+i).style.display=i===s?'block':'none';});
   document.querySelectorAll('.sec-tab').forEach(function(e){e.classList.remove('active');});
   if(btn)btn.classList.add('active');
 }
-function selBook(id){D.activeBook=id;renderAll();['log','refl','context'].forEach(function(i){document.getElementById('sec-'+i).style.display=i===D.activeSection?'block':'none';});}
-function book(){return D.books.find(function(b){return b.id===D.activeBook;});}
+
+function selBook(id){
+  D.activeBook=id;renderAll();
+  ['log','refl','ctx'].forEach(function(i){document.getElementById('s-'+i).style.display=i===D.activeSection?'block':'none';});
+}
+
+function curBook(){return D.books.filter(function(b){return b.id===D.activeBook;})[0];}
 
 function renderAll(){
   if(!D.books.length){document.getElementById('blist').innerHTML='';return;}
   if(!D.activeBook)D.activeBook=D.books[0].id;
   document.getElementById('blist').innerHTML=D.books.map(function(b){
-    return '<div class="book-item '+(b.id===D.activeBook?'active':'')+'" onclick="selBook(\''+b.id+'\')">'
+    return '<div class="book-item '+(b.id===D.activeBook?'active':'')+'" onclick="selBook(''+b.id+'')">'
       +'<div class="b-num">'+b.num+'</div><div class="b-title">'+b.title+'</div><div class="b-author">'+b.author+'</div></div>';
   }).join('');
   var ms=document.getElementById('msb');
   ms.innerHTML=D.books.map(function(b){return '<option value="'+b.id+'" '+(b.id===D.activeBook?'selected':'')+'>'+b.num+' \u2014 '+b.title+'</option>';}).join('');
   document.getElementById('mbs').style.display='block';
-  var b=book();if(!b)return;
+  var b=curBook();if(!b)return;
   document.getElementById('hl').textContent=b.num;
   document.getElementById('ht').textContent=b.title;
   document.getElementById('ha').textContent=b.author;
   document.getElementById('hy').textContent=b.year;
   document.getElementById('hc').textContent=b.entries.length+' '+(b.entries.length===1?'entry':'entries');
-  // Log
-  document.getElementById('sec-log').innerHTML=b.entries.length
-    ?b.entries.map(function(e,i){return '<div class="entry"><div class="entry-time">'+(e.time||'\u2014')+'</div><div class="entry-quote">\u201c'+e.quote+'\u201d</div><div class="entry-resp">'+e.response+'</div><div class="entry-act"><button onclick="delE(\''+b.id+'\','+i+')">Remove</button></div></div>';}).join('')
+  document.getElementById('s-log').innerHTML=b.entries.length
+    ?b.entries.map(function(e,i){
+        return '<div class="entry">'
+          +'<div class="entry-time">'+(e.time||'\u2014')+'</div>'
+          +'<div class="entry-quote">\u201C'+e.quote+'\u201D</div>'
+          +'<div class="entry-resp">'+e.response+'</div>'
+          +'<div class="entry-act"><button onclick="delE(''+b.id+'','+i+')">Remove</button></div>'
+          +'</div>';
+      }).join('')
     :'<div class="empty">No notes yet.</div>';
-  // Reflections
   var hasR=b.reflection&&b.reflection.text;
-  var reflContent=hasR
-    ?'<div class="current-refl"><div class="refl-date">'+b.reflection.date+'</div>'+b.reflection.text.replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>')+'</div>'
+  var rc=hasR
+    ?'<div class="cur-refl"><div class="refl-date">'+b.reflection.date+'</div><p>'+b.reflection.text.replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>')+'</p></div>'
     :'<div class="empty" style="padding:1rem 0">No reflection yet. Add notes then generate below.</div>';
-  var snapsContent=(b.snapshots&&b.snapshots.length)
-    ?'<div class="snapshots-section"><div class="snapshots-title">Saved snapshots</div>'
-      +b.snapshots.map(function(s,i){return '<div class="snapshot"><button class="snap-del" onclick="delSnap(\''+b.id+'\','+i+')">&#215;</button><div class="snap-date">'+s.date+'</div><div class="snap-preview">'+s.text.substring(0,200)+'...</div></div>';}).join('')+'</div>'
+  var sc=(b.snapshots&&b.snapshots.length)
+    ?'<div class="snaps-sec"><div class="snaps-title">Saved snapshots</div>'
+      +b.snapshots.map(function(s,i){
+        return '<div class="snapshot">'
+          +'<button class="snap-del" onclick="delSnap(''+b.id+'','+i+')">&#215;</button>'
+          +'<div class="snap-date">'+s.date+'</div>'
+          +'<div class="snap-prev">'+s.text.substring(0,200)+'...</div>'
+          +'</div>';
+      }).join('')+'</div>'
     :'';
-  document.getElementById('sec-refl').innerHTML=
-    '<p class="refl-intro">A living reflection \u2014 rewrites itself as you read. Save a snapshot anytime to preserve where you were.</p>'
+  document.getElementById('s-refl').innerHTML=
+    '<p class="refl-intro">A living reflection \u2014 rewrites itself as you read. Save a snapshot to keep a record of where you were.</p>'
     +'<div class="refl-actions">'
-    +'<button class="gen-btn" onclick="genRefl()">'+(hasR?'Regenerate reflection':'Generate my reflection')+'</button>'
-    +(hasR?'<button class="dl-refl-btn" onclick="dlRefl()">Download reflection</button>':'')
-    +(hasR?'<button class="save-snap-btn" onclick="saveSnapshot()">Save snapshot</button>':'')
-    +'<span class="refl-note">Replaces previous \u2014 save snapshot first if you want to keep it</span>'
+    +'<button class="gen-btn" onclick="doGenRefl()">'+(hasR?'Regenerate reflection':'Generate my reflection')+'</button>'
+    +(hasR?'<button class="dl-btn" onclick="doDlRefl()">Download reflection</button>':'')
+    +(hasR?'<button class="snap-btn" onclick="doSaveSnap()">Save snapshot</button>':'')
+    +'<span class="refl-note">Each generation replaces the previous</span>'
     +'</div>'
-    +reflContent+snapsContent;
-  // Context
-  document.getElementById('sec-context').innerHTML='<div class="ctx-block"><p>'+b.context+'</p></div>';
+    +rc+sc;
+  document.getElementById('s-ctx').innerHTML='<div class="ctx-block"><p>'+b.context+'</p></div>';
 }
 
-async function submitNote(){
+function subNote(){
   var bi=document.getElementById('nb').value;
   var ti=document.getElementById('nt').value.trim();
   var q=document.getElementById('nq').value.trim();
   var rp=document.getElementById('nr').value.trim();
   if(!q||!rp){alert('Please fill in both the passage and your response.');return;}
-  D.books.find(function(b){return b.id===bi;}).entries.push({time:ti||new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),quote:q,response:rp});
+  D.books.filter(function(b){return b.id===bi;})[0].entries.push({
+    time:ti||new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),
+    quote:q,response:rp
+  });
   clrAll();D.activeBook=bi;renderAll();
   document.querySelectorAll('.view').forEach(function(e){e.classList.remove('active');});
   document.querySelectorAll('.tab-btn').forEach(function(e){e.classList.remove('active');});
-  document.getElementById('view-archive').classList.add('active');
+  document.getElementById('va').classList.add('active');
   document.querySelector('.tab-btn').classList.add('active');
   ss('log',document.querySelector('.sec-tab'));
-  setTimeout(function(){var l=document.getElementById('sec-log').lastElementChild;if(l)l.scrollIntoView({behavior:'smooth'});},150);
-  await save();
+  setTimeout(function(){
+    var l=document.getElementById('s-log').lastElementChild;
+    if(l)l.scrollIntoView({behavior:'smooth'});
+  },150);
+  doSave();
 }
-async function delE(bi,i){if(!confirm('Remove this entry?'))return;D.books.find(function(b){return b.id===bi;}).entries.splice(i,1);renderAll();await save();}
-async function delSnap(bi,i){if(!confirm('Remove this snapshot?'))return;D.books.find(function(b){return b.id===bi;}).snapshots.splice(i,1);renderAll();await save();}
-function openModal(){document.getElementById('mbg').classList.add('open');document.getElementById('nt2').focus();}
-function closeModal(){document.getElementById('mbg').classList.remove('open');}
-async function addBook(){
-  var ti=document.getElementById('nt2').value.trim();
-  var au=document.getElementById('na2').value.trim();
-  var yr=document.getElementById('ny2').value.trim();
-  var cx=document.getElementById('nc2').value.trim();
+
+function delE(bi,i){
+  if(!confirm('Remove this entry?'))return;
+  D.books.filter(function(b){return b.id===bi;})[0].entries.splice(i,1);
+  renderAll();doSave();
+}
+
+function delSnap(bi,i){
+  if(!confirm('Remove this snapshot?'))return;
+  D.books.filter(function(b){return b.id===bi;})[0].snapshots.splice(i,1);
+  renderAll();doSave();
+}
+
+function openM(){document.getElementById('mbg').classList.add('open');document.getElementById('mt').focus();}
+function closeM(){document.getElementById('mbg').classList.remove('open');}
+
+function addBook(){
+  var ti=document.getElementById('mt').value.trim();
+  var au=document.getElementById('ma').value.trim();
+  var yr=document.getElementById('my').value.trim();
+  var cx=document.getElementById('mc').value.trim();
   if(!ti){alert('Please enter a title.');return;}
   var ns=['I','II','III','IV','V','VI','VII','VIII','IX','X'];
   var id='b'+Date.now();
-  var year=yr||new Date().getFullYear().toString();
-  D.books.push({id:id,num:'Book '+(ns[D.books.length]||D.books.length+1),title:ti,author:au||'',year:'Reading '+year,context:cx||'Added to the archive.',reflection:null,snapshots:[],entries:[]});
-  closeModal();
-  ['nt2','na2','ny2','nc2'].forEach(function(i){document.getElementById(i).value='';});
-  selBook(id);await save();
+  D.books.push({id:id,num:'Book '+(ns[D.books.length]||D.books.length+1),
+    title:ti,author:au||'',year:'Reading '+(yr||new Date().getFullYear()),
+    context:cx||'Added to the archive.',reflection:null,snapshots:[],entries:[]});
+  closeM();
+  ['mt','ma','my','mc'].forEach(function(i){document.getElementById(i).value='';});
+  selBook(id);doSave();
 }
+
 tok=getTok();
-if(!tok)document.getElementById('tw').style.display='flex';
-else load();
+if(!tok){document.getElementById('tw').style.display='flex';}
+else{load();}
 </script>
 </body>
 </html>
