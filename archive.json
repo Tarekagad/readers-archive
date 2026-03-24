@@ -1,6 +1,6 @@
 {
   "activeBook": "thif",
-  "activeSection": "log",
+  "activeSection": "themes",
   "books": [
     {
       "id": "omas",
@@ -71,7 +71,24 @@
       "author": "John Boyne",
       "year": "Reading 2025",
       "context": "Recommended to me as East of Eden crossed with Covenant of Water â modern, sharper, faster. Life across decades. Identity, family, exile, belonging. I started it after Hemingway.",
-      "themes": [],
+      "themes": [
+        {
+          "title": "Religious Hypocrisy and Moral Contradictions",
+          "body": "I'm struck by how Boyne immediately exposes the gap between religious authority and moral behavior. The priest who should embody virtue is the one committing the sins, while the community that claims goodness shows none of it. This irony sets up what I expect will be a sustained critique of institutional morality throughout the novel."
+        },
+        {
+          "title": "The Power of Sardonic Storytelling",
+          "body": "I love how Boyne uses sarcasm as a narrative weapon right from the start. That capitalized 'Good People of Goleen' feels like a bitter joke that the narrator is sharing with me. It's a storytelling technique that makes me complicit in the criticism—I'm in on the joke about these supposedly good people who are anything but."
+        },
+        {
+          "title": "Social Judgment and Shame as Weapons",
+          "body": "I can already see how shame and social condemnation will be major forces in this story. The way the community turns on the mother while protecting or ignoring the priest's behavior tells me everything about how power and gender dynamics work in this setting. I suspect this opening scene of public shaming will echo throughout the entire narrative."
+        },
+        {
+          "title": "The Corruption of Innocence",
+          "body": "What strikes me about this opening is how it immediately corrupts any notion of innocence or goodness. Even the chapter title becomes tainted with irony, and I'm left questioning whether anyone in this story will truly embody the virtue they claim to represent. It's a brilliant way to prepare me for a world where moral certainties don't exist."
+        }
+      ],
       "entries": [
         {
           "time": "12:11 AM",
