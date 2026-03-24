@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Readings of Tarek | readingsof.tarekofcairo.com</title>
+<meta name="description" content="A reader's archive — notes and reflections from the books of Tarek of Cairo.">
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inconsolata:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#1c1a17;--sepia:#f5f0e8;--gold:#b8893a;--rust:#8b4a2a;--faded:#9a9080;--line:#ddd5c0;--paper:#faf7f0;--margin:#f0ebe0}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--sepia);color:var(--ink);font-family:'Cormorant Garamond',Georgia,serif;font-size:20px;line-height:1.75;min-height:100vh}
+nav{background:var(--ink);color:var(--sepia);display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem;height:56px;position:sticky;top:0;z-index:100}
+.brand{font-family:'IM Fell English',serif;font-size:17px;opacity:.9}
+.brand span{font-size:12px;font-family:'Inconsolata',monospace;opacity:.5;letter-spacing:.1em;margin-left:1rem}
+.shell{max-width:780px;margin:0 auto;padding:3rem 2rem}
+.loading{text-align:center;padding:5rem 2rem;color:var(--faded);font-style:italic;font-size:1.1rem}
+
+/* BOOK CARD */
+.book-card{background:var(--paper);border-radius:6px;margin-bottom:3rem;overflow:hidden;border:1px solid var(--line)}
+.book-card-header{padding:2rem 2.5rem 1.5rem;border-bottom:1px solid var(--line);background:linear-gradient(to bottom,var(--sepia),var(--paper))}
+.book-num{font-family:'Inconsolata',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.4rem}
+.book-title{font-family:'IM Fell English',serif;font-size:2rem;font-style:italic;line-height:1.2;margin-bottom:.3rem}
+.book-author{font-size:1rem;color:var(--faded);font-style:italic}
+.book-meta{margin-top:.8rem;font-family:'Inconsolata',monospace;font-size:11px;color:var(--faded);display:flex;gap:1.5rem}
+
+/* TABS */
+.pub-tabs{display:flex;padding:0 2.5rem;border-bottom:1px solid var(--line);background:var(--paper);overflow-x:auto}
+.pub-tab{background:none;border:none;border-bottom:2px solid transparent;padding:.8rem 1rem;font-family:'Inconsolata',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--faded);cursor:pointer;transition:all .2s;margin-bottom:-1px;white-space:nowrap}
+.pub-tab:hover{color:var(--ink)}.pub-tab.active{color:var(--ink);border-bottom-color:var(--ink)}
+.pub-section{padding:1.8rem 2.5rem}
+
+/* ENTRIES */
+.entry{margin-bottom:2rem;padding-bottom:2rem;border-bottom:1px solid var(--line)}
+.entry:last-child{border-bottom:none}
+.entry-time{font-family:'Inconsolata',monospace;font-size:10px;color:var(--faded);letter-spacing:.1em;margin-bottom:.5rem}
+.entry-quote{border-left:2px solid var(--gold);padding-left:1.2rem;font-style:italic;color:#3a3530;font-size:1rem;line-height:1.75;margin-bottom:.6rem}
+.entry-resp{padding-left:1.2rem;font-weight:600;font-size:1rem;line-height:1.75}
+
+/* REFLECTION */
+.refl-block{background:var(--sepia);border-radius:4px;border-left:3px solid var(--gold);padding:1.6rem 1.8rem;line-height:1.85;font-size:1.05rem;color:#3a3530}
+.refl-date{font-family:'Inconsolata',monospace;font-size:10px;color:var(--faded);margin-bottom:1rem;letter-spacing:.1em}
+.snapshots-title{font-family:'Inconsolata',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--faded);margin:2rem 0 1rem}
+.snapshot{background:white;border:1px solid var(--line);border-radius:4px;padding:1.2rem 1.4rem;margin-bottom:1rem}
+.snap-date{font-family:'Inconsolata',monospace;font-size:10px;color:var(--faded);letter-spacing:.1em;margin-bottom:.6rem}
+.snap-body{font-size:.95rem;color:#3a3530;line-height:1.8}
+
+/* CONTEXT */
+.ctx{font-size:1rem;line-height:1.85;color:#3a3530}
+
+.empty{color:var(--faded);font-style:italic;padding:1rem 0}
+
+/* FOOTER */
+footer{text-align:center;padding:3rem 2rem;font-family:'Inconsolata',monospace;font-size:11px;color:var(--faded);letter-spacing:.08em;border-top:1px solid var(--line);margin-top:2rem}
+footer a{color:var(--gold);text-decoration:none}
+
+@media(max-width:600px){
+  .shell{padding:1.5rem 1rem}
+  .book-card-header{padding:1.4rem 1.2rem 1rem}
+  .pub-tabs{padding:0 1.2rem}
+  .pub-section{padding:1.4rem 1.2rem}
+  .book-title{font-size:1.6rem}
+}
+</style>
+</head>
+<body>
+<nav>
+  <div class="brand">Readings of Tarek <span>readingsof.tarekofcairo.com</span></div>
+</nav>
+
+<div class="shell">
+  <div class="loading" id="loading">Loading archive...</div>
+  <div id="books" style="display:none"></div>
+</div>
+
+<footer>
+  A Reader&#8217;s Archive &nbsp;&middot;&nbsp; <a href="https://readingsof.tarekofcairo.com">readingsof.tarekofcairo.com</a>
+  <br><br>
+  Reading notes and reflections by Tarek of Cairo. Read-only view.
+</footer>
+
+<script>
+async function loadArchive(){
+  try{
+    const r=await fetch('https://raw.githubusercontent.com/Tarekagad/readers-archive/main/archive.json');
+    const D=await r.json();
+    document.getElementById('loading').style.display='none';
+    document.getElementById('books').style.display='block';
+    renderBooks(D.books);
+  }catch(e){
+    document.getElementById('loading').textContent='Could not load archive. Please try again later.';
+  }
+}
+
+function renderBooks(books){
+  document.getElementById('books').innerHTML=books.map((b,bi)=>{
+    const entries=b.entries||[];
+    const refl=b.reflection;
+    const snaps=b.snapshots||[];
+    const ctx=b.context||'';
+
+    const entriesHtml=entries.length
+      ?entries.map(e=>'<div class="entry"><div class="entry-time">'+(e.time||'')+'</div><div class="entry-quote">\u201c'+e.quote+'\u201d</div><div class="entry-resp">'+e.response+'</div></div>').join('')
+      :'<div class="empty">No notes yet for this book.</div>';
+
+    const reflHtml=refl
+      ?'<div class="refl-block"><div class="refl-date">'+refl.date+'</div><div>'+refl.text.replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>')+'</div></div>'
+        +(snaps.length?'<div class="snapshots-title">Earlier snapshots</div>'+snaps.map(s=>'<div class="snapshot"><div class="snap-date">'+s.date+'</div><div class="snap-body">'+s.text.replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>')+'</div></div>').join(''):'')
+      :'<div class="empty">No reflection yet \u2014 still reading.</div>';
+
+    return '<div class="book-card" id="book-'+bi+'">'
+      +'<div class="book-card-header">'
+      +'<div class="book-num">'+b.num+'</div>'
+      +'<div class="book-title">'+b.title+'</div>'
+      +'<div class="book-author">'+b.author+'</div>'
+      +'<div class="book-meta"><span>'+b.year+'</span><span>'+entries.length+' '+(entries.length===1?'entry':'entries')+'</span></div>'
+      +'</div>'
+      +'<div class="pub-tabs">'
+      +'<button class="pub-tab active" onclick="pubTab(\'log\','+bi+',this)">Verbatim Log</button>'
+      +'<button class="pub-tab" onclick="pubTab(\'refl\','+bi+',this)">Reflections</button>'
+      +'<button class="pub-tab" onclick="pubTab(\'ctx\','+bi+',this)">Context</button>'
+      +'</div>'
+      +'<div class="pub-section" id="ps-log-'+bi+'">'+entriesHtml+'</div>'
+      +'<div class="pub-section" id="ps-refl-'+bi+'" style="display:none">'+reflHtml+'</div>'
+      +'<div class="pub-section" id="ps-ctx-'+bi+'" style="display:none"><div class="ctx"><p>'+ctx+'</p></div></div>'
+      +'</div>';
+  }).join('');
+}
+
+function pubTab(sec,bi,btn){
+  ['log','refl','ctx'].forEach(s=>document.getElementById('ps-'+s+'-'+bi).style.display=s===sec?'block':'none');
+  btn.closest('.pub-tabs').querySelectorAll('.pub-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+loadArchive();
+</script>
+</body>
+</html>
