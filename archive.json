@@ -1,6 +1,6 @@
 {
   "activeBook": "thif",
-  "activeSection": "log",
+  "activeSection": "themes",
   "books": [
     {
       "id": "omas",
@@ -87,6 +87,22 @@
         {
           "title": "The Corruption of Innocence",
           "body": "What strikes me about this opening is how it immediately corrupts any notion of innocence or goodness. Even the chapter title becomes tainted with irony, and I'm left questioning whether anyone in this story will truly embody the virtue they claim to represent. It's a brilliant way to prepare me for a world where moral certainties don't exist."
+        },
+        {
+          "title": "The Circular Nature of Time and Return",
+          "body": "I'm fascinated by how Boyne uses time as both a linear progression and a circle that eventually closes. The image of someone returning after sixty years to find only graveyards where judgment once lived speaks to me about the futility of exile and the way time becomes the ultimate equalizer. I see this as both melancholic and satisfying—the idea that we outlast our persecutors simply by surviving."
+        },
+        {
+          "title": "Humor as Survival Mechanism",
+          "body": "I find myself drawn to how Boyne uses comedy to make tragedy bearable, much like McCourt did. The way he can make me laugh at situations that should devastate me shows me how humor becomes a form of resistance against cruelty. I think this sardonic tone isn't just stylistic—it's how people actually cope with impossible circumstances, turning pain into something they can control through laughter."
+        },
+        {
+          "title": "The Irony of Titles and Labels",
+          "body": "I'm struck by how Boyne plays with the gap between what people call themselves and what they actually are. 'The Good People of Goleen' becomes immediately ironic when none of them demonstrate goodness, and I see this pattern throughout the book. I think he's showing me how society uses these labels as masks, and how the most dangerous people are often those who wear the most virtuous titles."
+        },
+        {
+          "title": "Geography as Character and Memory",
+          "body": "I notice how places in this novel aren't just settings—they're repositories of memory and judgment that persist across decades. Goleen becomes a character itself, one that remembers shame and exile long after the people who created them are gone. I see the village as representing all the small, suffocating places we flee from, only to realize they've shaped us more than we ever wanted to admit."
         }
       ],
       "entries": [
