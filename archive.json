@@ -1,6 +1,6 @@
 {
   "activeBook": "omas",
-  "activeSection": "log",
+  "activeSection": "refl",
   "books": [
     {
       "id": "omas",
@@ -62,7 +62,12 @@
           "quote": "I am a strange old man. / But are you strong enough now for a truly big fish? / I think so. And there are many tricks.",
           "response": "Let's count the Swiss knife tools of the aged as Hemingway thinks; luck, humility, experience, trickery, mysticism, resolution, empathy, sympathy and lions in dreams."
         }
-      ]
+      ],
+      "reflection": {
+        "text": "I'm starting to see Santiago not as some tragic figure, but as someone who's figured out something I'm still wrestling with. When I first read about his eyes being \"cheerful and undefeated,\" I thought it was just poetic description. But now, six passages in, I realize Hemingway is showing me what survives when everything else gets stripped away. Santiago has lost his strength, his luck, his youth - hell, even the kid can't fish with him anymore - but there's this core that remains untouched. It's not stubbornness; it's something deeper.\n\nWhat's catching me off guard is how Santiago's relationship with memory and dreams has evolved. He doesn't question whether his memories are real anymore, and his dreams have shifted from wanting things to simply being in places. There's something profoundly liberating about that transition that I didn't expect to find moving. I keep thinking about my own dreams lately - am I still dreaming of contests and acquisitions, or am I starting to dream of spaces, of being rather than having?\n\nThe humility passage hit me hardest. \"Too simple to wonder when he had attained humility\" - that phrase keeps rolling around in my head. I've always thought of humility as something you work toward, analyze, achieve consciously. But Santiago just inhabits it naturally now, without the self-consciousness that would make it performative. It makes me wonder if I'm overthinking my own growth, if real wisdom comes from this kind of unconscious settling into what you've become.\n\nAnd yet he still believes in his big fish. That's what's keeping me hooked - this isn't a story about resignation or quiet defeat. Santiago has all these tools now, this \"Swiss knife of the aged\" as I put it, but he's still out there hunting for something magnificent. The combination of deep acceptance and persistent hope feels like a paradox I need to understand better. Maybe that's what undefeated eyes actually look like.",
+        "date": "24 March 2026"
+      },
+      "snapshots": []
     },
     {
       "id": "thif",
@@ -72,7 +77,9 @@
       "year": "Reading 2026",
       "context": "Recommended to me as East of Eden crossed with Covenant of Water — modern, sharper, faster. Life across decades. Identity, family, exile, belonging. I started it after Hemingway.",
       "themes": [],
-      "entries": []
+      "entries": [],
+      "reflection": null,
+      "snapshots": []
     }
   ]
 }
