@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>A Reader's Archive</title>
+<title>A Reader\u2019s Archive</title>
 <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inconsolata:wght@300;400&display=swap" rel="stylesheet">
 <style>
 :root{--ink:#1c1a17;--sepia:#f5f0e8;--gold:#b8893a;--rust:#8b4a2a;--faded:#9a9080;--line:#ddd5c0;--paper:#faf7f0;--margin:#f0ebe0;--green:#4a7c59}
@@ -444,7 +444,7 @@ function expBook(){
   var sl=(b.snapshots&&b.snapshots.length)
     ?b.snapshots.map(function(s){return '<div class="pfrl"><div class="pfrd">Saved \u2014 '+s.date+'</div><div class="pfrb">'+s.text.replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>')+'</div></div>';}).join(''):'';
   document.getElementById('pf').innerHTML=
-    '<div class="pfc"><div class="pfs">A Reader's Archive \u00B7 '+b.num+'</div>'
+    '<div class="pfc"><div class="pfs">A Reader\u2019s Archive \u00B7 '+b.num+'</div>'
     +'<div class="pft">'+b.title+'</div><div class="pfa">'+b.author+'</div>'
     +'<div class="pfy">'+b.year+'</div><hr class="pfr">'
     +'<div class="pfe">\u201C'+ep+(ep.length>=140?'...':'')+'\u201D</div>'
@@ -452,7 +452,7 @@ function expBook(){
     +'<div class="pfsec"><div class="pfst">Verbatim Notes</div><div class="pfsi">Exact words, written in the moment.</div>'+el+'</div>'
     +'<div class="pfsec"><div class="pfst">My Reflection</div>'+rl+(sl?'<div class="pfst" style="margin-top:1.5rem;font-size:1.1rem">Saved Snapshots</div>'+sl:'')+'</div>'
     +'<div class="pfsec"><div class="pfst">Context</div><div class="pfctx"><p>'+b.context+'</p></div></div>'
-    +'<div class="pfco">A Reader's Archive \u00B7 '+b.title+' \u00B7 '+new Date().toLocaleDateString('en-GB',{year:'numeric',month:'long',day:'numeric'})+'</div>';
+    +'<div class="pfco">A Reader\u2019s Archive \u00B7 '+b.title+' \u00B7 '+new Date().toLocaleDateString('en-GB',{year:'numeric',month:'long',day:'numeric'})+'</div>';
   setTimeout(function(){window.print();},150);
 }
 
