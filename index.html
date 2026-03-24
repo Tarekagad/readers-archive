@@ -16,8 +16,6 @@ nav{background:var(--ink);color:var(--sepia);display:flex;align-items:center;jus
 .tab-btn:hover{color:var(--sepia)}.tab-btn.active{color:var(--gold);border-bottom-color:var(--gold)}
 .nav-st{font-family:'Inconsolata',monospace;font-size:11px;opacity:.5;font-style:italic}
 .nav-st.saving{opacity:1;color:var(--gold)}.nav-st.saved{opacity:1;color:#7abf8e}.nav-st.err{opacity:1;color:#e07060}
-
-/* DESKTOP LAYOUT */
 .shell{display:grid;grid-template-columns:230px 1fr;min-height:calc(100vh - 56px)}
 .sidebar{background:var(--margin);border-right:1px solid var(--line);padding:2rem 1.2rem;position:sticky;top:56px;height:calc(100vh - 56px);overflow-y:auto}
 .sidebar h3{font-family:'Inconsolata',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--faded);margin-bottom:1rem}
@@ -28,15 +26,10 @@ nav{background:var(--ink);color:var(--sepia);display:flex;align-items:center;jus
 .b-author{font-size:13px;color:var(--faded);margin-top:2px}
 .add-book-btn{width:100%;margin-top:1rem;padding:.6rem;background:none;border:1px dashed var(--line);border-radius:4px;color:var(--faded);font-family:'Inconsolata',monospace;font-size:12px;cursor:pointer;transition:all .2s}
 .add-book-btn:hover{border-color:var(--gold);color:var(--gold)}
-
-/* MOBILE BOOK SELECTOR */
 .mobile-book-select{display:none;padding:.8rem 1.2rem;background:var(--margin);border-bottom:1px solid var(--line)}
 .mobile-book-select select{width:100%;padding:.6rem .8rem;font-family:'IM Fell English',serif;font-size:17px;font-style:italic;border:1px solid var(--line);border-radius:4px;background:var(--paper);color:var(--ink);outline:none}
-
 .content{background:var(--paper);overflow-y:auto}
 .view{display:none}.view.active{display:block}
-
-/* BOOK HEADER */
 .book-header{padding:2.5rem 3.5rem 1.8rem;border-bottom:1px solid var(--line);background:linear-gradient(to bottom,var(--sepia),var(--paper))}
 .book-label{font-family:'Inconsolata',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.4rem}
 .book-header h1{font-family:'IM Fell English',serif;font-size:2.4rem;font-style:italic;line-height:1.2}
@@ -44,14 +37,10 @@ nav{background:var(--ink);color:var(--sepia);display:flex;align-items:center;jus
 .meta-row{margin-top:1rem;display:flex;gap:1.2rem;align-items:center;font-family:'Inconsolata',monospace;font-size:12px;color:var(--faded);flex-wrap:wrap}
 .hdr-btn{background:none;border:1px solid var(--line);border-radius:3px;padding:.4rem 1rem;font-family:'Inconsolata',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--faded);cursor:pointer;transition:all .2s}
 .hdr-btn:hover{border-color:var(--gold);color:var(--gold)}
-
-/* SECTION TABS */
 .sec-tabs{display:flex;padding:0 3.5rem;border-bottom:1px solid var(--line);background:var(--paper);overflow-x:auto}
 .sec-tab{background:none;border:none;border-bottom:2px solid transparent;padding:.9rem 1.2rem;font-family:'Inconsolata',monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--faded);cursor:pointer;transition:all .2s;margin-bottom:-1px;white-space:nowrap}
 .sec-tab:hover{color:var(--ink)}.sec-tab.active{color:var(--ink);border-bottom-color:var(--ink)}
 .sec-content{padding:2rem 3.5rem}
-
-/* ENTRIES */
 .entry{margin-bottom:2.2rem;padding-bottom:2.2rem;border-bottom:1px solid var(--line);animation:fi .3s ease}
 .entry:last-child{border-bottom:none}
 @keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1}}
@@ -59,27 +48,19 @@ nav{background:var(--ink);color:var(--sepia);display:flex;align-items:center;jus
 .entry-quote{border-left:2px solid var(--gold);padding-left:1.2rem;font-style:italic;color:#3a3530;font-size:1.05rem;line-height:1.75;margin-bottom:.6rem}
 .entry-resp{padding-left:1.2rem;font-weight:600;font-size:1.05rem;line-height:1.75}
 .entry-act{padding-left:1.2rem;margin-top:.5rem}
-.entry-act button{background:none;border:none;font-family:'Inconsolata',monospace;font-size:11px;letter-spacing:.08em;color:var(--faded);cursor:pointer;text-transform:uppercase}
+.entry-act button{background:none;border:none;font-family:'Inconsolata',monospace;font-size:11px;color:var(--faded);cursor:pointer;text-transform:uppercase}
 .entry-act button:hover{color:var(--rust)}
-
-/* REFLECTIONS */
-.refl-top{margin-bottom:1.5rem}
 .refl-intro{font-size:.95rem;color:var(--faded);font-style:italic;margin-bottom:1.2rem;line-height:1.6}
 .refl-actions{display:flex;gap:.8rem;flex-wrap:wrap;align-items:center;margin-bottom:1.5rem}
 .gen-btn{background:var(--ink);color:var(--sepia);border:none;padding:.7rem 1.5rem;font-family:'IM Fell English',serif;font-size:16px;font-style:italic;cursor:pointer;border-radius:3px;transition:background .2s}
 .gen-btn:hover{background:#4a7c59}.gen-btn:disabled{opacity:.5;cursor:not-allowed}
-.save-snap-btn{background:none;border:1px solid var(--gold);border-radius:3px;padding:.7rem 1.5rem;font-family:'IM Fell English',serif;font-size:16px;font-style:italic;cursor:pointer;color:var(--gold);transition:all .2s;display:none}
-.print-refl-btn{background:none;border:1px solid var(--faded);border-radius:3px;padding:.7rem 1.5rem;font-family:'IM Fell English',serif;font-size:16px;font-style:italic;cursor:pointer;color:var(--faded);transition:all .2s;display:none}
-.print-refl-btn:hover{border-color:var(--ink);color:var(--ink)}
+.dl-refl-btn{background:none;border:1px solid var(--faded);border-radius:3px;padding:.7rem 1.5rem;font-family:'IM Fell English',serif;font-size:16px;font-style:italic;cursor:pointer;color:var(--faded);transition:all .2s}
+.dl-refl-btn:hover{border-color:var(--ink);color:var(--ink)}
+.save-snap-btn{background:none;border:1px solid var(--gold);border-radius:3px;padding:.7rem 1.5rem;font-family:'IM Fell English',serif;font-size:16px;font-style:italic;cursor:pointer;color:var(--gold);transition:all .2s}
 .save-snap-btn:hover{background:var(--gold);color:white}
 .refl-note{font-family:'Inconsolata',monospace;font-size:11px;color:var(--faded)}
-
-/* CURRENT REFLECTION */
 .current-refl{background:var(--sepia);border-radius:6px;border-left:3px solid var(--gold);padding:1.6rem 1.8rem;margin-bottom:2rem;line-height:1.85;font-size:1.05rem;color:#3a3530}
-.current-refl h3{font-family:'IM Fell English',serif;font-size:1.2rem;color:var(--rust);margin-bottom:1rem;font-style:italic}
-.current-refl .refl-date{font-family:'Inconsolata',monospace;font-size:10px;color:var(--faded);margin-bottom:.8rem;letter-spacing:.1em}
-
-/* SAVED SNAPSHOTS */
+.refl-date{font-family:'Inconsolata',monospace;font-size:10px;color:var(--faded);margin-bottom:1rem;letter-spacing:.1em}
 .snapshots-section{margin-top:2rem;border-top:1px solid var(--line);padding-top:1.5rem}
 .snapshots-title{font-family:'Inconsolata',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--faded);margin-bottom:1rem}
 .snapshot{background:white;border:1px solid var(--line);border-radius:4px;padding:1.2rem 1.4rem;margin-bottom:1rem;position:relative}
@@ -87,12 +68,8 @@ nav{background:var(--ink);color:var(--sepia);display:flex;align-items:center;jus
 .snap-preview{font-size:.93rem;color:#555;line-height:1.7;font-style:italic}
 .snap-del{position:absolute;top:.8rem;right:.8rem;background:none;border:none;font-size:13px;color:var(--faded);cursor:pointer;opacity:.4}
 .snap-del:hover{opacity:1;color:var(--rust)}
-
 .ctx-block{max-width:680px;font-size:1.05rem;line-height:1.85;color:#3a3530}
 .ctx-block p{margin-bottom:1.2rem}
-.ctx-block blockquote{border-left:2px solid var(--line);padding-left:1.2rem;font-style:italic;color:var(--faded);margin:1.2rem 0}
-
-/* ADD NOTE */
 .add-shell{padding:2.5rem 3.5rem;max-width:800px}
 .add-shell h2{font-family:'IM Fell English',serif;font-size:1.8rem;font-style:italic;margin-bottom:.3rem}
 .add-shell .sub{font-size:1rem;color:var(--faded);font-style:italic;margin-bottom:2rem}
@@ -123,11 +100,9 @@ nav{background:var(--ink);color:var(--sepia);display:flex;align-items:center;jus
 .form-acts{display:flex;gap:.9rem;align-items:center;margin-top:.5rem;flex-wrap:wrap}
 .save-btn{background:var(--ink);color:var(--sepia);border:none;padding:.8rem 2rem;font-family:'IM Fell English',serif;font-size:17px;font-style:italic;cursor:pointer;border-radius:3px;transition:background .2s}
 .save-btn:hover{background:var(--rust)}
-.clr-btn{background:none;border:none;font-family:'Inconsolata',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--faded);cursor:pointer}
+.clr-btn{background:none;border:none;font-family:'Inconsolata',monospace;font-size:12px;color:var(--faded);cursor:pointer;text-transform:uppercase}
 .clr-btn:hover{color:var(--rust)}
 .empty{text-align:center;padding:3rem 2rem;color:var(--faded);font-style:italic;font-size:1.05rem}
-
-/* TOKEN WALL */
 .tw{position:fixed;inset:0;background:var(--sepia);z-index:500;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1.2rem;padding:2rem;text-align:center}
 .tw h2{font-family:'IM Fell English',serif;font-size:2rem;font-style:italic}
 .tw p{font-size:1rem;color:var(--faded);max-width:420px;line-height:1.75}
@@ -136,8 +111,6 @@ nav{background:var(--ink);color:var(--sepia);display:flex;align-items:center;jus
 .tw button{background:var(--ink);color:var(--sepia);border:none;padding:.85rem 2rem;font-family:'IM Fell English',serif;font-size:17px;font-style:italic;cursor:pointer;border-radius:3px}
 .tw button:hover{background:var(--rust)}
 .tw-note{font-family:'Inconsolata',monospace;font-size:11px;color:var(--faded);max-width:420px}
-
-/* MODAL */
 .modal-bg{display:none;position:fixed;inset:0;background:rgba(28,26,23,.6);z-index:200;align-items:center;justify-content:center}
 .modal-bg.open{display:flex}
 .modal{background:var(--paper);border-radius:6px;padding:2rem 2.4rem;width:480px;max-width:95vw;box-shadow:0 20px 60px rgba(0,0,0,.3)}
@@ -146,10 +119,7 @@ nav{background:var(--ink);color:var(--sepia);display:flex;align-items:center;jus
 .modal-acts button{padding:.65rem 1.4rem;border-radius:3px;font-family:'Cormorant Garamond',serif;font-size:17px;cursor:pointer;border:1px solid var(--line);background:var(--sepia);color:var(--ink)}
 .modal-acts .pri{background:var(--ink);color:var(--sepia);border-color:var(--ink)}
 .modal-acts .pri:hover{background:var(--rust);border-color:var(--rust)}
-
 ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px}
-
-/* MOBILE */
 @media(max-width:700px){
   .shell{grid-template-columns:1fr}
   .sidebar{display:none}
@@ -159,15 +129,8 @@ nav{background:var(--ink);color:var(--sepia);display:flex;align-items:center;jus
   .sec-tabs{padding:0 1.2rem}
   .sec-content{padding:1.5rem 1.2rem}
   .add-shell{padding:1.5rem 1.2rem}
-  nav .brand{font-size:14px}
-  .tab-btn{padding:0 .8rem;font-size:11px}
   .nav-st{display:none}
-  .meta-row{gap:.8rem}
-  .entry-quote,.entry-resp{font-size:1rem}
-  body{font-size:19px}
 }
-
-/* PRINT */
 #pf{display:none}
 @media print{
   *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
@@ -175,26 +138,26 @@ nav{background:var(--ink);color:var(--sepia);display:flex;align-items:center;jus
   #pf{display:block!important;font-family:'Cormorant Garamond',Georgia,serif;color:#1c1a17;background:white;max-width:620px;margin:0 auto;padding:0 2.5rem}
   .pfc{text-align:center;padding:5rem 2rem 3.5rem;page-break-after:always}
   .pfs{font-family:'Inconsolata',monospace;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:#b8893a;margin-bottom:1.3rem}
-  .pft{font-family:'IM Fell English',serif;font-size:2.4rem;font-style:italic;line-height:1.2;margin-bottom:.4rem;color:#1c1a17}
+  .pft{font-family:'IM Fell English',serif;font-size:2.4rem;font-style:italic;line-height:1.2;margin-bottom:.4rem}
   .pfa{font-size:1rem;color:#666;font-style:italic;margin-bottom:.4rem}
   .pfy{font-family:'Inconsolata',monospace;font-size:9px;color:#aaa;letter-spacing:.08em;margin-bottom:2.5rem}
   .pfr{border:none;border-top:1px solid #ddd5c0;margin:1.8rem auto;width:50px}
   .pfe{font-style:italic;color:#555;font-size:.93rem;line-height:1.85;max-width:380px;margin:0 auto}
   .pfea{font-family:'Inconsolata',monospace;font-size:9px;color:#aaa;letter-spacing:.08em;margin-top:.7rem;text-transform:uppercase}
-  .pfsec{padding:2.5rem 0;page-break-inside:avoid}
+  .pfsec{padding:2.5rem 0}
   .pfst{font-family:'IM Fell English',serif;font-size:1.25rem;color:#1c1a17;padding-bottom:.4rem;border-bottom:1px solid #b8893a;margin-bottom:.4rem}
   .pfsi{font-style:italic;font-size:.87rem;color:#888;margin-bottom:1.8rem}
   .pfen{margin-bottom:1.8rem;padding-bottom:1.8rem;border-bottom:1px solid #eee;page-break-inside:avoid}
   .pfen:last-child{border-bottom:none}
-  .pfet{font-family:'Inconsolata',monospace;font-size:8.5px;color:#aaa;letter-spacing:.1em;margin-bottom:.35rem}
+  .pfet{font-family:'Inconsolata',monospace;font-size:8.5px;color:#aaa;margin-bottom:.35rem}
   .pfeq{border-left:2px solid #b8893a;padding-left:.9rem;font-style:italic;color:#3a3530;font-size:.9rem;line-height:1.75;margin-bottom:.4rem}
   .pfer{padding-left:.9rem;font-weight:600;font-size:.9rem;line-height:1.75}
   .pfrefl{margin-bottom:1.2rem;padding:.85rem 1rem;border-left:3px solid #b8893a;background:#faf7f0;page-break-inside:avoid}
-  .pfrdate{font-family:'Inconsolata',monospace;font-size:8px;color:#aaa;letter-spacing:.08em;margin-bottom:.4rem}
+  .pfrdate{font-family:'Inconsolata',monospace;font-size:8px;color:#aaa;margin-bottom:.4rem}
   .pfrbody{font-size:.9rem;color:#3a3530;line-height:1.8}
   .pfctx{font-size:.9rem;line-height:1.85;color:#3a3530}
   .pfctx p{margin-bottom:.9rem}
-  .pfco{text-align:center;padding:1.8rem;font-family:'Inconsolata',monospace;font-size:8px;color:#ccc;letter-spacing:.08em;text-transform:uppercase;border-top:1px solid #eee;margin-top:1.8rem}
+  .pfco{text-align:center;padding:1.8rem;font-family:'Inconsolata',monospace;font-size:8px;color:#ccc;border-top:1px solid #eee;margin-top:1.8rem}
 }
 </style>
 </head>
@@ -214,12 +177,9 @@ nav{background:var(--ink);color:var(--sepia);display:flex;align-items:center;jus
   </div>
   <div class="nav-st" id="nst">&#8212;</div>
 </nav>
-
-<!-- MOBILE BOOK SELECTOR -->
-<div class="mobile-book-select" id="mobileBookSel" style="display:none">
-  <select id="mobileSel" onchange="selBook(this.value)"></select>
+<div class="mobile-book-select" id="mbs" style="display:none">
+  <select id="msb" onchange="selBook(this.value)"></select>
 </div>
-
 <div class="shell">
   <aside class="sidebar">
     <h3>Books</h3>
@@ -256,7 +216,7 @@ nav{background:var(--ink);color:var(--sepia);display:flex;align-items:center;jus
           <input type="file" accept="image/*" onchange="dfs(event)">
           <div class="dz-icon">&#128247;</div>
           <div class="dz-title">Drop, tap, or paste a screenshot</div>
-          <div class="dz-hint">Apple Notes screenshots &nbsp;<em>Cmd+V</em> to paste</div>
+          <div class="dz-hint">Apple Notes screenshots &#160;&#160;<em>Cmd+V</em> to paste</div>
         </div>
         <div class="ss-prev" id="ssp">
           <img id="ssi" src="" alt="">
@@ -286,234 +246,293 @@ nav{background:var(--ink);color:var(--sepia);display:flex;align-items:center;jus
     <div class="form-row"><label>Title</label><input type="text" id="nt2" placeholder="e.g. The Heart's Invisible Furies"></div>
     <div class="form-row"><label>Author</label><input type="text" id="na2" placeholder="e.g. John Boyne"></div>
     <div class="form-row"><label>Year Read</label><input type="text" id="ny2" placeholder="e.g. 2026"></div>
-    <div class="form-row"><label>Why this book? <span style="opacity:.5;font-size:11px">(optional)</span></label><textarea id="nc2" rows="2" placeholder="What brought you to it..."></textarea></div>
+    <div class="form-row"><label>Why this book?</label><textarea id="nc2" rows="2" placeholder="What brought you to it..."></textarea></div>
     <div class="modal-acts">
       <button onclick="closeModal()">Cancel</button>
       <button class="pri" onclick="addBook()">Add Book</button>
     </div>
   </div>
 </div>
-
 <script>
 const GH={o:'Tarekagad',r:'readers-archive',p:'archive.json'};
+const PROXY='https://readers-archive-proxyf.ttawab.workers.dev';
 let tok=null,sha=null,D={activeBook:null,activeSection:'log',books:[]};
 
 function getTok(){return localStorage.getItem('ra_tok')||null}
-function saveTok(){const t=document.getElementById('tok').value.trim();if(!t){alert('Please enter your token.');return}localStorage.setItem('ra_tok',t);tok=t;document.getElementById('tw').style.display='none';load()}
-
-function nst(m,c=''){const e=document.getElementById('nst');e.textContent=m;e.className='nav-st '+c}
-
+function saveTok(){
+  var t=document.getElementById('tok').value.trim();
+  if(!t){alert('Please enter your token.');return}
+  localStorage.setItem('ra_tok',t);tok=t;
+  document.getElementById('tw').style.display='none';load();
+}
+function nst(m,c){
+  var e=document.getElementById('nst');e.textContent=m;e.className='nav-st'+(c?' '+c:'');
+}
+function enc(s){
+  var bytes=new TextEncoder().encode(s);
+  var bin='';for(var i=0;i<bytes.length;i++)bin+=String.fromCharCode(bytes[i]);
+  return btoa(bin);
+}
+function dec(s){
+  var bin=atob(s.replace(/\n/g,''));
+  var bytes=new Uint8Array(bin.length);
+  for(var i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);
+  return new TextDecoder().decode(bytes);
+}
 async function load(){
   nst('Loading...','saving');
   try{
-    const r=await fetch('https://api.github.com/repos/'+GH.o+'/'+GH.r+'/contents/'+GH.p,{headers:{Authorization:'token '+tok,Accept:'application/vnd.github.v3+json'}});
+    var r=await fetch('https://api.github.com/repos/'+GH.o+'/'+GH.r+'/contents/'+GH.p,{headers:{Authorization:'token '+tok,Accept:'application/vnd.github.v3+json'}});
     if(r.status===401){localStorage.removeItem('ra_tok');location.reload();return}
-    if(r.status===404){nst('No archive.json found','err');return}
-    const d=await r.json();sha=d.sha;
-    const raw=atob(d.content.replace(/\n/g,''));const bytes=new Uint8Array(raw.length);for(let i=0;i<raw.length;i++)bytes[i]=raw.charCodeAt(i);D=JSON.parse(new TextDecoder().decode(bytes));
+    if(r.status===404){nst('No archive.json','err');return}
+    var d=await r.json();sha=d.sha;
+    D=JSON.parse(dec(d.content));
     if(!D.activeBook&&D.books.length)D.activeBook=D.books[0].id;
-    // migrate old themes to new reflection format
-    D.books.forEach(b=>{
-      if(!b.reflection)b.reflection=null;
-      if(!b.snapshots)b.snapshots=[];
-    });
-    nst('Loaded','saved');setTimeout(()=>nst('\u2014'),2000);
+    D.books.forEach(function(b){if(!b.reflection)b.reflection=null;if(!b.snapshots)b.snapshots=[];});
+    nst('Loaded','saved');setTimeout(function(){nst('\u2014');},2000);
     renderAll();
-  }catch(e){nst('Load failed','err')}
+  }catch(e){nst('Load failed','err');console.error(e);}
 }
-
 async function save(){
   nst('Saving...','saving');
   try{
-    const j=JSON.stringify(D,null,2);const c=btoa(Array.from(new TextEncoder().encode(j)).map(b=>String.fromCharCode(b)).join(''));
-    const r=await fetch('https://api.github.com/repos/'+GH.o+'/'+GH.r+'/contents/'+GH.p,{method:'PUT',headers:{Authorization:'token '+tok,Accept:'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify({message:'Archive update '+new Date().toISOString(),content:c,sha:sha})});
-    const d=await r.json();sha=d.content?.sha;
-    nst('Saved','saved');setTimeout(()=>nst('\u2014'),2500);
-  }catch(e){nst('Save failed','err')}
+    var c=enc(JSON.stringify(D,null,2));
+    var r=await fetch('https://api.github.com/repos/'+GH.o+'/'+GH.r+'/contents/'+GH.p,{
+      method:'PUT',
+      headers:{Authorization:'token '+tok,Accept:'application/vnd.github.v3+json','Content-Type':'application/json'},
+      body:JSON.stringify({message:'Archive update '+new Date().toISOString(),content:c,sha:sha})
+    });
+    var d=await r.json();sha=d.content&&d.content.sha;
+    nst('Saved','saved');setTimeout(function(){nst('\u2014');},2500);
+  }catch(e){nst('Save failed','err');}
 }
 
-// SCREENSHOT
-let ib64=null,im='image/jpeg';
-function dov(e){e.preventDefault();document.getElementById('dz').classList.add('dragover')}
-function dlv(){document.getElementById('dz').classList.remove('dragover')}
-function ddr(e){e.preventDefault();dlv();const f=e.dataTransfer.files[0];if(f&&f.type.startsWith('image/'))loadImg(f)}
-function dfs(e){const f=e.target.files[0];if(f)loadImg(f)}
-document.addEventListener('paste',e=>{
+// Screenshot
+var ib64=null,im='image/jpeg';
+function dov(e){e.preventDefault();document.getElementById('dz').classList.add('dragover');}
+function dlv(){document.getElementById('dz').classList.remove('dragover');}
+function ddr(e){e.preventDefault();dlv();var f=e.dataTransfer.files[0];if(f&&f.type.startsWith('image/'))loadImg(f);}
+function dfs(e){var f=e.target.files[0];if(f)loadImg(f);}
+document.addEventListener('paste',function(e){
   if(!document.getElementById('view-add').classList.contains('active'))return;
-  for(const i of(e.clipboardData?.items||[])){if(i.type.startsWith('image/')){loadImg(i.getAsFile());break}}
+  var items=e.clipboardData&&e.clipboardData.items;
+  if(!items)return;
+  for(var i=0;i<items.length;i++){if(items[i].type.startsWith('image/')){loadImg(items[i].getAsFile());break;}}
 });
 function loadImg(f){
   im=f.type||'image/jpeg';
-  const r=new FileReader();
-  r.onload=e=>{ib64=e.target.result.split(',')[1];document.getElementById('ssi').src=e.target.result;document.getElementById('ssp').classList.add('vis');pist('reading','Reading with Claude...');ocr()};
+  var r=new FileReader();
+  r.onload=function(e){
+    ib64=e.target.result.split(',')[1];
+    document.getElementById('ssi').src=e.target.result;
+    document.getElementById('ssp').classList.add('vis');
+    pist('reading','Reading with Claude...');
+    ocr();
+  };
   r.readAsDataURL(f);
 }
 async function ocr(){
   try{
-    const r=await fetch('https://readers-archive-proxyf.ttawab.workers.dev',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:im,data:ib64}},{type:'text',text:'Reading notes screenshot. Book passage in blockquote/italic, reader response in bold below. Return ONLY JSON: {"quote":"passage","response":"reader words","time":"timestamp or empty"}. If unclear: {"quote":"","response":"","time":""}'}]}]})});
-    const d=await r.json();
-    const t=d.content?.find(b=>b.type==='text')?.text||'';
-    const p=JSON.parse(t.replace(/```json|```/g,'').trim());
+    var prompt='Reading notes screenshot. Book passage in blockquote or italic block, reader response in bold. Return ONLY JSON: {'+'"'+'quote'+'"'+':'+'"'+'passage'+'"'+','+'"'+'response'+'"'+':'+'"'+'reader words'+'"'+','+'"'+'time'+'"'+':'+'"'+'timestamp or empty'+'"'+'} If unclear return all empty strings.';
+    var r=await fetch(PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:im,data:ib64}},{type:'text',text:prompt}]}]})});
+    var d=await r.json();
+    var t=d.content&&d.content.find(function(x){return x.type==='text';});
+    var txt=t?t.text:'';
+    var p=JSON.parse(txt.replace(/```json|```/g,'').trim());
     if(p.quote||p.response){
       if(p.quote)document.getElementById('nq').value=p.quote;
       if(p.response)document.getElementById('nr').value=p.response;
       if(p.time)document.getElementById('nt').value=p.time;
-      pist('done','Extracted \u2014 review and save below');
-    }else{pist('error','Could not detect \u2014 type manually')}
-  }catch(e){pist('error','Could not read \u2014 type manually')}
+      pist('done','Extracted \u2014 review and save');
+    }else{pist('error','Could not detect \u2014 type manually');}
+  }catch(e){pist('error','Could not read \u2014 type manually');}
 }
-function pist(c,m){const e=document.getElementById('pist');e.className='pi-st '+c;e.textContent=m}
-function clrSS(){ib64=null;document.getElementById('ssp').classList.remove('vis');document.getElementById('ssi').src='';document.getElementById('dz').querySelector('input').value=''}
-function clrAll(){clrSS();['nt','nq','nr'].forEach(i=>document.getElementById(i).value='')}
+function pist(c,m){var e=document.getElementById('pist');e.className='pi-st '+c;e.textContent=m;}
+function clrSS(){ib64=null;document.getElementById('ssp').classList.remove('vis');document.getElementById('ssi').src='';document.getElementById('dz').querySelector('input').value='';}
+function clrAll(){clrSS();['nt','nq','nr'].forEach(function(i){document.getElementById(i).value='';});}
 
-// PRINT REFLECTION ONLY
-function printRefl(){
-  const b=book();
-  if(!b.reflection)return;
-  const w=window.open('','_blank');
-  w.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+b.title+' - Reflection</title><link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cormorant+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet"><style>body{font-family:"Cormorant Garamond",Georgia,serif;font-size:20px;line-height:1.85;max-width:680px;margin:3rem auto;padding:0 2rem;color:#1c1a17;background:white}.title{font-family:"IM Fell English",serif;font-size:2rem;font-style:italic;margin-bottom:.3rem}.author{color:#9a9080;font-style:italic;margin-bottom:2rem}.date{font-family:monospace;font-size:11px;color:#aaa;letter-spacing:.1em;margin-bottom:1.5rem;text-transform:uppercase}.body{border-left:2px solid #b8893a;padding-left:1.5rem}.footer{margin-top:3rem;font-family:monospace;font-size:10px;color:#ccc;letter-spacing:.1em;text-transform:uppercase;border-top:1px solid #eee;padding-top:1rem}@media print{body{margin:1.5rem auto}}</style></head><body>');
-  w.document.write('<div class="title">'+b.title+'</div><div class="author">'+b.author+'</div><div class="date">Reflection — '+b.reflection.date+'</div><div class="body">'+b.reflection.text.replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>')+'</div><div class="footer">readingsof.tarekofcairo.com · A Reader’s Archive</div></body></html>');
-  w.document.close();
-  setTimeout(()=>w.print(),500);
-}
-
-// REFLECTIONS — living document, replace not accumulate
+// Reflections
 async function genRefl(){
-  const b=book();
-  if(!b.entries.length){alert('Add reading notes first.');return}
-  const btn=document.querySelector('.gen-btn');
+  var b=book();
+  if(!b.entries.length){alert('Add reading notes first.');return;}
+  var btn=document.querySelector('.gen-btn');
   btn.disabled=true;btn.textContent='Thinking...';
-
-  const es=b.entries.map((e,i)=>'Note '+(i+1)+':\nPassage: "'+e.quote+'"\nMy response: "'+e.response+'"').join('\n\n');
-  const prev=b.reflection?'Previous reflection (for context, so you can note what has evolved):\n'+b.reflection.text+'\n\n':'';
-
+  var es=b.entries.map(function(e,i){return 'Note '+(i+1)+':\nPassage: "'+e.quote+'"\nMy response: "'+e.response+'"';}).join('\n\n');
+  var prev=b.reflection?'Previous reflection (note what has evolved):\n'+b.reflection.text+'\n\n':'';
   try{
-    const r=await fetch('https://readers-archive-proxyf.ttawab.workers.dev',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2500,messages:[{role:'user',content:'You are helping Tarek maintain a living reflection on "'+b.title+'" by '+b.author+'. He is reading this book and taking notes as he goes.\n\n'+prev+'His reading notes so far:\n\n'+es+'\n\nWrite a FRESH synthesis of where his reading stands right now. This is NOT a list of themes. It is a flowing personal reflection written in first person as Tarek speaking \u2014 "I", "me", "my". Write AS him.\n\nCapture: what is gripping him, what ideas are forming, what has surprised him, how his thinking has shifted from earlier notes if at all. Keep it between 3-5 paragraphs. Maximum 400 words. Make it feel like a letter to himself mid-book \u2014 honest, unresolved, alive.\n\nReturn ONLY the reflection text. No title, no labels, no JSON.'}]})});
-    const d=await r.json();
-    const text=d.content?.find(x=>x.type==='text')?.text||'';
+    var r=await fetch(PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2500,messages:[{role:'user',content:'You are helping Tarek maintain a living reflection on "'+b.title+'" by '+b.author+'. He is reading this book and taking notes as he goes.\n\n'+prev+'His reading notes so far:\n\n'+es+'\n\nWrite a FRESH synthesis of where his reading stands right now. This is NOT a list of themes. It is a flowing personal reflection written in first person as Tarek speaking - I, me, my. Write AS him.\n\nCapture: what is gripping him, what ideas are forming, what has surprised him, how his thinking has shifted from earlier notes if at all. Keep it between 3-5 paragraphs. Maximum 400 words. Make it feel like a letter to himself mid-book - honest, unresolved, alive.\n\nReturn ONLY the reflection text. No title, no labels, no JSON.'}]})});
+    var d=await r.json();
+    var t=d.content&&d.content.find(function(x){return x.type==='text';});
+    var text=t?t.text:'';
     if(text){
       b.reflection={text:text,date:new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})};
       renderAll();
       ss('refl',document.querySelectorAll('.sec-tab')[1]);
-      document.querySelector('.save-snap-btn').style.display='inline-block';document.querySelector('.print-refl-btn').style.display='inline-block';
       await save();
-    }else{alert('Could not generate. Try again.')}
-  }catch(e){alert('Could not generate. Check connection.')}
+    }else{alert('Could not generate. Try again.');}
+  }catch(e){alert('Could not generate. Check connection.');}
   btn.disabled=false;btn.textContent='Regenerate reflection';
 }
 
+function dlRefl(){
+  var b=book();
+  if(!b||!b.reflection)return;
+  var html='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+b.title+' - Reflection</title>'
+    +'<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Cormorant+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">'
+    +'<style>body{font-family:"Cormorant Garamond",Georgia,serif;font-size:20px;line-height:1.85;max-width:680px;margin:3rem auto;padding:0 2rem;color:#1c1a17}'
+    +'.title{font-family:"IM Fell English",serif;font-size:2rem;font-style:italic;margin-bottom:.3rem}'
+    +'.author{color:#9a9080;font-style:italic;margin-bottom:2rem}'
+    +'.date{font-family:monospace;font-size:11px;color:#aaa;letter-spacing:.1em;margin-bottom:1.5rem;text-transform:uppercase}'
+    +'.body{border-left:2px solid #b8893a;padding-left:1.5rem}'
+    +'.footer{margin-top:3rem;font-family:monospace;font-size:10px;color:#ccc;letter-spacing:.08em;text-transform:uppercase;border-top:1px solid #eee;padding-top:1rem}'
+    +'@media print{body{margin:1.5rem auto}}</style></head><body>'
+    +'<div class="title">'+b.title+'</div>'
+    +'<div class="author">'+b.author+'</div>'
+    +'<div class="date">Reflection \u2014 '+b.reflection.date+'</div>'
+    +'<div class="body">'+b.reflection.text.replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>')+'</div>'
+    +'<div class="footer">readingsof.tarekofcairo.com \u00b7 A Reader\u2019s Archive</div>'
+    +'</body></html>';
+  var w=window.open('','_blank');
+  w.document.write(html);
+  w.document.close();
+  setTimeout(function(){w.print();},600);
+}
+
 function saveSnapshot(){
-  const b=book();
+  var b=book();
   if(!b.reflection)return;
   if(!b.snapshots)b.snapshots=[];
   b.snapshots.unshift({text:b.reflection.text,date:b.reflection.date});
   renderAll();
   ss('refl',document.querySelectorAll('.sec-tab')[1]);
   save();
-  document.querySelector('.save-snap-btn').style.display='none';
 }
 
-// EXPORT PDF
 function exportBook(){
-  const b=book();
-  const ep=(b.entries[0]?.response||'').substring(0,140);
-  const reflHtml=b.reflection?'<div class="pfrefl"><div class="pfrdate">Reflection \u2014 '+b.reflection.date+'</div><div class="pfrbody">'+b.reflection.text.replace(/\n/g,'<br>')+'</div></div>':'<p style="color:#aaa;font-style:italic">No reflection yet.</p>';
-  const snapsHtml=b.snapshots&&b.snapshots.length?b.snapshots.map(s=>'<div class="pfrefl"><div class="pfrdate">Saved \u2014 '+s.date+'</div><div class="pfrbody">'+s.text.replace(/\n/g,'<br>')+'</div></div>').join(''):'';
-
-  document.getElementById('pf').innerHTML='<div class="pfc"><div class="pfs">A Reader\'s Archive \u00b7 '+b.num+'</div><div class="pft">'+b.title+'</div><div class="pfa">'+b.author+'</div><div class="pfy">'+b.year+'</div><hr class="pfr"><div class="pfe">"'+ep+(ep.length>=140?'...':'')+'"</div><div class="pfea">\u2014 Tarek</div></div><div class="pfsec"><div class="pfst">Verbatim Notes</div><div class="pfsi">Exact words, written in the moment.</div>'+(b.entries.map(e=>'<div class="pfen"><div class="pfet">'+(e.time||'')+'</div><div class="pfeq">"'+e.quote+'"</div><div class="pfer">'+e.response+'</div></div>').join('')||'<p style="color:#aaa;font-style:italic">No entries.</p>')+'</div><div class="pfsec"><div class="pfst">My Reflection</div>'+reflHtml+(snapsHtml?'<div class="pfst" style="margin-top:2rem;font-size:1rem">Saved Snapshots</div>'+snapsHtml:'')+'</div><div class="pfsec"><div class="pfst">Context</div><div class="pfctx"><p>'+b.context+'</p></div></div><div class="pfco">A Reader\'s Archive \u00b7 '+b.title+' \u00b7 '+new Date().toLocaleDateString('en-GB',{year:'numeric',month:'long',day:'numeric'})+'</div>';
-  setTimeout(()=>window.print(),150);
+  var b=book();
+  var ep=(b.entries[0]&&b.entries[0].response||'').substring(0,140);
+  var entriesHtml=b.entries.map(function(e){
+    return '<div class="pfen"><div class="pfet">'+(e.time||'')+'</div><div class="pfeq">"'+e.quote+'"</div><div class="pfer">'+e.response+'</div></div>';
+  }).join('')||'<p style="color:#aaa;font-style:italic">No entries.</p>';
+  var reflHtml=b.reflection
+    ?'<div class="pfrefl"><div class="pfrdate">'+b.reflection.date+'</div><div class="pfrbody">'+b.reflection.text.replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>')+'</div></div>'
+    :'<p style="color:#aaa;font-style:italic">No reflection yet.</p>';
+  var snapsHtml=(b.snapshots&&b.snapshots.length)
+    ?b.snapshots.map(function(s){return '<div class="pfrefl"><div class="pfrdate">Saved \u2014 '+s.date+'</div><div class="pfrbody">'+s.text.replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>')+'</div></div>';}).join('')
+    :'';
+  document.getElementById('pf').innerHTML=
+    '<div class="pfc"><div class="pfs">A Reader\'s Archive \u00b7 '+b.num+'</div>'
+    +'<div class="pft">'+b.title+'</div><div class="pfa">'+b.author+'</div>'
+    +'<div class="pfy">'+b.year+'</div><hr class="pfr">'
+    +'<div class="pfe">"'+ep+(ep.length>=140?'...':'')+'"</div>'
+    +'<div class="pfea">\u2014 Tarek</div></div>'
+    +'<div class="pfsec"><div class="pfst">Verbatim Notes</div>'
+    +'<div class="pfsi">Exact words, written in the moment.</div>'+entriesHtml+'</div>'
+    +'<div class="pfsec"><div class="pfst">My Reflection</div>'+reflHtml
+    +(snapsHtml?'<div class="pfst" style="margin-top:2rem;font-size:1rem">Saved Snapshots</div>'+snapsHtml:'')+'</div>'
+    +'<div class="pfsec"><div class="pfst">Context</div><div class="pfctx"><p>'+b.context+'</p></div></div>'
+    +'<div class="pfco">A Reader\'s Archive \u00b7 '+b.title+' \u00b7 '+new Date().toLocaleDateString('en-GB',{year:'numeric',month:'long',day:'numeric'})+'</div>';
+  setTimeout(function(){window.print();},150);
 }
 
-// NAV
+// Nav
 function sv(v,btn){
-  document.querySelectorAll('.view').forEach(e=>e.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(e=>e.classList.remove('active'));
+  document.querySelectorAll('.view').forEach(function(e){e.classList.remove('active');});
+  document.querySelectorAll('.tab-btn').forEach(function(e){e.classList.remove('active');});
   document.getElementById('view-'+v).classList.add('active');
   if(btn)btn.classList.add('active');
-  if(v==='add'){document.getElementById('nb').innerHTML=D.books.map(b=>'<option value="'+b.id+'" '+(b.id===D.activeBook?'selected':'')+'>'+b.title+'</option>').join('')}
+  if(v==='add'){
+    document.getElementById('nb').innerHTML=D.books.map(function(b){return '<option value="'+b.id+'" '+(b.id===D.activeBook?'selected':'')+'>'+b.title+'</option>';}).join('');
+  }
 }
 function ss(s,btn){
   D.activeSection=s;
-  ['log','refl','context'].forEach(i=>document.getElementById('sec-'+i).style.display=i===s?'block':'none');
-  document.querySelectorAll('.sec-tab').forEach(e=>e.classList.remove('active'));
+  ['log','refl','context'].forEach(function(i){document.getElementById('sec-'+i).style.display=i===s?'block':'none';});
+  document.querySelectorAll('.sec-tab').forEach(function(e){e.classList.remove('active');});
   if(btn)btn.classList.add('active');
 }
-function selBook(id){D.activeBook=id;renderAll();['log','refl','context'].forEach(i=>document.getElementById('sec-'+i).style.display=i===D.activeSection?'block':'none')}
-function book(){return D.books.find(b=>b.id===D.activeBook)}
+function selBook(id){D.activeBook=id;renderAll();['log','refl','context'].forEach(function(i){document.getElementById('sec-'+i).style.display=i===D.activeSection?'block':'none';});}
+function book(){return D.books.find(function(b){return b.id===D.activeBook;});}
 
-// RENDER
 function renderAll(){
-  if(!D.books.length){document.getElementById('blist').innerHTML='';return}
+  if(!D.books.length){document.getElementById('blist').innerHTML='';return;}
   if(!D.activeBook)D.activeBook=D.books[0].id;
-
-  // Desktop sidebar
-  document.getElementById('blist').innerHTML=D.books.map(b=>'<div class="book-item '+(b.id===D.activeBook?'active':'')+'" onclick="selBook(\''+b.id+'\')"><div class="b-num">'+b.num+'</div><div class="b-title">'+b.title+'</div><div class="b-author">'+b.author+'</div></div>').join('');
-
-  // Mobile selector
-  const ms=document.getElementById('mobileSel');
-  ms.innerHTML=D.books.map(b=>'<option value="'+b.id+'" '+(b.id===D.activeBook?'selected':'')+'>'+b.num+' \u2014 '+b.title+'</option>').join('');
-  document.getElementById('mobileBookSel').style.display='block';
-
-  const b=book();if(!b)return;
+  document.getElementById('blist').innerHTML=D.books.map(function(b){
+    return '<div class="book-item '+(b.id===D.activeBook?'active':'')+'" onclick="selBook(\''+b.id+'\')">'
+      +'<div class="b-num">'+b.num+'</div><div class="b-title">'+b.title+'</div><div class="b-author">'+b.author+'</div></div>';
+  }).join('');
+  var ms=document.getElementById('msb');
+  ms.innerHTML=D.books.map(function(b){return '<option value="'+b.id+'" '+(b.id===D.activeBook?'selected':'')+'>'+b.num+' \u2014 '+b.title+'</option>';}).join('');
+  document.getElementById('mbs').style.display='block';
+  var b=book();if(!b)return;
   document.getElementById('hl').textContent=b.num;
   document.getElementById('ht').textContent=b.title;
   document.getElementById('ha').textContent=b.author;
   document.getElementById('hy').textContent=b.year;
   document.getElementById('hc').textContent=b.entries.length+' '+(b.entries.length===1?'entry':'entries');
-
   // Log
-  document.getElementById('sec-log').innerHTML=b.entries.length?b.entries.map((e,i)=>'<div class="entry"><div class="entry-time">'+(e.time||'\u2014')+'</div><div class="entry-quote">\u201c'+e.quote+'\u201d</div><div class="entry-resp">'+e.response+'</div><div class="entry-act"><button onclick="delE(\''+b.id+'\','+i+')">Remove</button></div></div>').join(''):'<div class="empty">No notes yet.</div>';
-
+  document.getElementById('sec-log').innerHTML=b.entries.length
+    ?b.entries.map(function(e,i){return '<div class="entry"><div class="entry-time">'+(e.time||'\u2014')+'</div><div class="entry-quote">\u201c'+e.quote+'\u201d</div><div class="entry-resp">'+e.response+'</div><div class="entry-act"><button onclick="delE(\''+b.id+'\','+i+')">Remove</button></div></div>';}).join('')
+    :'<div class="empty">No notes yet.</div>';
   // Reflections
-  const hasRefl=b.reflection&&b.reflection.text;
-  const reflContent=hasRefl?'<div class="current-refl"><div class="refl-date">'+b.reflection.date+'</div><div>'+b.reflection.text.replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>')+'</div></div>':'<div class="empty" style="padding:1.5rem 0">No reflection yet. Add notes then generate below.</div>';
-  const snapsContent=b.snapshots&&b.snapshots.length?'<div class="snapshots-section"><div class="snapshots-title">Saved snapshots</div>'+b.snapshots.map((s,i)=>'<div class="snapshot"><button class="snap-del" onclick="delSnap(\''+b.id+'\','+i+')">&#215;</button><div class="snap-date">'+s.date+'</div><div class="snap-preview">'+s.text.substring(0,200)+'...</div></div>').join('')+'</div>':'';
-
-  document.getElementById('sec-refl').innerHTML='<div class="refl-top"><p class="refl-intro">A living reflection \u2014 rewrites itself as you read. Save a snapshot anytime to keep a record of where you were.</p><div class="refl-actions"><button class="gen-btn" onclick="genRefl()">'+(hasRefl?'Regenerate reflection':'Generate my reflection')+'</button><button class="print-refl-btn" onclick="printRefl()" style="display:'+(hasRefl?'inline-block':'none')+'">Download reflection</button>
-        <button class="save-snap-btn" onclick="saveSnapshot()" style="display:'+(hasRefl?'inline-block':'none')+'">Save snapshot</button><span class="refl-note">Replaces previous \u2014 save first if you want to keep it</span></div></div>'+reflContent+snapsContent;
-
+  var hasR=b.reflection&&b.reflection.text;
+  var reflContent=hasR
+    ?'<div class="current-refl"><div class="refl-date">'+b.reflection.date+'</div>'+b.reflection.text.replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>')+'</div>'
+    :'<div class="empty" style="padding:1rem 0">No reflection yet. Add notes then generate below.</div>';
+  var snapsContent=(b.snapshots&&b.snapshots.length)
+    ?'<div class="snapshots-section"><div class="snapshots-title">Saved snapshots</div>'
+      +b.snapshots.map(function(s,i){return '<div class="snapshot"><button class="snap-del" onclick="delSnap(\''+b.id+'\','+i+')">&#215;</button><div class="snap-date">'+s.date+'</div><div class="snap-preview">'+s.text.substring(0,200)+'...</div></div>';}).join('')+'</div>'
+    :'';
+  document.getElementById('sec-refl').innerHTML=
+    '<p class="refl-intro">A living reflection \u2014 rewrites itself as you read. Save a snapshot anytime to preserve where you were.</p>'
+    +'<div class="refl-actions">'
+    +'<button class="gen-btn" onclick="genRefl()">'+(hasR?'Regenerate reflection':'Generate my reflection')+'</button>'
+    +(hasR?'<button class="dl-refl-btn" onclick="dlRefl()">Download reflection</button>':'')
+    +(hasR?'<button class="save-snap-btn" onclick="saveSnapshot()">Save snapshot</button>':'')
+    +'<span class="refl-note">Replaces previous \u2014 save snapshot first if you want to keep it</span>'
+    +'</div>'
+    +reflContent+snapsContent;
   // Context
   document.getElementById('sec-context').innerHTML='<div class="ctx-block"><p>'+b.context+'</p></div>';
 }
 
 async function submitNote(){
-  const bi=document.getElementById('nb').value;
-  const ti=document.getElementById('nt').value.trim();
-  const q=document.getElementById('nq').value.trim();
-  const rp=document.getElementById('nr').value.trim();
-  if(!q||!rp){alert('Please fill in both the passage and your response.');return}
-  D.books.find(b=>b.id===bi).entries.push({time:ti||new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),quote:q,response:rp});
+  var bi=document.getElementById('nb').value;
+  var ti=document.getElementById('nt').value.trim();
+  var q=document.getElementById('nq').value.trim();
+  var rp=document.getElementById('nr').value.trim();
+  if(!q||!rp){alert('Please fill in both the passage and your response.');return;}
+  D.books.find(function(b){return b.id===bi;}).entries.push({time:ti||new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),quote:q,response:rp});
   clrAll();D.activeBook=bi;renderAll();
-  document.querySelectorAll('.view').forEach(e=>e.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(e=>e.classList.remove('active'));
+  document.querySelectorAll('.view').forEach(function(e){e.classList.remove('active');});
+  document.querySelectorAll('.tab-btn').forEach(function(e){e.classList.remove('active');});
   document.getElementById('view-archive').classList.add('active');
   document.querySelector('.tab-btn').classList.add('active');
   ss('log',document.querySelector('.sec-tab'));
-  setTimeout(()=>document.getElementById('sec-log').lastElementChild?.scrollIntoView({behavior:'smooth'}),150);
+  setTimeout(function(){var l=document.getElementById('sec-log').lastElementChild;if(l)l.scrollIntoView({behavior:'smooth'});},150);
   await save();
 }
-async function delE(bi,i){if(!confirm('Remove this entry?'))return;D.books.find(b=>b.id===bi).entries.splice(i,1);renderAll();await save()}
-async function delSnap(bi,i){if(!confirm('Remove this snapshot?'))return;D.books.find(b=>b.id===bi).snapshots.splice(i,1);renderAll();await save()}
-function openModal(){document.getElementById('mbg').classList.add('open');document.getElementById('nt2').focus()}
-function closeModal(){document.getElementById('mbg').classList.remove('open')}
+async function delE(bi,i){if(!confirm('Remove this entry?'))return;D.books.find(function(b){return b.id===bi;}).entries.splice(i,1);renderAll();await save();}
+async function delSnap(bi,i){if(!confirm('Remove this snapshot?'))return;D.books.find(function(b){return b.id===bi;}).snapshots.splice(i,1);renderAll();await save();}
+function openModal(){document.getElementById('mbg').classList.add('open');document.getElementById('nt2').focus();}
+function closeModal(){document.getElementById('mbg').classList.remove('open');}
 async function addBook(){
-  const ti=document.getElementById('nt2').value.trim();
-  const au=document.getElementById('na2').value.trim();
-  const yr=document.getElementById('ny2').value.trim();
-  const cx=document.getElementById('nc2').value.trim();
-  if(!ti){alert('Please enter a title.');return}
-  const ns=['I','II','III','IV','V','VI','VII','VIII','IX','X'];
-  const id='b'+Date.now();
-  const year=yr||new Date().getFullYear().toString();
-  D.books.push({id,num:'Book '+(ns[D.books.length]||D.books.length+1),title:ti,author:au||'',year:'Reading '+year,context:cx||'Added to the archive.',reflection:null,snapshots:[],entries:[]});
-  closeModal();['nt2','na2','ny2','nc2'].forEach(i=>document.getElementById(i).value='');
+  var ti=document.getElementById('nt2').value.trim();
+  var au=document.getElementById('na2').value.trim();
+  var yr=document.getElementById('ny2').value.trim();
+  var cx=document.getElementById('nc2').value.trim();
+  if(!ti){alert('Please enter a title.');return;}
+  var ns=['I','II','III','IV','V','VI','VII','VIII','IX','X'];
+  var id='b'+Date.now();
+  var year=yr||new Date().getFullYear().toString();
+  D.books.push({id:id,num:'Book '+(ns[D.books.length]||D.books.length+1),title:ti,author:au||'',year:'Reading '+year,context:cx||'Added to the archive.',reflection:null,snapshots:[],entries:[]});
+  closeModal();
+  ['nt2','na2','ny2','nc2'].forEach(function(i){document.getElementById(i).value='';});
   selBook(id);await save();
 }
-
 tok=getTok();
 if(!tok)document.getElementById('tw').style.display='flex';
 else load();
 </script>
 </body>
 </html>
-
