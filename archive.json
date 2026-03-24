@@ -1,6 +1,6 @@
 {
-  "activeBook": "omas",
-  "activeSection": "refl",
+  "activeBook": "thif",
+  "activeSection": "log",
   "books": [
     {
       "id": "omas",
@@ -77,7 +77,13 @@
       "year": "Reading 2026",
       "context": "Recommended to me as East of Eden crossed with Covenant of Water — modern, sharper, faster. Life across decades. Identity, family, exile, belonging. I started it after Hemingway.",
       "themes": [],
-      "entries": [],
+      "entries": [
+        {
+          "time": "11:06PM",
+          "quote": "The Good People of Goleen Long before we discovered that he had fathered two children by two different women, one in Drimoleague and one in Cl...",
+          "response": "I think this has to count as one of the most memorable first paragraph of a novel .. it starts with a sarcastic title of a chapter , followed by the act of a sinful priest and ends with a mother called a whore!. The Good People of Goleen - capitalised-but no one seems to be Good."
+        }
+      ],
       "reflection": null,
       "snapshots": []
     }
