@@ -61,6 +61,16 @@ footer a{color:var(--gold);text-decoration:none}
   .pub-section{padding:1.4rem 1.2rem}
   .book-title{font-size:1.6rem}
 }
+
+.mem-pub-entry{margin-bottom:2.5rem;padding-bottom:2.5rem;border-bottom:1px solid var(--line)}
+.mem-pub-entry:last-child{border-bottom:none}
+.mem-pub-title{font-family:'IM Fell English',serif;font-size:1.4rem;font-style:italic;margin-bottom:.5rem}
+.mem-pub-meta{font-family:'Inconsolata',monospace;font-size:10px;color:var(--faded);display:flex;flex-wrap:wrap;gap:.8rem;margin-bottom:.8rem}
+.mem-when{color:#1c1a17}.mem-where{color:#8b4a2a}
+.mem-pub-body{font-size:1rem;line-height:1.9;color:#2a2520}
+.mem-pub-body p{margin-bottom:.8rem}
+.mem-pub-themes{display:flex;flex-wrap:wrap;gap:.3rem;margin-top:.6rem}
+.mem-pub-tag{font-family:'Inconsolata',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;background:#ece6f4;color:#6a4a8a;padding:.15rem .5rem;border-radius:2px}
 </style>
 </head>
 <body>
@@ -93,36 +103,68 @@ async function loadArchive(){
 }
 
 function renderBooks(books){
-  document.getElementById('books').innerHTML=books.map((b,bi)=>{
-    const entries=b.entries||[];
-    const refl=b.reflection;
-    const snaps=b.snapshots||[];
-    const ctx=b.context||'';
+  document.getElementById('books').innerHTML=books.map(function(b,bi){
+    var entries=b.entries||[];
+    var refl=b.reflection;
+    var snaps=b.snapshots||[];
+    var ctx=b.context||'';
+    var isMemoir=b.type==='memoir';
 
-    const entriesHtml=entries.length
-      ?entries.map(e=>'<div class="entry"><div class="entry-time">'+(e.time||'')+'</div><div class="entry-quote">\u201c'+e.quote+'\u201d</div><div class="entry-resp">'+e.response+'</div></div>').join('')
+    // memoir: only public entries
+    var pubEntries=isMemoir?entries.filter(function(e){return e.isPublic;}):entries;
+
+    var memoirHtml=pubEntries.length
+      ?pubEntries.map(function(e){
+          var themes=e.themes&&e.themes.length
+            ?'<div class="mem-pub-themes">'+e.themes.map(function(t){return '<span class="mem-pub-tag">'+t+'</span>';}).join('')+'</div>'
+            :'';
+          var meta='';
+          if(e.memdate) meta+='<span class="mem-when">\u25cf '+e.memdate+'</span>';
+          if(e.place) meta+='<span class="mem-where">\ud83d\udccd '+e.place+'</span>';
+          meta+='<span class="mem-written">Written '+(e.entrydate||'')+'</span>';
+          var body='<p>'+(e.elevated||e.raw||'').split('\n\n').join('</p><p>').split('\n').join('<br>')+'</p>';
+          return '<div class="mem-pub-entry"><div class="mem-pub-title">'+(e.title||'Untitled')+'</div><div class="mem-pub-meta">'+meta+'</div><div class="mem-pub-body">'+body+'</div>'+themes+'</div>';
+        }).join('')
+      :'<div class="empty">No public memories yet.</div>';
+
+    var entriesHtml=entries.length
+      ?entries.map(function(e){return '<div class="entry"><div class="entry-time">'+(e.time||'')+'</div><div class="entry-quote">\u201c'+e.quote+'\u201d</div><div class="entry-resp">'+e.response+'</div></div>';}).join('')
       :'<div class="empty">No notes yet for this book.</div>';
 
-    const reflHtml=refl
-      ?'<div class="refl-block"><div class="refl-date">'+refl.date+'</div><div>'+refl.text.replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>')+'</div></div>'
-        +(snaps.length?'<div class="snapshots-title">Earlier snapshots</div>'+snaps.map(s=>'<div class="snapshot"><div class="snap-date">'+s.date+'</div><div class="snap-body">'+s.text.replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>')+'</div></div>').join(''):'')
-      :'<div class="empty">No reflection yet \u2014 still reading.</div>';
+    var reflHtml=refl
+      ?'<div class="refl-block"><div class="refl-date">'+refl.date+'</div><div>'+refl.text.split('\n\n').join('</p><p>').split('\n').join('<br>')+'</div></div>'
+      :'<div class="empty">No reflection yet.</div>';
+
+    var snapsHtml=snaps.length
+      ?'<div class="snapshots-title">Earlier snapshots</div>'+snaps.map(function(s){return '<div class="snapshot"><div class="snap-date">'+s.date+'</div><div class="snap-body">'+s.text.split('\n\n').join('</p><p>').split('\n').join('<br>')+'</div></div>';}).join('')
+      :'';
+
+    var badge=isMemoir?'<span style="font-family:\'Inconsolata\',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;background:#ece6f4;color:#6a4a8a;padding:.15rem .5rem;border-radius:2px;margin-left:.5rem">Memoir</span>':'';
+
+    var tabs=isMemoir
+      ?'<button class="pub-tab active" onclick="pubTab(\'log\','+bi+',this)">Memories</button>'
+       +'<button class="pub-tab" onclick="pubTab(\'ctx\','+bi+',this)">About</button>'
+      :'<button class="pub-tab active" onclick="pubTab(\'log\','+bi+',this)">Verbatim Log</button>'
+       +'<button class="pub-tab" onclick="pubTab(\'refl\','+bi+',this)">Reflections</button>'
+       +'<button class="pub-tab" onclick="pubTab(\'ctx\','+bi+',this)">Context</button>';
+
+    var sections=isMemoir
+      ?'<div class="pub-section" id="ps-log-'+bi+'">'+memoirHtml+'</div>'
+       +'<div class="pub-section" id="ps-ctx-'+bi+'" style="display:none"><div class="ctx">'+ctx+'</div></div>'
+      :'<div class="pub-section" id="ps-log-'+bi+'">'+entriesHtml+'</div>'
+       +'<div class="pub-section" id="ps-refl-'+bi+'" style="display:none">'+reflHtml+snapsHtml+'</div>'
+       +'<div class="pub-section" id="ps-ctx-'+bi+'" style="display:none"><div class="ctx"><p>'+ctx+'</p></div></div>';
 
     return '<div class="book-card" id="book-'+bi+'">'
       +'<div class="book-card-header">'
       +'<div class="book-num">'+b.num+'</div>'
-      +'<div class="book-title">'+b.title+'</div>'
+      +'<div class="book-title">'+b.title+badge+'</div>'
       +'<div class="book-author">'+b.author+'</div>'
-      +'<div class="book-meta"><span>'+b.year+'</span><span>'+entries.length+' '+(entries.length===1?'entry':'entries')+'</span></div>'
-      +'</div>'
-      +'<div class="pub-tabs">'
-      +'<button class="pub-tab active" onclick="pubTab(\'log\','+bi+',this)">Verbatim Log</button>'
-      +'<button class="pub-tab" onclick="pubTab(\'refl\','+bi+',this)">Reflections</button>'
-      +'<button class="pub-tab" onclick="pubTab(\'ctx\','+bi+',this)">Context</button>'
-      +'</div>'
-      +'<div class="pub-section" id="ps-log-'+bi+'">'+entriesHtml+'</div>'
-      +'<div class="pub-section" id="ps-refl-'+bi+'" style="display:none">'+reflHtml+'</div>'
-      +'<div class="pub-section" id="ps-ctx-'+bi+'" style="display:none"><div class="ctx"><p>'+ctx+'</p></div></div>'
+      +'<div class="book-meta"><span>'+b.year+'</span>'
+      +(isMemoir?'<span>'+pubEntries.length+' public '+(pubEntries.length===1?'memory':'memories')+'</span>':'<span>'+entries.length+' '+(entries.length===1?'entry':'entries')+'</span>')
+      +'</div></div>'
+      +'<div class="pub-tabs">'+tabs+'</div>'
+      +sections
       +'</div>';
   }).join('');
 }
