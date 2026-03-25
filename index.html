@@ -1051,6 +1051,691 @@ function updateSceneDropdown() {
   if (scRow) scRow.style.display = scenes.length ? 'block' : 'none';
 }
 
+function sv(v, btn) {
+  document.querySelectorAll('.view').forEach(function(e) { e.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(e) { e.classList.remove('active'); });
+  var viewId = v === 'archive' ? 'va' : v === 'memoir' ? 'vmem' : 'vadd';
+  document.getElementById(viewId).classList.add('active');
+  if (v === 'memoir') { updateMemFormDropdowns(); }
+  if (btn) btn.classList.add('active');
+  if (v === 'add') {
+    document.getElementById('nb').innerHTML = D.books.map(function(b) {
+      return '<option value="' + b.id + '"' + (b.id === D.activeBook ? ' selected' : '') + '>' + b.title + '</option>';
+    }).join('');
+  }
+}
+
+function ss(s, btn) {
+  D.activeSection = s;
+  ['log','refl','ctx'].forEach(function(i) { document.getElementById('s-' + i).style.display = i === s ? 'block' : 'none'; });
+  document.querySelectorAll('.sec-tab').forEach(function(e) { e.classList.remove('active'); });
+  if (btn) btn.classList.add('active');
+}
+
+function selBook(id) {
+  D.activeBook = id;
+  // Always return to archive view when switching books
+  document.querySelectorAll('.view').forEach(function(e) { e.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(e) { e.classList.remove('active'); });
+  document.getElementById('va').classList.add('active');
+  document.querySelector('.tab-btn').classList.add('active');
+  renderAll();
+  updateNavTabs();
+  D.activeSection = 'log';
+  ['log','refl','ctx'].forEach(function(i) { document.getElementById('s-' + i).style.display = i === 'log' ? 'block' : 'none'; });
+  document.querySelectorAll('.sec-tab').forEach(function(e) { e.classList.remove('active'); });
+  var firstTab = document.querySelector('.sec-tab');
+  if (firstTab) firstTab.classList.add('active');
+}
+
+function curBook() { return D.books.filter(function(b) { return b.id === D.activeBook; })[0]; }
+
+// Render
+function renderAll() {
+  if (!D.books.length) { document.getElementById('blist').innerHTML = ''; return; }
+  if (!D.activeBook) D.activeBook = D.books[0].id;
+
+  // Sidebar - use data-id to avoid inline quote issues
+  var blistEl = document.getElementById('blist');
+  blistEl.innerHTML = '';
+  D.books.forEach(function(b) {
+    var div = document.createElement('div');
+    div.className = 'book-item' + (b.id === D.activeBook ? ' active' : '');
+    div.dataset.bid = b.id;
+    var badge = b.type === 'memoir' ? '<span class="badge-memoir">Memoir</span>' : '';
+    div.innerHTML = '<div class="b-num">' + b.num + '</div><div class="b-title">' + b.title + badge + '</div><div class="b-author">' + b.author + '</div>';
+    blistEl.appendChild(div);
+    // For memoir books: render chapter tree below the book item
+    if (b.type === 'memoir' && b.id === D.activeBook) {
+      var chContainer = document.createElement('div');
+      chContainer.className = 'ch-container';
+      chContainer.style.paddingLeft = '.5rem';
+      renderMemoirSidebar(b, chContainer);
+      blistEl.appendChild(chContainer);
+    }
+  });
+  blistEl.onclick = function(e) {
+    var el = e.target.closest('[data-bid]');
+    if (el) selBook(el.dataset.bid);
+  };
+
+  // Mobile selector
+  document.getElementById('msb').innerHTML = D.books.map(function(b) {
+    return '<option value="' + b.id + '"' + (b.id === D.activeBook ? ' selected' : '') + '>' + b.num + ' — ' + b.title + '</option>';
+  }).join('');
+  document.getElementById('mbs').style.display = 'block';
+
+  var b = curBook();
+  if (!b) return;
+
+  document.getElementById('hl').textContent = b.num;
+  document.getElementById('ht').textContent = b.title;
+  document.getElementById('ha').textContent = b.author;
+  document.getElementById('hy').textContent = b.year;
+  document.getElementById('hc').textContent = b.entries.length + ' ' + (b.entries.length === 1 ? 'entry' : 'entries');
+
+  // Log
+  var logEl = document.getElementById('s-log');
+  if (b.type === 'memoir') { renderMemoirLog(b); } else
+  if (!b.entries.length) {
+    logEl.innerHTML = '<div class="empty">No notes yet.</div>';
+  } else {
+    logEl.innerHTML = '';
+    b.entries.forEach(function(e, i) {
+      var div = document.createElement('div');
+      div.className = 'entry';
+      div.innerHTML = '<div class="entry-time">' + (e.time || '—') + '</div>'
+        + '<div class="entry-quote">“' + e.quote + '”</div>'
+        + '<div class="entry-resp">' + e.response + '</div>';
+      var act = document.createElement('div');
+      act.className = 'entry-act';
+      var btn = document.createElement('button');
+      btn.textContent = 'Remove';
+      btn.dataset.bid = b.id;
+      btn.dataset.idx = i;
+      btn.onclick = function() { delE(this.dataset.bid, parseInt(this.dataset.idx)); };
+      act.appendChild(btn);
+      div.appendChild(act);
+      logEl.appendChild(div);
+    });
+  }
+
+  // Reflections
+  var hasR = b.reflection && b.reflection.text;
+  var reflEl = document.getElementById('s-refl');
+  reflEl.innerHTML = '';
+
+  var intro = document.createElement('p');
+  intro.className = 'refl-intro';
+  intro.textContent = 'A living reflection — rewrites itself as you read. Save a snapshot to keep a record of where you were.';
+  reflEl.appendChild(intro);
+
+  var actions = document.createElement('div');
+  actions.className = 'refl-actions';
+  var genBtn = document.createElement('button');
+  genBtn.className = 'gen-btn';
+  genBtn.textContent = hasR ? 'Regenerate reflection' : 'Generate my reflection';
+  genBtn.onclick = doGenRefl;
+  actions.appendChild(genBtn);
+  if (hasR) {
+    var dlBtn = document.createElement('button');
+    dlBtn.className = 'dl-btn';
+    dlBtn.textContent = 'Download reflection';
+    dlBtn.onclick = doDlRefl;
+    actions.appendChild(dlBtn);
+    var snapBtn = document.createElement('button');
+    snapBtn.className = 'snap-btn';
+    snapBtn.textContent = 'Save snapshot';
+    snapBtn.onclick = doSaveSnap;
+    actions.appendChild(snapBtn);
+  }
+  var note = document.createElement('span');
+  note.className = 'refl-note';
+  note.textContent = 'Each generation replaces the previous';
+  actions.appendChild(note);
+  reflEl.appendChild(actions);
+
+  if (hasR) {
+    var curDiv = document.createElement('div');
+    curDiv.className = 'cur-refl';
+    curDiv.innerHTML = '<div class="refl-date">' + b.reflection.date + '</div><p>' + b.reflection.text.split('\n\n').join('</p><p>').split('\n').join('<br>') + '</p>';
+    reflEl.appendChild(curDiv);
+  } else {
+    var empty = document.createElement('div');
+    empty.className = 'empty';
+    empty.style.padding = '1rem 0';
+    empty.textContent = 'No reflection yet. Add notes then generate below.';
+    reflEl.appendChild(empty);
+  }
+
+  if (b.snapshots && b.snapshots.length) {
+    var snapsDiv = document.createElement('div');
+    snapsDiv.className = 'snaps-sec';
+    snapsDiv.innerHTML = '<div class="snaps-title">Saved snapshots</div>';
+    b.snapshots.forEach(function(s, i) {
+      var snap = document.createElement('div');
+      snap.className = 'snapshot';
+      snap.innerHTML = '<div class="snap-date">' + s.date + '</div><div class="snap-prev">' + s.text.substring(0,200) + '...</div>';
+      var del = document.createElement('button');
+      del.className = 'snap-del';
+      del.innerHTML = '&#215;';
+      del.dataset.bid = b.id;
+      del.dataset.idx = i;
+      del.onclick = function() { delSnap(this.dataset.bid, parseInt(this.dataset.idx)); };
+      snap.appendChild(del);
+      snapsDiv.appendChild(snap);
+    });
+    reflEl.appendChild(snapsDiv);
+  }
+
+  // Context
+  document.getElementById('s-ctx').innerHTML = '<div class="ctx-block"><p>' + b.context + '</p></div>';
+  updateNavTabs();
+}
+
+function subNote() {
+  var bi = document.getElementById('nb').value;
+  var ti = document.getElementById('nt').value.trim();
+  var q = document.getElementById('nq').value.trim();
+  var rp = document.getElementById('nr').value.trim();
+  if (!q || !rp) { alert('Please fill in both the passage and your response.'); return; }
+  D.books.filter(function(b) { return b.id === bi; })[0].entries.push({
+    time: ti || new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}),
+    quote: q, response: rp
+  });
+  clrAll(); D.activeBook = bi; renderAll();
+  document.querySelectorAll('.view').forEach(function(e) { e.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(e) { e.classList.remove('active'); });
+  document.getElementById('va').classList.add('active');
+  document.querySelector('.tab-btn').classList.add('active');
+  ss('log', document.querySelector('.sec-tab'));
+  setTimeout(function() {
+    var l = document.getElementById('s-log').lastElementChild;
+    if (l) l.scrollIntoView({behavior:'smooth'});
+  }, 150);
+  doSave();
+}
+
+function delE(bi, i) {
+  if (!confirm('Remove this entry?')) return;
+  D.books.filter(function(b) { return b.id === bi; })[0].entries.splice(i, 1);
+  renderAll(); doSave();
+}
+
+function delSnap(bi, i) {
+  if (!confirm('Remove this snapshot?')) return;
+  D.books.filter(function(b) { return b.id === bi; })[0].snapshots.splice(i, 1);
+  renderAll(); doSave();
+}
+
+function openM() { document.getElementById('mbg').classList.add('open'); document.getElementById('mt').focus(); }
+function closeM() { document.getElementById('mbg').classList.remove('open'); }
+
+function addBook() {
+  var ti = document.getElementById('mt').value.trim();
+  var au = document.getElementById('ma').value.trim();
+  var yr = document.getElementById('my').value.trim();
+  var cx = document.getElementById('mc').value.trim();
+  if (!ti) { alert('Please enter a title.'); return; }
+  var ns = ['I','II','III','IV','V','VI','VII','VIII','IX','X'];
+  var id = 'b' + Date.now();
+  var btype = document.getElementById('mtype') ? document.getElementById('mtype').value : 'reading';
+  var yearPrefix = btype === 'memoir' ? 'Begun ' : 'Reading ';
+  D.books.push({
+    id: id,
+    num: 'Book ' + (ns[D.books.length] || D.books.length + 1),
+    title: ti, author: au || '',
+    year: yearPrefix + (yr || new Date().getFullYear()),
+    context: cx || 'Added to the archive.',
+    type: btype,
+    reflection: null, snapshots: [], entries: []
+  });
+  closeM();
+  ['mt','ma','my','mc'].forEach(function(i) { document.getElementById(i).value = ''; });
+  selBook(id); doSave();
+}
+
+
+// MEMOIR GLOBALS
+var mib64=null,mim='image/jpeg',ghostElevated='',ghostQs=[],memSort='entrydate',editingMemId=null;
+
+function updateNavTabs(){var b=curBook(),isM=b&&b.type==='memoir';var a=document.getElementById('tab-add'),m=document.getElementById('tab-mem');if(a)a.style.display=isM?'none':'';if(m)m.style.display=isM?'':'none';}
+function mdrp(e){e.preventDefault();document.getElementById('mdz').classList.remove('over');var f=e.dataTransfer.files[0];if(f&&f.type.startsWith('image/'))mloadImg(f);}
+function mfsel(e){var f=e.target.files[0];if(f)mloadImg(f);}
+function mloadImg(f){mim=f.type||'image/jpeg';var r=new FileReader();r.onload=function(ev){mib64=ev.target.result.split(',')[1];document.getElementById('mssi').src=ev.target.result;document.getElementById('mssp').classList.add('vis');setMpist('reading','Reading...');mOcr();};r.readAsDataURL(f);}
+function mOcr(){var body={model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:mim,data:mib64}},{type:'text',text:'Extract all text from this notes screenshot. Return ONLY JSON: {"text":"full text","title":"short title if visible or empty"}'}]}]};fetch(PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(function(r){return r.json();}).then(function(d){var t=d.content&&d.content.filter(function(x){return x.type==='text';})[0];var txt=t?t.text:'';var p=JSON.parse(txt.replace(/```json/g,'').replace(/```/g,'').trim());if(p.text){document.getElementById('m-raw').value=p.text;if(p.title)document.getElementById('m-title').value=p.title;setMpist('done','Extracted');}else{setMpist('error','Could not detect');}}).catch(function(){setMpist('error','Could not read');});}
+function setMpist(c,m){var e=document.getElementById('mpist');e.className='pi-st '+c;e.textContent=m;}
+function clrMSS(){mib64=null;document.getElementById('mssp').classList.remove('vis');document.getElementById('mssi').src='';document.getElementById('mdz').querySelector('input').value='';}
+function clrMem(){clrMSS();['m-title','m-memdate','m-place','m-raw'].forEach(function(i){document.getElementById(i).value='';});document.getElementById('ghostPanel').classList.remove('open');document.getElementById('mem-step1-acts').style.display='flex';ghostElevated='';ghostQs=[];editingMemId=null;document.getElementById('memFormTitle').textContent='Add a Memory';}
+
+function doGhost(){
+  var raw=document.getElementById('m-raw').value.trim();
+  if(!raw){alert('Please write your memory first.');return;}
+  var btns=document.querySelectorAll('#vmem button');btns.forEach(function(b){b.disabled=true;});
+  var title=document.getElementById('m-title').value.trim(),place=document.getElementById('m-place').value.trim(),memdate=document.getElementById('m-memdate').value.trim();
+  var ctx=(title?'Title: '+title+'\n':'')+(memdate?'When: '+memdate+'\n':'')+(place?'Where: '+place+'\n':'');
+  var prompt='You are a literary ghost editor helping Tarek write his memoirs.\n\nDo two things:\n1. ELEVATE the prose to literary level. Keep all facts exactly as written. Do NOT invent facts, names, dates. But imagine atmosphere, sensory details, emotional texture. Write first person in his voice. 2-4 paragraphs.\n2. Ask 2-3 short enrichment questions. Gentle and curious.\n\n'+(ctx?ctx+'\n':'')+'Raw memory:\n'+raw+'\n\nReturn ONLY JSON: {"elevated":"literary version","questions":["q1","q2","q3"]}';
+  fetch(PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2000,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(d){var t=d.content&&d.content.filter(function(x){return x.type==='text';})[0];var txt=t?t.text:'';var p=JSON.parse(txt.replace(/```json/g,'').replace(/```/g,'').trim());ghostElevated=p.elevated||'';ghostQs=p.questions||[];showGhostPanel();btns.forEach(function(b){b.disabled=false;});}).catch(function(){alert('Could not connect.');btns.forEach(function(b){b.disabled=false;});});
+}
+
+function doAsk(){
+  var raw=document.getElementById('m-raw').value.trim();
+  if(!raw){alert('Please write your memory first.');return;}
+  var btns=document.querySelectorAll('#vmem button');btns.forEach(function(b){b.disabled=true;});
+  var prompt='Help Tarek enrich his memoir. Ask 3 thoughtful questions to help him go deeper into this memory. Gentle, curious, specific.\n\nHis memory:\n'+raw+'\n\nReturn ONLY JSON: {"elevated":"","questions":["q1","q2","q3"]}';
+  fetch(PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(d){var t=d.content&&d.content.filter(function(x){return x.type==='text';})[0];var txt=t?t.text:'';var p=JSON.parse(txt.replace(/```json/g,'').replace(/```/g,'').trim());ghostElevated='';ghostQs=p.questions||[];showGhostPanel();btns.forEach(function(b){b.disabled=false;});}).catch(function(){alert('Could not connect.');btns.forEach(function(b){b.disabled=false;});});
+}
+
+function showGhostPanel(){var panel=document.getElementById('ghostPanel');document.getElementById('ghostText').innerHTML=ghostElevated?'<p>'+ghostElevated.split('\n\n').join('</p><p>').split('\n').join('<br>')+'</p>':'';document.getElementById('ghostQs').innerHTML=ghostQs.map(function(q){return '<div class="ghost-q">'+q+'</div>';}).join('');panel.classList.add('open');}
+function acceptMem(){saveMemoirEntry(ghostElevated);}
+function keepOriginalMem(){saveMemoirEntry('');}
+function saveMemAsIs(){saveMemoirEntry('');}
+
+function saveMemoirEntry(elevated){
+  var raw=document.getElementById('m-raw').value.trim();
+  if(!raw){alert('Please write your memory first.');return;}
+  var b=curBook();
+  var title=document.getElementById('m-title').value.trim()||'Untitled memory';
+  var memdate=document.getElementById('m-memdate').value.trim();
+  var place=document.getElementById('m-place').value.trim();
+  var themes=suggestThemes((elevated||raw)+' '+title+' '+place);
+  var now=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+  if(editingMemId){
+    var entry=b.entries.filter(function(e){return e.id===editingMemId;})[0];
+    if(entry){entry.title=title;entry.raw=raw;if(elevated)entry.elevated=elevated;entry.memdate=memdate;entry.place=place;entry.themes=themes;if(ghostQs.length)entry.questions=ghostQs;var cs3=document.getElementById('m-chapter');var ss3=document.getElementById('m-scene');if(cs3)entry.chapterId=cs3.value||null;if(ss3)entry.sceneId=ss3.value||null;}
+  }else{
+    var chSel2=document.getElementById('m-chapter');var scSel2=document.getElementById('m-scene');
+    var chId=chSel2?chSel2.value||null:null;var scId=scSel2?scSel2.value||null:null;
+    b.entries.push({id:'me'+Date.now(),title:title,raw:raw,elevated:elevated,questions:ghostQs,memdate:memdate,place:place,entrydate:now,themes:themes,isPublic:false,chapterId:chId,sceneId:scId});
+  }
+  clrMem();D.activeBook=b.id;
+  document.querySelectorAll('.view').forEach(function(e){e.classList.remove('active');});
+  document.querySelectorAll('.tab-btn').forEach(function(e){e.classList.remove('active');});
+  document.getElementById('va').classList.add('active');
+  updateNavTabs();renderAll();ss('log',document.querySelector('.sec-tab'));doSave();
+}
+
+function suggestThemes(text){
+  var t=text.toLowerCase(),tags=[];
+  [['family','family'],['childhood','childhood'],['cairo','cairo'],['kuwait','kuwait'],['london','london'],['loss','loss'],['home','home'],['father','father'],['mother','mother'],['school','school'],['love','love'],['friendship','friendship'],['travel','travel'],['food','food'],['music','music'],['medicine','medicine'],['identity','identity'],['egypt','egypt'],['paris','paris'],['surgery','surgery'],['memory','memory']].forEach(function(c){if(t.indexOf(c[0])!==-1)tags.push(c[1]);});
+  return tags.slice(0,5);
+}
+
+function editMemEntry(bid,eid){
+  var bk=D.books.filter(function(b){return b.id===bid;})[0];
+  var entry=bk&&bk.entries.filter(function(e){return e.id===eid;})[0];
+  if(!entry)return;
+  editingMemId=eid;
+  document.getElementById('m-title').value=entry.title||'';
+  document.getElementById('m-memdate').value=entry.memdate||'';
+  document.getElementById('m-place').value=entry.place||'';
+  document.getElementById('m-raw').value=entry.raw||'';
+  updateMemFormDropdowns();
+  var cs=document.getElementById('m-chapter');if(cs)cs.value=entry.chapterId||'';
+  updateSceneDropdown();
+  var ss2=document.getElementById('m-scene');if(ss2)ss2.value=entry.sceneId||'';
+  document.getElementById('ghostPanel').classList.remove('open');
+  ghostElevated=entry.elevated||'';ghostQs=entry.questions||[];
+  document.getElementById('memFormTitle').textContent='Edit Memory';
+  document.querySelectorAll('.view').forEach(function(e){e.classList.remove('active');});
+  document.querySelectorAll('.tab-btn').forEach(function(e){e.classList.remove('active');});
+  document.getElementById('vmem').classList.add('active');
+  var mt=document.getElementById('tab-mem');if(mt)mt.classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function renderMemoirLog(b){
+  var logEl=document.getElementById('s-log');
+  var entries=b.entries.slice();
+  entries.sort(function(a,b2){if(memSort==='place')return(a.place||'').localeCompare(b2.place||'');if(memSort==='memdate')return(a.memdate||'').localeCompare(b2.memdate||'');if(memSort==='theme')return(a.themes&&a.themes[0]||'').localeCompare(b2.themes&&b2.themes[0]||'');return(b2.entrydate||'').localeCompare(a.entrydate||'');});
+  logEl.innerHTML='';
+  var sb=document.createElement('div');sb.className='mem-sort-bar';
+  var sl=document.createElement('span');sl.textContent='Sort by:';sb.appendChild(sl);
+  [{k:'entrydate',l:'Written'},{k:'memdate',l:'When'},{k:'place',l:'Place'},{k:'theme',l:'Theme'}].forEach(function(s){
+    var btn=document.createElement('button');btn.className='sort-btn'+(memSort===s.k?' active':'');btn.textContent=s.l;btn.dataset.sort=s.k;
+    btn.onclick=function(){memSort=this.dataset.sort;renderAll();ss(D.activeSection,document.querySelector('.sec-tab'));};
+    sb.appendChild(btn);
+  });
+  logEl.appendChild(sb);
+  if(!entries.length){var em=document.createElement('div');em.className='empty';em.textContent='No memories yet.';logEl.appendChild(em);return;}
+  entries.forEach(function(e){
+    var div=document.createElement('div');div.className='mem-entry';
+    var meta=document.createElement('div');meta.className='mem-meta';
+    var td=document.createElement('div');td.className='mem-entry-title';td.textContent=e.title||'Untitled';meta.appendChild(td);
+    var dd=document.createElement('div');dd.className='mem-meta-details';
+    dd.innerHTML=(e.memdate?'<span class="memdate">\u25cf '+e.memdate+'</span>':'')+(e.place?'<span class="place">\U0001F4CD '+e.place+'</span>':'')+'<span class="entrydate">Written '+(e.entrydate||'')+'</span>'+'<span class="'+(e.isPublic?'pub-badge':'priv-badge')+'">'+(e.isPublic?'Public':'Private')+'</span>';
+    meta.appendChild(dd);div.appendChild(meta);
+    var body=document.createElement('div');body.className='mem-body';
+    body.innerHTML='<p>'+(e.elevated||e.raw||'').split('\n\n').join('</p><p>').split('\n').join('<br>')+'</p>';
+    div.appendChild(body);
+    if(e.elevated&&e.raw){
+      var rt=document.createElement('button');rt.className='mem-raw-toggle';rt.textContent='Show original';
+      rt.onclick=function(){var rd=this.nextElementSibling;rd.classList.toggle('open');this.textContent=rd.classList.contains('open')?'Hide original':'Show original';};
+      div.appendChild(rt);
+      var rd=document.createElement('div');rd.className='mem-raw';rd.textContent=e.raw;div.appendChild(rd);
+    }
+    if(e.themes&&e.themes.length){
+      var tgs=document.createElement('div');tgs.className='mem-themes';
+      e.themes.forEach(function(t){var tg=document.createElement('span');tg.className='mem-theme-tag';tg.textContent=t;tgs.appendChild(tg);});
+      div.appendChild(tgs);
+    }
+    var acts=document.createElement('div');acts.className='pub-row';
+    var sw=document.createElement('label');sw.className='sw';
+    var inp=document.createElement('input');inp.type='checkbox';inp.checked=!!e.isPublic;inp.dataset.eid=e.id;inp.dataset.bid=b.id;
+    inp.onchange=function(){
+      var bk=D.books.filter(function(x){return x.id===this.dataset.bid;}.bind(this))[0];
+      var en=bk&&bk.entries.filter(function(x){return x.id===this.dataset.eid;}.bind(this))[0];
+      if(en){en.isPublic=this.checked;renderAll();doSave();}
+    };
+    var tr=document.createElement('span');tr.className='sw-track';
+    var th=document.createElement('span');th.className='sw-thumb';
+    sw.appendChild(inp);sw.appendChild(tr);sw.appendChild(th);
+    var pl=document.createElement('span');pl.className=e.isPublic?'pub-on':'pub-off';pl.textContent=e.isPublic?'Public':'Private';
+    var eb=document.createElement('button');eb.className='mem-act-btn';eb.style.marginLeft='auto';eb.textContent='Edit';eb.dataset.eid=e.id;eb.dataset.bid=b.id;
+    eb.onclick=function(){editMemEntry(this.dataset.bid,this.dataset.eid);};
+    var db=document.createElement('button');db.className='mem-act-btn';db.style.marginLeft='.5rem';db.textContent='Delete';db.dataset.eid=e.id;db.dataset.bid=b.id;
+    db.onclick=function(){
+      if(!confirm('Delete this memory?'))return;
+      var bk=D.books.filter(function(x){return x.id===this.dataset.bid;}.bind(this))[0];
+      if(bk)bk.entries=bk.entries.filter(function(x){return x.id!==this.dataset.eid;}.bind(this));
+      renderAll();doSave();
+    };
+    acts.appendChild(sw);acts.appendChild(pl);acts.appendChild(eb);acts.appendChild(db);div.appendChild(acts);
+    logEl.appendChild(div);
+  });
+}
+
+// ── CHAPTER & SCENE MANAGEMENT ───────────────────────────────────────────────
+// Data structure added to memoir books:
+// b.chapters = [{id:'ch1', title:'Cairo Years', scenes:[{id:'sc1',title:'The House'}]}, ...]
+// entries get: chapterId, sceneId fields
+
+function getChapters(b) {
+  if (!b.chapters) b.chapters = [];
+  return b.chapters;
+}
+
+function addChapter(bid) {
+  var title = prompt('Chapter title:');
+  if (!title || !title.trim()) return;
+  var b = D.books.filter(function(x){return x.id===bid;})[0];
+  if (!b) return;
+  if (!b.chapters) b.chapters = [];
+  var ns = ['I','II','III','IV','V','VI','VII','VIII','IX','X'];
+  var id = 'ch' + Date.now();
+  b.chapters.push({id:id, title:title.trim(), scenes:[], collapsed:false});
+  renderAll();
+  updateNavTabs();
+  doSave();
+}
+
+function addScene(bid, chid) {
+  var title = prompt('Scene title:');
+  if (!title || !title.trim()) return;
+  var b = D.books.filter(function(x){return x.id===bid;})[0];
+  if (!b) return;
+  var ch = b.chapters && b.chapters.filter(function(x){return x.id===chid;})[0];
+  if (!ch) return;
+  if (!ch.scenes) ch.scenes = [];
+  ch.scenes.push({id:'sc'+Date.now(), title:title.trim()});
+  renderAll();
+  updateNavTabs();
+  doSave();
+}
+
+function toggleChapter(bid, chid) {
+  var b = D.books.filter(function(x){return x.id===bid;})[0];
+  if (!b) return;
+  var ch = b.chapters && b.chapters.filter(function(x){return x.id===chid;})[0];
+  if (ch) { ch.collapsed = !ch.collapsed; renderAll(); updateNavTabs(); }
+}
+
+function renameChapter(bid, chid) {
+  var b = D.books.filter(function(x){return x.id===bid;})[0];
+  var ch = b && b.chapters && b.chapters.filter(function(x){return x.id===chid;})[0];
+  if (!ch) return;
+  var t = prompt('Rename chapter:', ch.title);
+  if (t && t.trim()) { ch.title = t.trim(); renderAll(); updateNavTabs(); doSave(); }
+}
+
+function deleteChapter(bid, chid) {
+  var b = D.books.filter(function(x){return x.id===bid;})[0];
+  if (!b) return;
+  var ch = b.chapters && b.chapters.filter(function(x){return x.id===chid;})[0];
+  var memCount = b.entries.filter(function(e){return e.chapterId===chid;}).length;
+  var msg = 'Delete chapter "' + (ch?ch.title:'') + '"?';
+  if (memCount) msg += '\n\n' + memCount + ' memories will become unassigned (not deleted).';
+  if (!confirm(msg)) return;
+  b.chapters = b.chapters.filter(function(x){return x.id!==chid;});
+  // Unassign entries
+  b.entries.forEach(function(e){ if(e.chapterId===chid){e.chapterId=null;e.sceneId=null;} });
+  renderAll(); updateNavTabs(); doSave();
+}
+
+function renameScene(bid, chid, scid) {
+  var b = D.books.filter(function(x){return x.id===bid;})[0];
+  var ch = b && b.chapters && b.chapters.filter(function(x){return x.id===chid;})[0];
+  var sc = ch && ch.scenes && ch.scenes.filter(function(x){return x.id===scid;})[0];
+  if (!sc) return;
+  var t = prompt('Rename scene:', sc.title);
+  if (t && t.trim()) { sc.title = t.trim(); renderAll(); updateNavTabs(); doSave(); }
+}
+
+function deleteScene(bid, chid, scid) {
+  var b = D.books.filter(function(x){return x.id===bid;})[0];
+  var ch = b && b.chapters && b.chapters.filter(function(x){return x.id===chid;})[0];
+  if (!ch) return;
+  var sc = ch.scenes && ch.scenes.filter(function(x){return x.id===scid;})[0];
+  var memCount = b.entries.filter(function(e){return e.sceneId===scid;}).length;
+  var msg = 'Delete scene "' + (sc?sc.title:'') + '"?';
+  if (memCount) msg += '\n\n' + memCount + ' memories will remain in the chapter.';
+  if (!confirm(msg)) return;
+  ch.scenes = ch.scenes.filter(function(x){return x.id!==scid;});
+  b.entries.forEach(function(e){ if(e.sceneId===scid) e.sceneId=null; });
+  renderAll(); updateNavTabs(); doSave();
+}
+
+// ── CHAPTER/SCENE SIDEBAR RENDER ─────────────────────────────────────────────
+function renderMemoirSidebar(b, container) {
+  var chapters = b.chapters || [];
+  var ns = ['I','II','III','IV','V','VI','VII','VIII','IX','X'];
+
+  chapters.forEach(function(ch, ci) {
+    var chDiv = document.createElement('div');
+    chDiv.className = 'ch-item';
+
+    // Chapter header
+    var chHead = document.createElement('div');
+    chHead.className = 'ch-head';
+
+    var toggle = document.createElement('button');
+    toggle.className = 'ch-toggle';
+    toggle.innerHTML = ch.collapsed ? '&#9658;' : '&#9660;';
+    toggle.dataset.bid = b.id;
+    toggle.dataset.chid = ch.id;
+    toggle.onclick = function() { toggleChapter(this.dataset.bid, this.dataset.chid); };
+
+    var chTitle = document.createElement('span');
+    chTitle.className = 'ch-title';
+    var chNum = ns[ci] || (ci+1)+'';
+    chTitle.textContent = 'Ch. ' + chNum + ' \u2014 ' + ch.title;
+
+    var chMenu = document.createElement('div');
+    chMenu.className = 'ch-menu';
+
+    var addScBtn = document.createElement('button');
+    addScBtn.className = 'ch-menu-btn';
+    addScBtn.title = 'Add scene';
+    addScBtn.innerHTML = '&#43;';
+    addScBtn.dataset.bid = b.id; addScBtn.dataset.chid = ch.id;
+    addScBtn.onclick = function(e) { e.stopPropagation(); addScene(this.dataset.bid, this.dataset.chid); };
+
+    var renBtn = document.createElement('button');
+    renBtn.className = 'ch-menu-btn';
+    renBtn.title = 'Rename';
+    renBtn.innerHTML = '&#9998;';
+    renBtn.dataset.bid = b.id; renBtn.dataset.chid = ch.id;
+    renBtn.onclick = function(e) { e.stopPropagation(); renameChapter(this.dataset.bid, this.dataset.chid); };
+
+    var delBtn = document.createElement('button');
+    delBtn.className = 'ch-menu-btn ch-del';
+    delBtn.title = 'Delete chapter';
+    delBtn.innerHTML = '&#215;';
+    delBtn.dataset.bid = b.id; delBtn.dataset.chid = ch.id;
+    delBtn.onclick = function(e) { e.stopPropagation(); deleteChapter(this.dataset.bid, this.dataset.chid); };
+
+    chMenu.appendChild(addScBtn);
+    chMenu.appendChild(renBtn);
+    chMenu.appendChild(delBtn);
+
+    chHead.appendChild(toggle);
+    chHead.appendChild(chTitle);
+    chHead.appendChild(chMenu);
+    chDiv.appendChild(chHead);
+
+    if (!ch.collapsed) {
+      var chBody = document.createElement('div');
+      chBody.className = 'ch-body';
+
+      // Scenes
+      var scenes = ch.scenes || [];
+      scenes.forEach(function(sc) {
+        var scDiv = document.createElement('div');
+        scDiv.className = 'sc-item';
+
+        var scTitle = document.createElement('span');
+        scTitle.className = 'sc-title';
+        scTitle.textContent = '\u25B8 ' + sc.title;
+
+        var scMenu = document.createElement('div');
+        scMenu.className = 'sc-menu';
+
+        var scRen = document.createElement('button');
+        scRen.className = 'ch-menu-btn';
+        scRen.title = 'Rename';
+        scRen.innerHTML = '&#9998;';
+        scRen.dataset.bid = b.id; scRen.dataset.chid = ch.id; scRen.dataset.scid = sc.id;
+        scRen.onclick = function(e) { e.stopPropagation(); renameScene(this.dataset.bid, this.dataset.chid, this.dataset.scid); };
+
+        var scDel = document.createElement('button');
+        scDel.className = 'ch-menu-btn ch-del';
+        scDel.title = 'Delete scene';
+        scDel.innerHTML = '&#215;';
+        scDel.dataset.bid = b.id; scDel.dataset.chid = ch.id; scDel.dataset.scid = sc.id;
+        scDel.onclick = function(e) { e.stopPropagation(); deleteScene(this.dataset.bid, this.dataset.chid, this.dataset.scid); };
+
+        scMenu.appendChild(scRen);
+        scMenu.appendChild(scDel);
+        scDiv.appendChild(scTitle);
+        scDiv.appendChild(scMenu);
+
+        // Memories in this scene
+        var sceneMems = b.entries.filter(function(e){ return e.chapterId===ch.id && e.sceneId===sc.id; });
+        sceneMems.forEach(function(e) {
+          var mDiv = document.createElement('div');
+          mDiv.className = 'sc-mem-item';
+          mDiv.textContent = e.title || 'Untitled';
+          mDiv.title = e.title || '';
+          chBody.appendChild(scDiv);
+          scDiv.appendChild(mDiv);
+        });
+
+        chBody.appendChild(scDiv);
+      });
+
+      // Memories directly in chapter (no scene)
+      var directMems = b.entries.filter(function(e){ return e.chapterId===ch.id && !e.sceneId; });
+      directMems.forEach(function(e) {
+        var mDiv = document.createElement('div');
+        mDiv.className = 'ch-mem-item';
+        mDiv.textContent = e.title || 'Untitled';
+        mDiv.title = e.title || '';
+        chBody.appendChild(mDiv);
+      });
+
+      chDiv.appendChild(chBody);
+    }
+
+    container.appendChild(chDiv);
+  });
+
+  // Unassigned memories
+  var unassigned = b.entries.filter(function(e){ return !e.chapterId; });
+  if (unassigned.length) {
+    var uDiv = document.createElement('div');
+    uDiv.className = 'ch-unassigned';
+    var uLabel = document.createElement('div');
+    uLabel.className = 'ch-unassigned-label';
+    uLabel.textContent = 'Unassigned';
+    uDiv.appendChild(uLabel);
+    unassigned.forEach(function(e) {
+      var mDiv = document.createElement('div');
+      mDiv.className = 'ch-mem-item';
+      mDiv.textContent = e.title || 'Untitled';
+      uDiv.appendChild(mDiv);
+    });
+    container.appendChild(uDiv);
+  }
+
+  // Add chapter button
+  var addChBtn = document.createElement('button');
+  addChBtn.className = 'add-ch-btn';
+  addChBtn.textContent = '+ New Chapter';
+  addChBtn.dataset.bid = b.id;
+  addChBtn.onclick = function() { addChapter(this.dataset.bid); };
+  container.appendChild(addChBtn);
+}
+
+// ── UPDATE CHAPTER/SCENE DROPDOWNS IN MEMOIR FORM ────────────────────────────
+function updateMemFormDropdowns() {
+  var b = curBook();
+  if (!b || b.type !== 'memoir') return;
+  var chapters = b.chapters || [];
+
+  // Chapter dropdown
+  var chSel = document.getElementById('m-chapter');
+  if (!chSel) return;
+  var prevCh = chSel.value;
+  chSel.innerHTML = '<option value="">No chapter</option>';
+  var ns = ['I','II','III','IV','V','VI','VII','VIII','IX','X'];
+  chapters.forEach(function(ch, i) {
+    var opt = document.createElement('option');
+    opt.value = ch.id;
+    opt.textContent = 'Ch. ' + (ns[i]||i+1) + ' \u2014 ' + ch.title;
+    chSel.appendChild(opt);
+  });
+  if (prevCh) chSel.value = prevCh;
+
+  // Scene dropdown - depends on selected chapter
+  updateSceneDropdown();
+}
+
+function updateSceneDropdown() {
+  var b = curBook();
+  if (!b) return;
+  var chSel = document.getElementById('m-chapter');
+  var scSel = document.getElementById('m-scene');
+  if (!chSel || !scSel) return;
+
+  var chid = chSel.value;
+  var ch = chid && b.chapters && b.chapters.filter(function(x){return x.id===chid;})[0];
+  var scenes = ch && ch.scenes || [];
+
+  var prevSc = scSel.value;
+  scSel.innerHTML = '<option value="">No scene</option>';
+  scenes.forEach(function(sc) {
+    var opt = document.createElement('option');
+    opt.value = sc.id;
+    opt.textContent = sc.title;
+    scSel.appendChild(opt);
+  });
+  if (prevSc) scSel.value = prevSc;
+
+  // Show/hide scene row
+  var scRow = document.getElementById('m-scene-row');
+  if (scRow) scRow.style.display = scenes.length ? 'block' : 'none';
+}
+
 tok = getTok();
 if (!tok) { document.getElementById('tw').style.display = 'flex'; }
 else { load(); }
