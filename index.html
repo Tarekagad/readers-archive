@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v7 -->
+<!-- v9 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -729,13 +729,13 @@ function renderMemoirLog(b){
     var meta=document.createElement('div');meta.className='mem-meta';
     var td=document.createElement('div');td.className='mem-entry-title';td.textContent=e.title||'Untitled';meta.appendChild(td);
     var dd=document.createElement('div');dd.className='mem-meta-details';
-    dd.innerHTML=(e.memdate?'<span class="memdate">\u25cf '+e.memdate+'</span>':'')+(e.place?'<span class="place">&#128205; '+e.place+'</span>':'')+'<span class="entrydate">Written '+(e.entrydate||'')+'</span>'+'<span class="'+(e.isPublic?'pub-badge':'priv-badge')+'">'+(e.isPublic?'Public':'Private')+'</span>';
+    dd.innerHTML=(e.memdate?'<span class="memdate">\u25cf '+e.memdate+'</span>':'')+(e.place?'<span class="place">► '+e.place+'</span>':'')+'<span class="entrydate">Written '+(e.entrydate||'')+'</span>'+'<span class="'+(e.isPublic?'pub-badge':'priv-badge')+'">'+(e.isPublic?'Public':'Private')+'</span>';
     meta.appendChild(dd);div.appendChild(meta);
     var body=document.createElement('div');body.className='mem-body';
     body.innerHTML='<p>'+(e.elevated||e.raw||'').split('\n\n').join('</p><p>').split('\n').join('<br>')+'</p>';
     div.appendChild(body);
     var rmBtn=document.createElement('button');rmBtn.className='read-more-btn';rmBtn.textContent='Read more';
-    rmBtn.onclick=function(){var bd=this.previousElementSibling;var isCol=bd.classList.contains('collapsed');bd.classList.toggle('collapsed');this.textContent=isCol?'Read less':'Read more';};
+    rmBtn.onclick=function(){toggleReadMore(this);};
     div.appendChild(rmBtn);
     if(e.elevated&&e.raw){
       var rt=document.createElement('button');rt.className='mem-raw-toggle';rt.textContent='Show original';
@@ -1431,7 +1431,7 @@ function renderMemoirLog(b){
     var meta=document.createElement('div');meta.className='mem-meta';
     var td=document.createElement('div');td.className='mem-entry-title';td.textContent=e.title||'Untitled';meta.appendChild(td);
     var dd=document.createElement('div');dd.className='mem-meta-details';
-    dd.innerHTML=(e.memdate?'<span class="memdate">\u25cf '+e.memdate+'</span>':'')+(e.place?'<span class="place">\U0001F4CD '+e.place+'</span>':'')+'<span class="entrydate">Written '+(e.entrydate||'')+'</span>'+'<span class="'+(e.isPublic?'pub-badge':'priv-badge')+'">'+(e.isPublic?'Public':'Private')+'</span>';
+    dd.innerHTML=(e.memdate?'<span class="memdate">\u25cf '+e.memdate+'</span>':'')+(e.place?'<span class="place">► '+e.place+'</span>':'')+'<span class="entrydate">Written '+(e.entrydate||'')+'</span>'+'<span class="'+(e.isPublic?'pub-badge':'priv-badge')+'">'+(e.isPublic?'Public':'Private')+'</span>';
     meta.appendChild(dd);div.appendChild(meta);
     var body=document.createElement('div');body.className='mem-body';
     body.innerHTML='<p>'+(e.elevated||e.raw||'').split('\n\n').join('</p><p>').split('\n').join('<br>')+'</p>';
