@@ -185,7 +185,7 @@ nav{background:var(--ink);color:var(--sepia);display:flex;align-items:center;jus
 .mem-meta .entrydate{color:var(--faded)}
 .mem-meta .priv-badge{background:var(--margin);color:var(--faded);padding:.1rem .4rem;border-radius:2px;font-size:9px}
 .mem-meta .pub-badge{background:#fdf5e0;color:var(--gold);padding:.1rem .4rem;border-radius:2px;font-size:9px}
-.mem-body{font-size:1.05rem;line-height:1.9;color:#2a2520}
+/* mem-body defined in truncation section */
 .mem-raw-toggle{background:none;border:none;font-family:'Inconsolata',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--faded);cursor:pointer;margin-top:.5rem;display:block}
 .mem-raw-toggle:hover{color:var(--ink)}
 .mem-raw{font-size:.88rem;line-height:1.7;color:var(--faded);font-style:italic;border-left:2px solid var(--line);padding:.6rem 1rem;margin-top:.5rem;display:none}
@@ -239,6 +239,13 @@ nav{background:var(--ink);color:var(--sepia);display:flex;align-items:center;jus
 .ch-unassigned-label{font-family:'Inconsolata',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--faded);margin-bottom:.2rem;padding-left:.3rem;opacity:.6}
 .add-ch-btn{width:100%;margin-top:.6rem;padding:.4rem;background:none;border:1px dashed var(--line);border-radius:3px;color:var(--faded);font-family:'Inconsolata',monospace;font-size:11px;cursor:pointer;transition:all .2s;text-align:center}
 .add-ch-btn:hover{border-color:#6a4a8a;color:#6a4a8a}
+
+.mem-body{font-size:1.05rem;line-height:1.9;color:#2a2520}
+.mem-body.collapsed{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.entry-quote.collapsed{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.entry-resp.collapsed{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.read-more-btn{background:none;border:none;font-family:'Inconsolata',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);cursor:pointer;padding:0;margin-top:.3rem;display:block}
+.read-more-btn:hover{color:var(--rust)}
 </style>
 </head>
 <body>
@@ -578,337 +585,86 @@ function doSaveSnap() {
 // Export book PDF
 function expBook() {
   var b = curBook();
-  var ep = (b.entries[0] && b.entries[0].response || '').substring(0, 140);
-  var el = b.entries.map(function(e) {
-    return '<div class="pfen"><div class="pfet">' + (e.time || '') + '</div>'
-      + '<div class="pfeq">“' + e.quote + '”</div>'
-      + '<div class="pfer">' + e.response + '</div></div>';
-  }).join('') || '<p style="color:#aaa;font-style:italic">No entries.</p>';
-  var rl = b.reflection
-    ? '<div class="pfrl"><div class="pfrd">' + b.reflection.date + '</div><div class="pfrb">' + b.reflection.text.split('\n\n').join('</p><p>').split('\n').join('<br>') + '</div></div>'
-    : '<p style="color:#aaa;font-style:italic">No reflection yet.</p>';
-  var sl = (b.snapshots && b.snapshots.length)
-    ? b.snapshots.map(function(s) {
-        return '<div class="pfrl"><div class="pfrd">Saved — ' + s.date + '</div><div class="pfrb">' + s.text.split('\n\n').join('</p><p>').split('\n').join('<br>') + '</div></div>';
-      }).join('')
-    : '';
-  var archive_name = "A Reader's Archive";
+  var isMemoir = b.type === 'memoir';
+  var archiveName = "A Reader's Archive";
+  var dateStr = new Date().toLocaleDateString('en-GB', {year:'numeric', month:'long', day:'numeric'});
+  var entriesHtml = '';
+
+  if (isMemoir) {
+    var chapters = b.chapters || [];
+    var ns = ['I','II','III','IV','V','VI','VII','VIII','IX','X'];
+    if (chapters.length) {
+      chapters.forEach(function(ch, ci) {
+        entriesHtml += '<div class="pfsec"><div class="pfst">Chapter ' + (ns[ci]||ci+1) + ' \u2014 ' + ch.title + '</div>';
+        var scenes = ch.scenes || [];
+        scenes.forEach(function(sc) {
+          var scMems = b.entries.filter(function(e){ return e.chapterId===ch.id && e.sceneId===sc.id; });
+          if (scMems.length) {
+            entriesHtml += '<div class="pfsi">Scene: ' + sc.title + '</div>';
+            scMems.forEach(function(e){ entriesHtml += memoirEntryHtml(e); });
+          }
+        });
+        var direct = b.entries.filter(function(e){ return e.chapterId===ch.id && !e.sceneId; });
+        direct.forEach(function(e){ entriesHtml += memoirEntryHtml(e); });
+        entriesHtml += '</div>';
+      });
+      var unassigned = b.entries.filter(function(e){ return !e.chapterId; });
+      if (unassigned.length) {
+        entriesHtml += '<div class="pfsec"><div class="pfst">Unassigned Memories</div>';
+        unassigned.forEach(function(e){ entriesHtml += memoirEntryHtml(e); });
+        entriesHtml += '</div>';
+      }
+    } else {
+      entriesHtml = '<div class="pfsec"><div class="pfst">Memories</div>';
+      if (b.entries.length) { b.entries.forEach(function(e){ entriesHtml += memoirEntryHtml(e); }); }
+      else { entriesHtml += '<p style="color:#aaa;font-style:italic">No memories yet.</p>'; }
+      entriesHtml += '</div>';
+    }
+  } else {
+    var ep = (b.entries[0] && b.entries[0].response || '').substring(0, 140);
+    var el = b.entries.map(function(e) {
+      return '<div class="pfen"><div class="pfet">' + (e.time || '') + '</div>'
+        + '<div class="pfeq">\u201c' + e.quote + '\u201d</div>'
+        + '<div class="pfer">' + e.response + '</div></div>';
+    }).join('') || '<p style="color:#aaa;font-style:italic">No entries.</p>';
+    var rl = b.reflection
+      ? '<div class="pfrl"><div class="pfrd">' + b.reflection.date + '</div><div class="pfrb">' + b.reflection.text.split('\n\n').join('</p><p>').split('\n').join('<br>') + '</div></div>'
+      : '<p style="color:#aaa;font-style:italic">No reflection yet.</p>';
+    var sl = (b.snapshots && b.snapshots.length)
+      ? b.snapshots.map(function(s){ return '<div class="pfrl"><div class="pfrd">Saved \u2014 ' + s.date + '</div><div class="pfrb">' + s.text.split('\n\n').join('</p><p>').split('\n').join('<br>') + '</div></div>'; }).join('')
+      : '';
+    entriesHtml =
+      '<div class="pfsec"><div class="pfst">Verbatim Notes</div><div class="pfsi">Exact words, written in the moment.</div>' + el + '</div>'
+      + '<div class="pfsec"><div class="pfst">My Reflection</div>' + rl + (sl ? '<div class="pfst" style="margin-top:1.5rem;font-size:1rem">Saved Snapshots</div>' + sl : '') + '</div>'
+      + '<div class="pfsec"><div class="pfst">Context</div><div class="pfctx"><p>' + b.context + '</p></div></div>';
+  }
+
+  var coverEp = isMemoir
+    ? (b.entries[0] && (b.entries[0].elevated || b.entries[0].raw) || '').substring(0, 140)
+    : (b.entries[0] && b.entries[0].response || '').substring(0, 140);
+
   document.getElementById('pf').innerHTML =
-    '<div class="pfc"><div class="pfs">' + archive_name + ' · ' + b.num + '</div>'
+    '<div class="pfc"><div class="pfs">' + archiveName + ' \u00b7 ' + b.num + '</div>'
     + '<div class="pft">' + b.title + '</div><div class="pfa">' + b.author + '</div>'
     + '<div class="pfy">' + b.year + '</div><hr class="pfr">'
-    + '<div class="pfe">“' + ep + (ep.length >= 140 ? '...' : '') + '”</div>'
-    + '<div class="pfea">— Tarek</div></div>'
-    + '<div class="pfsec"><div class="pfst">Verbatim Notes</div><div class="pfsi">Exact words, written in the moment.</div>' + el + '</div>'
-    + '<div class="pfsec"><div class="pfst">My Reflection</div>' + rl + (sl ? '<div class="pfst" style="margin-top:1.5rem;font-size:1rem">Saved Snapshots</div>' + sl : '') + '</div>'
-    + '<div class="pfsec"><div class="pfst">Context</div><div class="pfctx"><p>' + b.context + '</p></div></div>'
-    + '<div class="pfco">' + archive_name + ' · ' + b.title + ' · ' + new Date().toLocaleDateString('en-GB', {year:'numeric', month:'long', day:'numeric'}) + '</div>';
+    + (coverEp ? '<div class="pfe">\u201c' + coverEp + (coverEp.length >= 140 ? '...' : '') + '\u201d</div><div class="pfea">\u2014 Tarek</div>' : '')
+    + '</div>'
+    + entriesHtml
+    + '<div class="pfco">' + archiveName + ' \u00b7 ' + b.title + ' \u00b7 ' + dateStr + '</div>';
   setTimeout(function() { window.print(); }, 150);
 }
 
-// Navigation
-function sv(v, btn) {
-  document.querySelectorAll('.view').forEach(function(e) { e.classList.remove('active'); });
-  document.querySelectorAll('.tab-btn').forEach(function(e) { e.classList.remove('active'); });
-  var viewId = v === 'archive' ? 'va' : v === 'memoir' ? 'vmem' : 'vadd';
-  document.getElementById(viewId).classList.add('active');
-  if (v === 'memoir') { updateMemFormDropdowns(); }
-  if (btn) btn.classList.add('active');
-  if (v === 'add') {
-    document.getElementById('nb').innerHTML = D.books.map(function(b) {
-      return '<option value="' + b.id + '"' + (b.id === D.activeBook ? ' selected' : '') + '>' + b.title + '</option>';
-    }).join('');
-  }
-}
-
-function ss(s, btn) {
-  D.activeSection = s;
-  ['log','refl','ctx'].forEach(function(i) { document.getElementById('s-' + i).style.display = i === s ? 'block' : 'none'; });
-  document.querySelectorAll('.sec-tab').forEach(function(e) { e.classList.remove('active'); });
-  if (btn) btn.classList.add('active');
-}
-
-function selBook(id) {
-  D.activeBook = id;
-  // Always return to archive view when switching books
-  document.querySelectorAll('.view').forEach(function(e) { e.classList.remove('active'); });
-  document.querySelectorAll('.tab-btn').forEach(function(e) { e.classList.remove('active'); });
-  document.getElementById('va').classList.add('active');
-  document.querySelector('.tab-btn').classList.add('active');
-  renderAll();
-  updateNavTabs();
-  D.activeSection = 'log';
-  ['log','refl','ctx'].forEach(function(i) { document.getElementById('s-' + i).style.display = i === 'log' ? 'block' : 'none'; });
-  document.querySelectorAll('.sec-tab').forEach(function(e) { e.classList.remove('active'); });
-  var firstTab = document.querySelector('.sec-tab');
-  if (firstTab) firstTab.classList.add('active');
-}
-
-function curBook() { return D.books.filter(function(b) { return b.id === D.activeBook; })[0]; }
-
-// Render
-function renderAll() {
-  if (!D.books.length) { document.getElementById('blist').innerHTML = ''; return; }
-  if (!D.activeBook) D.activeBook = D.books[0].id;
-
-  // Sidebar - use data-id to avoid inline quote issues
-  var blistEl = document.getElementById('blist');
-  blistEl.innerHTML = '';
-  D.books.forEach(function(b) {
-    var div = document.createElement('div');
-    div.className = 'book-item' + (b.id === D.activeBook ? ' active' : '');
-    div.dataset.bid = b.id;
-    var badge = b.type === 'memoir' ? '<span class="badge-memoir">Memoir</span>' : '';
-    div.innerHTML = '<div class="b-num">' + b.num + '</div><div class="b-title">' + b.title + badge + '</div><div class="b-author">' + b.author + '</div>';
-    blistEl.appendChild(div);
-    // For memoir books: render chapter tree below the book item
-    if (b.type === 'memoir' && b.id === D.activeBook) {
-      var chContainer = document.createElement('div');
-      chContainer.className = 'ch-container';
-      chContainer.style.paddingLeft = '.5rem';
-      renderMemoirSidebar(b, chContainer);
-      blistEl.appendChild(chContainer);
-    }
-  });
-  blistEl.onclick = function(e) {
-    var el = e.target.closest('[data-bid]');
-    if (el) selBook(el.dataset.bid);
-  };
-
-  // Mobile selector
-  document.getElementById('msb').innerHTML = D.books.map(function(b) {
-    return '<option value="' + b.id + '"' + (b.id === D.activeBook ? ' selected' : '') + '>' + b.num + ' — ' + b.title + '</option>';
-  }).join('');
-  document.getElementById('mbs').style.display = 'block';
-
-  var b = curBook();
-  if (!b) return;
-
-  document.getElementById('hl').textContent = b.num;
-  document.getElementById('ht').textContent = b.title;
-  document.getElementById('ha').textContent = b.author;
-  document.getElementById('hy').textContent = b.year;
-  document.getElementById('hc').textContent = b.entries.length + ' ' + (b.entries.length === 1 ? 'entry' : 'entries');
-
-  // Log
-  var logEl = document.getElementById('s-log');
-  if (b.type === 'memoir') { renderMemoirLog(b); } else
-  if (!b.entries.length) {
-    logEl.innerHTML = '<div class="empty">No notes yet.</div>';
-  } else {
-    logEl.innerHTML = '';
-    b.entries.forEach(function(e, i) {
-      var div = document.createElement('div');
-      div.className = 'entry';
-      div.innerHTML = '<div class="entry-time">' + (e.time || '—') + '</div>'
-        + '<div class="entry-quote">“' + e.quote + '”</div>'
-        + '<div class="entry-resp">' + e.response + '</div>';
-      var act = document.createElement('div');
-      act.className = 'entry-act';
-      var btn = document.createElement('button');
-      btn.textContent = 'Remove';
-      btn.dataset.bid = b.id;
-      btn.dataset.idx = i;
-      btn.onclick = function() { delE(this.dataset.bid, parseInt(this.dataset.idx)); };
-      act.appendChild(btn);
-      div.appendChild(act);
-      logEl.appendChild(div);
-    });
-  }
-
-  // Reflections
-  var hasR = b.reflection && b.reflection.text;
-  var reflEl = document.getElementById('s-refl');
-  reflEl.innerHTML = '';
-
-  var intro = document.createElement('p');
-  intro.className = 'refl-intro';
-  intro.textContent = 'A living reflection — rewrites itself as you read. Save a snapshot to keep a record of where you were.';
-  reflEl.appendChild(intro);
-
-  var actions = document.createElement('div');
-  actions.className = 'refl-actions';
-  var genBtn = document.createElement('button');
-  genBtn.className = 'gen-btn';
-  genBtn.textContent = hasR ? 'Regenerate reflection' : 'Generate my reflection';
-  genBtn.onclick = doGenRefl;
-  actions.appendChild(genBtn);
-  if (hasR) {
-    var dlBtn = document.createElement('button');
-    dlBtn.className = 'dl-btn';
-    dlBtn.textContent = 'Download reflection';
-    dlBtn.onclick = doDlRefl;
-    actions.appendChild(dlBtn);
-    var snapBtn = document.createElement('button');
-    snapBtn.className = 'snap-btn';
-    snapBtn.textContent = 'Save snapshot';
-    snapBtn.onclick = doSaveSnap;
-    actions.appendChild(snapBtn);
-  }
-  var note = document.createElement('span');
-  note.className = 'refl-note';
-  note.textContent = 'Each generation replaces the previous';
-  actions.appendChild(note);
-  reflEl.appendChild(actions);
-
-  if (hasR) {
-    var curDiv = document.createElement('div');
-    curDiv.className = 'cur-refl';
-    curDiv.innerHTML = '<div class="refl-date">' + b.reflection.date + '</div><p>' + b.reflection.text.split('\n\n').join('</p><p>').split('\n').join('<br>') + '</p>';
-    reflEl.appendChild(curDiv);
-  } else {
-    var empty = document.createElement('div');
-    empty.className = 'empty';
-    empty.style.padding = '1rem 0';
-    empty.textContent = 'No reflection yet. Add notes then generate below.';
-    reflEl.appendChild(empty);
-  }
-
-  if (b.snapshots && b.snapshots.length) {
-    var snapsDiv = document.createElement('div');
-    snapsDiv.className = 'snaps-sec';
-    snapsDiv.innerHTML = '<div class="snaps-title">Saved snapshots</div>';
-    b.snapshots.forEach(function(s, i) {
-      var snap = document.createElement('div');
-      snap.className = 'snapshot';
-      snap.innerHTML = '<div class="snap-date">' + s.date + '</div><div class="snap-prev">' + s.text.substring(0,200) + '...</div>';
-      var del = document.createElement('button');
-      del.className = 'snap-del';
-      del.innerHTML = '&#215;';
-      del.dataset.bid = b.id;
-      del.dataset.idx = i;
-      del.onclick = function() { delSnap(this.dataset.bid, parseInt(this.dataset.idx)); };
-      snap.appendChild(del);
-      snapsDiv.appendChild(snap);
-    });
-    reflEl.appendChild(snapsDiv);
-  }
-
-  // Context
-  document.getElementById('s-ctx').innerHTML = '<div class="ctx-block"><p>' + b.context + '</p></div>';
-  updateNavTabs();
-}
-
-function subNote() {
-  var bi = document.getElementById('nb').value;
-  var ti = document.getElementById('nt').value.trim();
-  var q = document.getElementById('nq').value.trim();
-  var rp = document.getElementById('nr').value.trim();
-  if (!q || !rp) { alert('Please fill in both the passage and your response.'); return; }
-  D.books.filter(function(b) { return b.id === bi; })[0].entries.push({
-    time: ti || new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}),
-    quote: q, response: rp
-  });
-  clrAll(); D.activeBook = bi; renderAll();
-  document.querySelectorAll('.view').forEach(function(e) { e.classList.remove('active'); });
-  document.querySelectorAll('.tab-btn').forEach(function(e) { e.classList.remove('active'); });
-  document.getElementById('va').classList.add('active');
-  document.querySelector('.tab-btn').classList.add('active');
-  ss('log', document.querySelector('.sec-tab'));
-  setTimeout(function() {
-    var l = document.getElementById('s-log').lastElementChild;
-    if (l) l.scrollIntoView({behavior:'smooth'});
-  }, 150);
-  doSave();
-}
-
-function delE(bi, i) {
-  if (!confirm('Remove this entry?')) return;
-  D.books.filter(function(b) { return b.id === bi; })[0].entries.splice(i, 1);
-  renderAll(); doSave();
-}
-
-function delSnap(bi, i) {
-  if (!confirm('Remove this snapshot?')) return;
-  D.books.filter(function(b) { return b.id === bi; })[0].snapshots.splice(i, 1);
-  renderAll(); doSave();
-}
-
-function openM() { document.getElementById('mbg').classList.add('open'); document.getElementById('mt').focus(); }
-function closeM() { document.getElementById('mbg').classList.remove('open'); }
-
-function addBook() {
-  var ti = document.getElementById('mt').value.trim();
-  var au = document.getElementById('ma').value.trim();
-  var yr = document.getElementById('my').value.trim();
-  var cx = document.getElementById('mc').value.trim();
-  if (!ti) { alert('Please enter a title.'); return; }
-  var ns = ['I','II','III','IV','V','VI','VII','VIII','IX','X'];
-  var id = 'b' + Date.now();
-  var btype = document.getElementById('mtype') ? document.getElementById('mtype').value : 'reading';
-  var yearPrefix = btype === 'memoir' ? 'Begun ' : 'Reading ';
-  D.books.push({
-    id: id,
-    num: 'Book ' + (ns[D.books.length] || D.books.length + 1),
-    title: ti, author: au || '',
-    year: yearPrefix + (yr || new Date().getFullYear()),
-    context: cx || 'Added to the archive.',
-    type: btype,
-    reflection: null, snapshots: [], entries: []
-  });
-  closeM();
-  ['mt','ma','my','mc'].forEach(function(i) { document.getElementById(i).value = ''; });
-  selBook(id); doSave();
-}
-
-
-// MEMOIR GLOBALS
-var mib64=null,mim='image/jpeg',ghostElevated='',ghostQs=[],memSort='entrydate',editingMemId=null;
-
-function updateNavTabs(){var b=curBook(),isM=b&&b.type==='memoir';var a=document.getElementById('tab-add'),m=document.getElementById('tab-mem');if(a)a.style.display=isM?'none':'';if(m)m.style.display=isM?'':'none';}
-function mdrp(e){e.preventDefault();document.getElementById('mdz').classList.remove('over');var f=e.dataTransfer.files[0];if(f&&f.type.startsWith('image/'))mloadImg(f);}
-function mfsel(e){var f=e.target.files[0];if(f)mloadImg(f);}
-function mloadImg(f){mim=f.type||'image/jpeg';var r=new FileReader();r.onload=function(ev){mib64=ev.target.result.split(',')[1];document.getElementById('mssi').src=ev.target.result;document.getElementById('mssp').classList.add('vis');setMpist('reading','Reading...');mOcr();};r.readAsDataURL(f);}
-function mOcr(){var body={model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:mim,data:mib64}},{type:'text',text:'Extract all text from this notes screenshot. Return ONLY JSON: {"text":"full text","title":"short title if visible or empty"}'}]}]};fetch(PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(function(r){return r.json();}).then(function(d){var t=d.content&&d.content.filter(function(x){return x.type==='text';})[0];var txt=t?t.text:'';var p=JSON.parse(txt.replace(/```json/g,'').replace(/```/g,'').trim());if(p.text){document.getElementById('m-raw').value=p.text;if(p.title)document.getElementById('m-title').value=p.title;setMpist('done','Extracted');}else{setMpist('error','Could not detect');}}).catch(function(){setMpist('error','Could not read');});}
-function setMpist(c,m){var e=document.getElementById('mpist');e.className='pi-st '+c;e.textContent=m;}
-function clrMSS(){mib64=null;document.getElementById('mssp').classList.remove('vis');document.getElementById('mssi').src='';document.getElementById('mdz').querySelector('input').value='';}
-function clrMem(){clrMSS();['m-title','m-memdate','m-place','m-raw'].forEach(function(i){document.getElementById(i).value='';});document.getElementById('ghostPanel').classList.remove('open');document.getElementById('mem-step1-acts').style.display='flex';ghostElevated='';ghostQs=[];editingMemId=null;document.getElementById('memFormTitle').textContent='Add a Memory';}
-
-function doGhost(){
-  var raw=document.getElementById('m-raw').value.trim();
-  if(!raw){alert('Please write your memory first.');return;}
-  var btns=document.querySelectorAll('#vmem button');btns.forEach(function(b){b.disabled=true;});
-  var title=document.getElementById('m-title').value.trim(),place=document.getElementById('m-place').value.trim(),memdate=document.getElementById('m-memdate').value.trim();
-  var ctx=(title?'Title: '+title+'\n':'')+(memdate?'When: '+memdate+'\n':'')+(place?'Where: '+place+'\n':'');
-  var prompt='You are a literary ghost editor helping Tarek write his memoirs.\n\nDo two things:\n1. ELEVATE the prose to literary level. Keep all facts exactly as written. Do NOT invent facts, names, dates. But imagine atmosphere, sensory details, emotional texture. Write first person in his voice. 2-4 paragraphs.\n2. Ask 2-3 short enrichment questions. Gentle and curious.\n\n'+(ctx?ctx+'\n':'')+'Raw memory:\n'+raw+'\n\nReturn ONLY JSON: {"elevated":"literary version","questions":["q1","q2","q3"]}';
-  fetch(PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2000,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(d){var t=d.content&&d.content.filter(function(x){return x.type==='text';})[0];var txt=t?t.text:'';var p=JSON.parse(txt.replace(/```json/g,'').replace(/```/g,'').trim());ghostElevated=p.elevated||'';ghostQs=p.questions||[];showGhostPanel();btns.forEach(function(b){b.disabled=false;});}).catch(function(){alert('Could not connect.');btns.forEach(function(b){b.disabled=false;});});
-}
-
-function doAsk(){
-  var raw=document.getElementById('m-raw').value.trim();
-  if(!raw){alert('Please write your memory first.');return;}
-  var btns=document.querySelectorAll('#vmem button');btns.forEach(function(b){b.disabled=true;});
-  var prompt='Help Tarek enrich his memoir. Ask 3 thoughtful questions to help him go deeper into this memory. Gentle, curious, specific.\n\nHis memory:\n'+raw+'\n\nReturn ONLY JSON: {"elevated":"","questions":["q1","q2","q3"]}';
-  fetch(PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(d){var t=d.content&&d.content.filter(function(x){return x.type==='text';})[0];var txt=t?t.text:'';var p=JSON.parse(txt.replace(/```json/g,'').replace(/```/g,'').trim());ghostElevated='';ghostQs=p.questions||[];showGhostPanel();btns.forEach(function(b){b.disabled=false;});}).catch(function(){alert('Could not connect.');btns.forEach(function(b){b.disabled=false;});});
-}
-
-function showGhostPanel(){var panel=document.getElementById('ghostPanel');document.getElementById('ghostText').innerHTML=ghostElevated?'<p>'+ghostElevated.split('\n\n').join('</p><p>').split('\n').join('<br>')+'</p>':'';document.getElementById('ghostQs').innerHTML=ghostQs.map(function(q){return '<div class="ghost-q">'+q+'</div>';}).join('');panel.classList.add('open');}
-function acceptMem(){saveMemoirEntry(ghostElevated);}
-function keepOriginalMem(){saveMemoirEntry('');}
-function saveMemAsIs(){saveMemoirEntry('');}
-
-function saveMemoirEntry(elevated){
-  var raw=document.getElementById('m-raw').value.trim();
-  if(!raw){alert('Please write your memory first.');return;}
-  var b=curBook();
-  var title=document.getElementById('m-title').value.trim()||'Untitled memory';
-  var memdate=document.getElementById('m-memdate').value.trim();
-  var place=document.getElementById('m-place').value.trim();
-  var themes=suggestThemes((elevated||raw)+' '+title+' '+place);
-  var now=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
-  if(editingMemId){
-    var entry=b.entries.filter(function(e){return e.id===editingMemId;})[0];
-    if(entry){entry.title=title;entry.raw=raw;if(elevated)entry.elevated=elevated;entry.memdate=memdate;entry.place=place;entry.themes=themes;if(ghostQs.length)entry.questions=ghostQs;var cs3=document.getElementById('m-chapter');var ss3=document.getElementById('m-scene');if(cs3)entry.chapterId=cs3.value||null;if(ss3)entry.sceneId=ss3.value||null;}
-  }else{
-    var chSel2=document.getElementById('m-chapter');var scSel2=document.getElementById('m-scene');
-    var chId=chSel2?chSel2.value||null:null;var scId=scSel2?scSel2.value||null:null;
-    b.entries.push({id:'me'+Date.now(),title:title,raw:raw,elevated:elevated,questions:ghostQs,memdate:memdate,place:place,entrydate:now,themes:themes,isPublic:false,chapterId:chId,sceneId:scId});
-  }
-  clrMem();D.activeBook=b.id;
-  document.querySelectorAll('.view').forEach(function(e){e.classList.remove('active');});
-  document.querySelectorAll('.tab-btn').forEach(function(e){e.classList.remove('active');});
-  document.getElementById('va').classList.add('active');
-  updateNavTabs();renderAll();ss('log',document.querySelector('.sec-tab'));doSave();
+function memoirEntryHtml(e) {
+  var body = e.elevated || e.raw || '';
+  return '<div class="pfen">'
+    + '<div class="pfet">'
+    + (e.memdate ? e.memdate : '') + (e.place ? (e.memdate ? ' \u00b7 ' : '') + e.place : '')
+    + (e.entrydate ? ' (written ' + e.entrydate + ')' : '')
+    + '</div>'
+    + '<div class="pfmtitle">' + (e.title || 'Untitled') + '</div>'
+    + '<div class="pfmbody"><p>' + body.split('\n\n').join('</p><p>').split('\n').join('<br>') + '</p></div>'
+    + (e.elevated && e.raw ? '<div class="pfmraw">Original: ' + e.raw.substring(0,200) + (e.raw.length>200?'...':'') + '</div>' : '')
+    + '</div>';
 }
 
 function suggestThemes(text){
@@ -959,11 +715,14 @@ function renderMemoirLog(b){
     var meta=document.createElement('div');meta.className='mem-meta';
     var td=document.createElement('div');td.className='mem-entry-title';td.textContent=e.title||'Untitled';meta.appendChild(td);
     var dd=document.createElement('div');dd.className='mem-meta-details';
-    dd.innerHTML=(e.memdate?'<span class="memdate">\u25cf '+e.memdate+'</span>':'')+(e.place?'<span class="place">\U0001F4CD '+e.place+'</span>':'')+'<span class="entrydate">Written '+(e.entrydate||'')+'</span>'+'<span class="'+(e.isPublic?'pub-badge':'priv-badge')+'">'+(e.isPublic?'Public':'Private')+'</span>';
+    dd.innerHTML=(e.memdate?'<span class="memdate">\u25cf '+e.memdate+'</span>':'')+(e.place?'<span class="place">&#128205; '+e.place+'</span>':'')+'<span class="entrydate">Written '+(e.entrydate||'')+'</span>'+'<span class="'+(e.isPublic?'pub-badge':'priv-badge')+'">'+(e.isPublic?'Public':'Private')+'</span>';
     meta.appendChild(dd);div.appendChild(meta);
-    var body=document.createElement('div');body.className='mem-body';
+    var body=document.createElement('div');body.className='mem-body collapsed';
     body.innerHTML='<p>'+(e.elevated||e.raw||'').split('\n\n').join('</p><p>').split('\n').join('<br>')+'</p>';
     div.appendChild(body);
+    var rmBtn=document.createElement('button');rmBtn.className='read-more-btn';rmBtn.textContent='Read more';
+    rmBtn.onclick=function(){var bd=this.previousElementSibling;var isCol=bd.classList.contains('collapsed');bd.classList.toggle('collapsed');this.textContent=isCol?'Read less':'Read more';};
+    div.appendChild(rmBtn);
     if(e.elevated&&e.raw){
       var rt=document.createElement('button');rt.className='mem-raw-toggle';rt.textContent='Show original';
       rt.onclick=function(){var rd=this.nextElementSibling;rd.classList.toggle('open');this.textContent=rd.classList.contains('open')?'Hide original':'Show original';};
