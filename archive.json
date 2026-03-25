@@ -1,5 +1,5 @@
 {
-  "activeBook": "thif",
+  "activeBook": "b1774455535265",
   "activeSection": "refl",
   "books": [
     {
@@ -119,6 +119,18 @@
         "date": "24 March 2026"
       },
       "snapshots": []
+    },
+    {
+      "id": "b1774455535265",
+      "num": "Book III",
+      "title": "Memoir",
+      "author": "Tarek Abdel Tawab",
+      "year": "Begun 2026",
+      "context": "A story of the patterns that revealed themselves with time—how lives echo across generations, how choices circle back in altered shapes, and how I found myself, almost unknowingly, stepping into paths already waiting for me.",
+      "type": "memoir",
+      "reflection": null,
+      "snapshots": [],
+      "entries": []
     }
   ]
 }
