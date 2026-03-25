@@ -158,6 +158,58 @@ nav{background:var(--ink);color:var(--sepia);display:flex;align-items:center;jus
   .pfctx p{margin-bottom:.9rem}
   .pfco{text-align:center;padding:1.8rem;font-family:'Inconsolata',monospace;font-size:8px;color:#ccc;border-top:1px solid #eee;margin-top:1.8rem}
 }
+
+.badge-memoir{font-family:'Inconsolata',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;padding:.15rem .5rem;border-radius:2px;background:#ece6f4;color:#6a4a8a;margin-left:.5rem;vertical-align:middle}
+.pub-row{display:flex;align-items:center;gap:.8rem;margin-top:.5rem}
+.pub-row span{font-family:'Inconsolata',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+.pub-on{color:var(--gold)}.pub-off{color:var(--faded)}
+.sw{position:relative;display:inline-block;width:38px;height:22px;cursor:pointer;flex-shrink:0}
+.sw input{opacity:0;width:0;height:0;position:absolute}
+.sw-track{position:absolute;inset:0;background:var(--line);border-radius:22px;transition:.25s}
+.sw input:checked+.sw-track{background:var(--gold)}
+.sw-thumb{position:absolute;top:3px;left:3px;width:16px;height:16px;background:white;border-radius:50%;transition:.25s;pointer-events:none;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.sw input:checked~.sw-thumb{transform:translateX(16px)}
+.mem-entry{margin-bottom:2.5rem;padding-bottom:2.5rem;border-bottom:1px solid var(--line)}
+.mem-entry:last-child{border-bottom:none}
+.mem-entry-top{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:.4rem;margin-bottom:.6rem}
+.mem-entry-title{font-family:'IM Fell English',serif;font-size:1.3rem;font-style:italic;color:var(--ink)}
+.mem-meta{font-family:'Inconsolata',monospace;font-size:10px;color:var(--faded);letter-spacing:.08em;display:flex;flex-wrap:wrap;gap:.8rem;margin-bottom:.8rem;align-items:center}
+.mem-meta .place{color:var(--rust)}
+.mem-meta .memdate{color:var(--ink)}
+.mem-meta .entrydate{color:var(--faded)}
+.mem-meta .priv-badge{background:var(--margin);color:var(--faded);padding:.1rem .4rem;border-radius:2px;font-size:9px}
+.mem-meta .pub-badge{background:#fdf5e0;color:var(--gold);padding:.1rem .4rem;border-radius:2px;font-size:9px}
+.mem-body{font-size:1.05rem;line-height:1.9;color:#2a2520}
+.mem-raw-toggle{background:none;border:none;font-family:'Inconsolata',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--faded);cursor:pointer;margin-top:.5rem;display:block}
+.mem-raw-toggle:hover{color:var(--ink)}
+.mem-raw{font-size:.88rem;line-height:1.7;color:var(--faded);font-style:italic;border-left:2px solid var(--line);padding:.6rem 1rem;margin-top:.5rem;display:none}
+.mem-raw.open{display:block}
+.mem-themes{display:flex;flex-wrap:wrap;gap:.3rem;margin-top:.6rem}
+.mem-theme-tag{font-family:'Inconsolata',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;background:#ece6f4;color:#6a4a8a;padding:.15rem .5rem;border-radius:2px}
+.mem-actions{display:flex;gap:.6rem;margin-top:.6rem;flex-wrap:wrap}
+.mem-act-btn{background:none;border:none;font-family:'Inconsolata',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--faded);cursor:pointer}
+.mem-act-btn:hover{color:var(--rust)}
+.mem-sort-bar{display:flex;gap:.5rem;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap}
+.mem-sort-bar span{font-family:'Inconsolata',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--faded)}
+.sort-btn{background:none;border:1px solid var(--line);border-radius:3px;padding:.25rem .7rem;font-family:'Inconsolata',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--faded);cursor:pointer;transition:all .2s}
+.sort-btn.active,.sort-btn:hover{border-color:var(--gold);color:var(--gold)}
+.mem-shell{padding:2.5rem 3.5rem;max-width:820px}
+.mem-shell h2{font-family:'IM Fell English',serif;font-size:2rem;font-style:italic;margin-bottom:.3rem}
+.mem-sub{font-size:1rem;color:var(--faded);font-style:italic;margin-bottom:2rem}
+.ghost-panel{background:var(--sepia);border-radius:6px;border-left:3px solid #6a4a8a;padding:1.6rem 1.8rem;margin:1.5rem 0;display:none}
+.ghost-panel.open{display:block}
+.ghost-lbl{font-family:'Inconsolata',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#6a4a8a;margin-bottom:1rem}
+.ghost-text{font-size:1.1rem;line-height:1.9;color:#2a2520;margin-bottom:1.5rem}
+.ghost-qs{margin-bottom:1.5rem}
+.ghost-q{font-family:'IM Fell English',serif;font-style:italic;font-size:1.05rem;color:var(--rust);margin-bottom:.5rem;padding-left:1rem;border-left:2px solid var(--line)}
+.ghost-acts{display:flex;gap:.8rem;flex-wrap:wrap}
+.ghost-accept{background:#6a4a8a;color:white;border:none;padding:.7rem 1.5rem;font-family:'IM Fell English',serif;font-size:16px;font-style:italic;cursor:pointer;border-radius:3px}
+.ghost-accept:hover{background:#553a70}
+.ghost-revise{background:none;border:1px solid var(--line);border-radius:3px;padding:.7rem 1.5rem;font-family:'IM Fell English',serif;font-size:16px;font-style:italic;cursor:pointer;color:var(--faded)}
+.ghost-revise:hover{border-color:var(--ink);color:var(--ink)}
+.ghost-btn{background:#6a4a8a;color:white;border:none;padding:.7rem 1.5rem;font-family:'IM Fell English',serif;font-size:16px;font-style:italic;cursor:pointer;border-radius:3px;transition:background .2s}
+.ghost-btn:hover{background:#553a70}.ghost-btn:disabled{opacity:.5;cursor:not-allowed}
+@media(max-width:700px){.mem-shell{padding:1.5rem 1.2rem}}
 </style>
 </head>
 <body>
@@ -172,7 +224,8 @@ nav{background:var(--ink);color:var(--sepia);display:flex;align-items:center;jus
   <div class="brand">A Reader&#8217;s Archive</div>
   <div class="tabs">
     <button class="tab-btn active" onclick="sv('archive',this)">Archive</button>
-    <button class="tab-btn" onclick="sv('add',this)">+ Add Note</button>
+    <button class="tab-btn" id="tab-add" onclick="sv('add',this)">+ Add Note</button>
+    <button class="tab-btn" id="tab-mem" onclick="sv('memoir',this)" style="display:none">+ Add Memory</button>
   </div>
   <div class="nav-st" id="nst">&#8212;</div>
 </nav>
@@ -236,12 +289,52 @@ nav{background:var(--ink);color:var(--sepia);display:flex;align-items:center;jus
         </div>
       </div>
     </div>
+  
+    <div id="vmem" class="view">
+      <div class="mem-shell">
+        <h2>Add a Memory</h2>
+        <p class="mem-sub">Write your raw memory. Claude elevates it and asks questions to enrich it.</p>
+        <div class="dz" id="mdz" ondragover="dov(event)" ondragleave="dlv()" ondrop="mdrp(event)">
+          <input type="file" accept="image/*" onchange="mfsel(event)">
+          <div class="dz-icon">&#128247;</div>
+          <div class="dz-title">Drop or paste a screenshot of your notes</div>
+          <div class="dz-hint">Or type directly below &nbsp;<em>Cmd+V</em> to paste</div>
+        </div>
+        <div class="ss-prev" id="mssp">
+          <img id="mssi" src="" alt="">
+          <div class="pi">
+            <div class="pi-lbl">Screenshot</div>
+            <div class="pi-st" id="mpist">Ready</div>
+            <button class="pi-clr" onclick="clrMSS()">&#215; Remove</button>
+          </div>
+        </div>
+        <div class="or-div">or type directly</div>
+        <div class="fr"><label>Title <span style="opacity:.5;font-size:13px">(optional)</span></label><input type="text" id="m-title" placeholder="e.g. The house in Salmiya, 1987"></div>
+        <div class="fr"><label>When did this happen?</label><input type="text" id="m-memdate" placeholder="e.g. Summer 1987 / March 2003 / Early 1990s"></div>
+        <div class="fr"><label>Where?</label><input type="text" id="m-place" placeholder="e.g. Cairo / Salmiya, Kuwait / London"></div>
+        <div class="fr"><label>Your memory</label><textarea id="m-raw" rows="8" placeholder="Write it as it comes. Raw, unpolished. The facts only you know..."></textarea><div class="fr-hint">Claude will find the atmosphere, the light, the feeling.</div></div>
+        <div class="fr-acts">
+          <button class="ghost-btn" id="ghostBtn" onclick="doGhost()">Elevate &amp; Ask</button>
+          <button class="cl-btn" onclick="clrMem()">Clear</button>
+        </div>
+        <div class="ghost-panel" id="ghostPanel">
+          <div class="ghost-lbl">&#9997; Ghost Editor</div>
+          <div class="ghost-text" id="ghostText"></div>
+          <div class="ghost-qs" id="ghostQs"></div>
+          <div class="ghost-acts">
+            <button class="ghost-accept" onclick="acceptMem()">Accept &amp; Save</button>
+            <button class="ghost-revise" onclick="reviseMem()">Revise my text first</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </main>
 </div>
 <div id="pf"></div>
 <div class="mbg" id="mbg" onclick="if(event.target===this)closeM()">
   <div class="modal">
     <h3>Add a New Book</h3>
+    <div class="fr"><label>Book Type</label><select id="mtype"><option value="reading">Reading Book</option><option value="memoir">Memoir</option></select></div>
     <div class="fr"><label>Title</label><input type="text" id="mt" placeholder="Title"></div>
     <div class="fr"><label>Author</label><input type="text" id="ma" placeholder="Author"></div>
     <div class="fr"><label>Year</label><input type="text" id="my" placeholder="2026"></div>
@@ -478,7 +571,8 @@ function expBook() {
 function sv(v, btn) {
   document.querySelectorAll('.view').forEach(function(e) { e.classList.remove('active'); });
   document.querySelectorAll('.tab-btn').forEach(function(e) { e.classList.remove('active'); });
-  document.getElementById(v === 'archive' ? 'va' : 'vadd').classList.add('active');
+  var viewId = v === 'archive' ? 'va' : v === 'memoir' ? 'vmem' : 'vadd';
+  document.getElementById(viewId).classList.add('active');
   if (btn) btn.classList.add('active');
   if (v === 'add') {
     document.getElementById('nb').innerHTML = D.books.map(function(b) {
@@ -497,6 +591,7 @@ function ss(s, btn) {
 function selBook(id) {
   D.activeBook = id;
   renderAll();
+  updateNavTabs();
   ['log','refl','ctx'].forEach(function(i) { document.getElementById('s-' + i).style.display = i === D.activeSection ? 'block' : 'none'; });
 }
 
@@ -514,7 +609,8 @@ function renderAll() {
     var div = document.createElement('div');
     div.className = 'book-item' + (b.id === D.activeBook ? ' active' : '');
     div.dataset.bid = b.id;
-    div.innerHTML = '<div class="b-num">' + b.num + '</div><div class="b-title">' + b.title + '</div><div class="b-author">' + b.author + '</div>';
+    var badge = b.type === 'memoir' ? '<span class="badge-memoir">Memoir</span>' : '';
+    div.innerHTML = '<div class="b-num">' + b.num + '</div><div class="b-title">' + b.title + badge + '</div><div class="b-author">' + b.author + '</div>';
     blistEl.appendChild(div);
   });
   blistEl.onclick = function(e) {
@@ -537,8 +633,9 @@ function renderAll() {
   document.getElementById('hy').textContent = b.year;
   document.getElementById('hc').textContent = b.entries.length + ' ' + (b.entries.length === 1 ? 'entry' : 'entries');
 
-  // Log - use DOM creation to avoid quote issues
+  // Log
   var logEl = document.getElementById('s-log');
+  if (b.type === 'memoir') { renderMemoirLog(b); } else
   if (!b.entries.length) {
     logEl.innerHTML = '<div class="empty">No notes yet.</div>';
   } else {
@@ -632,6 +729,7 @@ function renderAll() {
 
   // Context
   document.getElementById('s-ctx').innerHTML = '<div class="ctx-block"><p>' + b.context + '</p></div>';
+  updateNavTabs();
 }
 
 function subNote() {
@@ -680,17 +778,300 @@ function addBook() {
   if (!ti) { alert('Please enter a title.'); return; }
   var ns = ['I','II','III','IV','V','VI','VII','VIII','IX','X'];
   var id = 'b' + Date.now();
+  var btype = document.getElementById('mtype') ? document.getElementById('mtype').value : 'reading';
+  var yearPrefix = btype === 'memoir' ? 'Begun ' : 'Reading ';
   D.books.push({
     id: id,
     num: 'Book ' + (ns[D.books.length] || D.books.length + 1),
     title: ti, author: au || '',
-    year: 'Reading ' + (yr || new Date().getFullYear()),
+    year: yearPrefix + (yr || new Date().getFullYear()),
     context: cx || 'Added to the archive.',
+    type: btype,
     reflection: null, snapshots: [], entries: []
   });
   closeM();
   ['mt','ma','my','mc'].forEach(function(i) { document.getElementById(i).value = ''; });
   selBook(id); doSave();
+}
+
+
+// ── MEMOIR GLOBALS ────────────────────────────────────────────────────────────
+var mib64 = null, mim = 'image/jpeg';
+var ghostElevated = '', ghostQs = [];
+var memSort = 'entrydate'; // entrydate | memdate | place | theme
+
+// ── MEMOIR NAV ────────────────────────────────────────────────────────────────
+function updateNavTabs() {
+  var b = curBook();
+  var isMemoir = b && b.type === 'memoir';
+  var addTab = document.getElementById('tab-add');
+  var memTab = document.getElementById('tab-mem');
+  if (addTab) addTab.style.display = isMemoir ? 'none' : '';
+  if (memTab) memTab.style.display = isMemoir ? '' : 'none';
+}
+
+// ── MEMOIR SCREENSHOT ─────────────────────────────────────────────────────────
+function mdrp(e) { e.preventDefault(); document.getElementById('mdz').classList.remove('over'); var f = e.dataTransfer.files[0]; if (f && f.type.startsWith('image/')) mloadImg(f); }
+function mfsel(e) { var f = e.target.files[0]; if (f) mloadImg(f); }
+function mloadImg(f) {
+  mim = f.type || 'image/jpeg';
+  var r = new FileReader();
+  r.onload = function(ev) {
+    mib64 = ev.target.result.split(',')[1];
+    document.getElementById('mssi').src = ev.target.result;
+    document.getElementById('mssp').classList.add('vis');
+    setMpist('reading', 'Reading with Claude...');
+    mOcr();
+  };
+  r.readAsDataURL(f);
+}
+function mOcr() {
+  var body = {model:'claude-sonnet-4-20250514', max_tokens:1000, messages:[{role:'user', content:[
+    {type:'image', source:{type:'base64', media_type:mim, data:mib64}},
+    {type:'text', text:'This is a personal notes screenshot. Extract the text as written. Return ONLY JSON: {"text":"the full text content","title":"a short title if visible or empty string"}'}
+  ]}]};
+  fetch(PROXY, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)})
+  .then(function(r){return r.json();})
+  .then(function(d){
+    var t = d.content && d.content.filter(function(x){return x.type==='text';})[0];
+    var txt = t ? t.text : '';
+    var clean = txt.replace(/```json/g,'').replace(/```/g,'').trim();
+    var p = JSON.parse(clean);
+    if (p.text) { document.getElementById('m-raw').value = p.text; if (p.title) document.getElementById('m-title').value = p.title; setMpist('done','Extracted — review below'); }
+    else { setMpist('error','Could not detect — type manually'); }
+  }).catch(function(){setMpist('error','Could not read — type manually');});
+}
+function setMpist(c,m){var e=document.getElementById('mpist');e.className='pi-st '+c;e.textContent=m;}
+function clrMSS(){mib64=null;document.getElementById('mssp').classList.remove('vis');document.getElementById('mssi').src='';document.getElementById('mdz').querySelector('input').value='';}
+function clrMem(){clrMSS();['m-title','m-memdate','m-place','m-raw'].forEach(function(i){document.getElementById(i).value='';});document.getElementById('ghostPanel').classList.remove('open');ghostElevated='';ghostQs=[];}
+
+// ── GHOST EDITOR ──────────────────────────────────────────────────────────────
+function doGhost() {
+  var raw = document.getElementById('m-raw').value.trim();
+  if (!raw) { alert('Please write your memory first.'); return; }
+  var btn = document.getElementById('ghostBtn');
+  btn.disabled = true; btn.textContent = 'Thinking...';
+  var title = document.getElementById('m-title').value.trim();
+  var place = document.getElementById('m-place').value.trim();
+  var memdate = document.getElementById('m-memdate').value.trim();
+  var context = (title ? 'Title: ' + title + '\n' : '') + (memdate ? 'When: ' + memdate + '\n' : '') + (place ? 'Where: ' + place + '\n' : '');
+  var prompt = 'You are a literary ghost editor helping Tarek write his memoirs. He has written a raw memory note. Your job is to do two things:\n\n1. ELEVATE the prose to a literary level. Keep every factual detail exactly as he wrote it. Do NOT invent facts, names, dates, or events. But you may imagine and describe: atmosphere, sensory details (light, smell, sound, temperature), emotional texture, the feeling of a place or moment. Write in his voice — first person, warm, reflective, a man looking back with clear eyes. Aim for 2-4 paragraphs.\n\n2. Ask 2-3 SHORT questions that would enrich this memory further. Questions about specific details, feelings, or context that only he would know. Keep them gentle and curious, not clinical.\n\n' + (context ? context + '\n' : '') + 'His raw memory:\n' + raw + '\n\nReturn ONLY this JSON:\n{"elevated":"the literary prose version","questions":["question 1","question 2","question 3"]}';
+  fetch(PROXY, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({model:'claude-sonnet-4-20250514', max_tokens:2000, messages:[{role:'user', content:prompt}]})})
+  .then(function(r){return r.json();})
+  .then(function(d){
+    var t = d.content && d.content.filter(function(x){return x.type==='text';})[0];
+    var txt = t ? t.text : '';
+    var clean = txt.replace(/```json/g,'').replace(/```/g,'').trim();
+    var p = JSON.parse(clean);
+    ghostElevated = p.elevated || '';
+    ghostQs = p.questions || [];
+    var panel = document.getElementById('ghostPanel');
+    document.getElementById('ghostText').innerHTML = '<p>' + ghostElevated.split('\n\n').join('</p><p>').split('\n').join('<br>') + '</p>';
+    var qHtml = ghostQs.map(function(q){return '<div class="ghost-q">' + q + '</div>';}).join('');
+    document.getElementById('ghostQs').innerHTML = qHtml;
+    panel.classList.add('open');
+    btn.disabled = false; btn.textContent = 'Re-elevate';
+  }).catch(function(){
+    alert('Could not connect. Check connection.');
+    btn.disabled = false; btn.textContent = 'Elevate & Ask';
+  });
+}
+
+function acceptMem() {
+  if (!ghostElevated) return;
+  var b = curBook();
+  var raw = document.getElementById('m-raw').value.trim();
+  var title = document.getElementById('m-title').value.trim() || 'Untitled memory';
+  var memdate = document.getElementById('m-memdate').value.trim();
+  var place = document.getElementById('m-place').value.trim();
+  // Suggest themes from the elevated text
+  var themes = suggestThemes(ghostElevated + ' ' + raw);
+  var entry = {
+    id: 'me' + Date.now(),
+    title: title,
+    raw: raw,
+    elevated: ghostElevated,
+    questions: ghostQs,
+    memdate: memdate,
+    place: place,
+    entrydate: new Date().toLocaleDateString('en-GB', {day:'numeric', month:'long', year:'numeric'}),
+    themes: themes,
+    isPublic: false
+  };
+  b.entries.push(entry);
+  clrMem();
+  D.activeBook = b.id;
+  renderAll();
+  document.querySelectorAll('.view').forEach(function(e){e.classList.remove('active');});
+  document.querySelectorAll('.tab-btn').forEach(function(e){e.classList.remove('active');});
+  document.getElementById('va').classList.add('active');
+  document.querySelector('.tab-btn').classList.add('active');
+  ss('log', document.querySelector('.sec-tab'));
+  doSave();
+}
+
+function reviseMem() {
+  document.getElementById('ghostPanel').classList.remove('open');
+  document.getElementById('m-raw').focus();
+}
+
+function suggestThemes(text) {
+  var t = text.toLowerCase();
+  var tags = [];
+  var checks = [
+    ['family','family'],['childhood','childhood'],['cairo','cairo'],['kuwait','kuwait'],
+    ['london','london'],['loss','loss'],['memory','memory'],['home','home'],
+    ['father','father'],['mother','mother'],['school','school'],['work','work'],
+    ['love','love'],['friendship','friendship'],['war','conflict'],['travel','travel'],
+    ['food','food'],['music','music'],['medicine','medicine'],['identity','identity']
+  ];
+  checks.forEach(function(c){if(t.indexOf(c[0]) !== -1) tags.push(c[1]);});
+  return tags.slice(0,4);
+}
+
+// ── MEMOIR RENDER ─────────────────────────────────────────────────────────────
+function renderMemoirLog(b) {
+  var logEl = document.getElementById('s-log');
+  var entries = b.entries.slice();
+
+  // Sort
+  entries.sort(function(a,b2) {
+    if (memSort === 'place') return (a.place||'').localeCompare(b2.place||'');
+    if (memSort === 'memdate') return (a.memdate||'').localeCompare(b2.memdate||'');
+    if (memSort === 'theme') return (a.themes&&a.themes[0]||'').localeCompare(b2.themes&&b2.themes[0]||'');
+    return (b2.entrydate||'').localeCompare(a.entrydate||''); // newest first
+  });
+
+  // Sort bar
+  var sortBar = document.createElement('div');
+  sortBar.className = 'mem-sort-bar';
+  sortBar.innerHTML = '<span>Sort by:</span>';
+  var sorts = [{k:'entrydate',l:'Written'},{k:'memdate',l:'When it happened'},{k:'place',l:'Place'},{k:'theme',l:'Theme'}];
+  sorts.forEach(function(s) {
+    var btn = document.createElement('button');
+    btn.className = 'sort-btn' + (memSort===s.k?' active':'');
+    btn.textContent = s.l;
+    btn.dataset.sort = s.k;
+    btn.onclick = function() { memSort = this.dataset.sort; renderAll(); ss(D.activeSection, document.querySelectorAll('.sec-tab')[0]); };
+    sortBar.appendChild(btn);
+  });
+
+  if (!entries.length) {
+    logEl.innerHTML = '';
+    logEl.appendChild(sortBar);
+    var empty = document.createElement('div');
+    empty.className = 'empty';
+    empty.textContent = 'No memories yet. Add your first memory above.';
+    logEl.appendChild(empty);
+    return;
+  }
+
+  logEl.innerHTML = '';
+  logEl.appendChild(sortBar);
+
+  entries.forEach(function(e) {
+    var div = document.createElement('div');
+    div.className = 'mem-entry';
+
+    // Header
+    var top = document.createElement('div');
+    top.className = 'mem-entry-top';
+    top.innerHTML = '<div class="mem-entry-title">' + e.title + '</div>';
+    div.appendChild(top);
+
+    // Meta
+    var meta = document.createElement('div');
+    meta.className = 'mem-meta';
+    if (e.memdate) meta.innerHTML += '<span class="memdate">&#9679; ' + e.memdate + '</span>';
+    if (e.place) meta.innerHTML += '<span class="place">&#128205; ' + e.place + '</span>';
+    meta.innerHTML += '<span class="entrydate">Written ' + (e.entrydate||'') + '</span>';
+    meta.innerHTML += '<span class="' + (e.isPublic?'pub-badge':'priv-badge') + '">' + (e.isPublic?'Public':'Private') + '</span>';
+    div.appendChild(meta);
+
+    // Elevated body
+    var body = document.createElement('div');
+    body.className = 'mem-body';
+    body.innerHTML = '<p>' + (e.elevated||e.raw||'').split('\n\n').join('</p><p>').split('\n').join('<br>') + '</p>';
+    div.appendChild(body);
+
+    // Themes
+    if (e.themes && e.themes.length) {
+      var tags = document.createElement('div');
+      tags.className = 'mem-themes';
+      e.themes.forEach(function(t){
+        var tag = document.createElement('span');
+        tag.className = 'mem-theme-tag';
+        tag.textContent = t;
+        tags.appendChild(tag);
+      });
+      div.appendChild(tags);
+    }
+
+    // Raw toggle
+    if (e.raw) {
+      var rawToggle = document.createElement('button');
+      rawToggle.className = 'mem-raw-toggle';
+      rawToggle.textContent = 'Show original';
+      rawToggle.dataset.eid = e.id;
+      rawToggle.onclick = function() {
+        var rawDiv = this.nextElementSibling;
+        rawDiv.classList.toggle('open');
+        this.textContent = rawDiv.classList.contains('open') ? 'Hide original' : 'Show original';
+      };
+      div.appendChild(rawToggle);
+      var rawDiv = document.createElement('div');
+      rawDiv.className = 'mem-raw';
+      rawDiv.textContent = e.raw;
+      div.appendChild(rawDiv);
+    }
+
+    // Actions: public toggle + delete
+    var acts = document.createElement('div');
+    acts.className = 'pub-row';
+
+    var sw = document.createElement('label');
+    sw.className = 'sw';
+    var inp = document.createElement('input');
+    inp.type = 'checkbox';
+    inp.checked = !!e.isPublic;
+    inp.dataset.eid = e.id;
+    inp.onchange = function() {
+      var bid = curBook().id;
+      var entry = curBook().entries.filter(function(x){return x.id===this.dataset.eid;}.bind(this))[0];
+      if (entry) { entry.isPublic = this.checked; renderAll(); doSave(); }
+    };
+    var track = document.createElement('span');
+    track.className = 'sw-track';
+    var thumb = document.createElement('span');
+    thumb.className = 'sw-thumb';
+    sw.appendChild(inp);
+    sw.appendChild(track);
+    sw.appendChild(thumb);
+
+    var pubLabel = document.createElement('span');
+    pubLabel.className = e.isPublic ? 'pub-on' : 'pub-off';
+    pubLabel.textContent = e.isPublic ? 'Public' : 'Private';
+
+    var delBtn = document.createElement('button');
+    delBtn.className = 'mem-act-btn';
+    delBtn.style.marginLeft = 'auto';
+    delBtn.textContent = 'Remove';
+    delBtn.dataset.eid = e.id;
+    delBtn.onclick = function() {
+      if (!confirm('Remove this memory?')) return;
+      var bid = curBook().id;
+      var bk = D.books.filter(function(x){return x.id===bid;})[0];
+      bk.entries = bk.entries.filter(function(x){return x.id!==this.dataset.eid;}.bind(this));
+      renderAll(); doSave();
+    };
+
+    acts.appendChild(sw);
+    acts.appendChild(pubLabel);
+    acts.appendChild(delBtn);
+    div.appendChild(acts);
+
+    logEl.appendChild(div);
+  });
 }
 
 tok = getTok();
