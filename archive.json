@@ -172,7 +172,9 @@
             "father",
             "mother"
           ],
-          "isPublic": false
+          "isPublic": false,
+          "chapterId": "ch1774472189313",
+          "sceneId": null
         },
         {
           "id": "me1774468472818",
