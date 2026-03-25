@@ -172,7 +172,7 @@
             "father",
             "mother"
           ],
-          "isPublic": false
+          "isPublic": true
         },
         {
           "id": "me1774468472818",
