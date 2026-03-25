@@ -292,8 +292,8 @@ nav{background:var(--ink);color:var(--sepia);display:flex;align-items:center;jus
   
     <div id="vmem" class="view">
       <div class="mem-shell">
-        <h2>Add a Memory</h2>
-        <p class="mem-sub">Write your raw memory. Claude elevates it and asks questions to enrich it.</p>
+        <h2 id="memFormTitle">Add a Memory</h2>
+        <p class="mem-sub">Write your raw memory. Every word yours. Claude can elevate it after.</p>
         <div class="dz" id="mdz" ondragover="dov(event)" ondragleave="dlv()" ondrop="mdrp(event)">
           <input type="file" accept="image/*" onchange="mfsel(event)">
           <div class="dz-icon">&#128247;</div>
@@ -308,22 +308,30 @@ nav{background:var(--ink);color:var(--sepia);display:flex;align-items:center;jus
             <button class="pi-clr" onclick="clrMSS()">&#215; Remove</button>
           </div>
         </div>
-        <div class="or-div">or type directly</div>
+        <div class="or-div" id="mem-or-div">or type directly</div>
         <div class="fr"><label>Title <span style="opacity:.5;font-size:13px">(optional)</span></label><input type="text" id="m-title" placeholder="e.g. The house in Salmiya, 1987"></div>
         <div class="fr"><label>When did this happen?</label><input type="text" id="m-memdate" placeholder="e.g. Summer 1987 / March 2003 / Early 1990s"></div>
         <div class="fr"><label>Where?</label><input type="text" id="m-place" placeholder="e.g. Cairo / Salmiya, Kuwait / London"></div>
         <div class="fr"><label>Your memory</label><textarea id="m-raw" rows="8" placeholder="Write it as it comes. Raw, unpolished. The facts only you know..."></textarea><div class="fr-hint">Claude will find the atmosphere, the light, the feeling.</div></div>
-        <div class="fr-acts">
-          <button class="ghost-btn" id="ghostBtn" onclick="doGhost()">Elevate &amp; Ask</button>
+
+        <!-- Step 1 actions: shown before any elevation -->
+        <div class="fr-acts" id="mem-step1-acts">
+          <button class="ghost-btn" onclick="doGhost()">Elevate</button>
+          <button class="ghost-btn" style="background:var(--ink)" onclick="doAsk()">Ask</button>
+          <button class="sv-btn" onclick="saveMemAsIs()">Save as-is</button>
           <button class="cl-btn" onclick="clrMem()">Clear</button>
         </div>
+
+        <!-- Ghost panel: shown after elevation -->
         <div class="ghost-panel" id="ghostPanel">
           <div class="ghost-lbl">&#9997; Ghost Editor</div>
           <div class="ghost-text" id="ghostText"></div>
           <div class="ghost-qs" id="ghostQs"></div>
-          <div class="ghost-acts">
-            <button class="ghost-accept" onclick="acceptMem()">Accept &amp; Save</button>
-            <button class="ghost-revise" onclick="reviseMem()">Revise my text first</button>
+          <!-- Step 2 actions: shown after elevation -->
+          <div class="ghost-acts" id="mem-step2-acts">
+            <button class="ghost-accept" onclick="acceptMem()">Keep elevated version</button>
+            <button class="ghost-btn" onclick="doGhost()">Re-generate</button>
+            <button class="ghost-revise" onclick="keepOriginalMem()">Keep original</button>
           </div>
         </div>
       </div>
@@ -590,9 +598,18 @@ function ss(s, btn) {
 
 function selBook(id) {
   D.activeBook = id;
+  // Always return to archive view when switching books
+  document.querySelectorAll('.view').forEach(function(e) { e.classList.remove('active'); });
+  document.querySelectorAll('.tab-btn').forEach(function(e) { e.classList.remove('active'); });
+  document.getElementById('va').classList.add('active');
+  document.querySelector('.tab-btn').classList.add('active');
   renderAll();
   updateNavTabs();
-  ['log','refl','ctx'].forEach(function(i) { document.getElementById('s-' + i).style.display = i === D.activeSection ? 'block' : 'none'; });
+  D.activeSection = 'log';
+  ['log','refl','ctx'].forEach(function(i) { document.getElementById('s-' + i).style.display = i === 'log' ? 'block' : 'none'; });
+  document.querySelectorAll('.sec-tab').forEach(function(e) { e.classList.remove('active'); });
+  var firstTab = document.querySelector('.sec-tab');
+  if (firstTab) firstTab.classList.add('active');
 }
 
 function curBook() { return D.books.filter(function(b) { return b.id === D.activeBook; })[0]; }
@@ -795,281 +812,145 @@ function addBook() {
 }
 
 
-// ── MEMOIR GLOBALS ────────────────────────────────────────────────────────────
-var mib64 = null, mim = 'image/jpeg';
-var ghostElevated = '', ghostQs = [];
-var memSort = 'entrydate'; // entrydate | memdate | place | theme
+// MEMOIR GLOBALS
+var mib64=null,mim='image/jpeg',ghostElevated='',ghostQs=[],memSort='entrydate',editingMemId=null;
 
-// ── MEMOIR NAV ────────────────────────────────────────────────────────────────
-function updateNavTabs() {
-  var b = curBook();
-  var isMemoir = b && b.type === 'memoir';
-  var addTab = document.getElementById('tab-add');
-  var memTab = document.getElementById('tab-mem');
-  if (addTab) addTab.style.display = isMemoir ? 'none' : '';
-  if (memTab) memTab.style.display = isMemoir ? '' : 'none';
-}
-
-// ── MEMOIR SCREENSHOT ─────────────────────────────────────────────────────────
-function mdrp(e) { e.preventDefault(); document.getElementById('mdz').classList.remove('over'); var f = e.dataTransfer.files[0]; if (f && f.type.startsWith('image/')) mloadImg(f); }
-function mfsel(e) { var f = e.target.files[0]; if (f) mloadImg(f); }
-function mloadImg(f) {
-  mim = f.type || 'image/jpeg';
-  var r = new FileReader();
-  r.onload = function(ev) {
-    mib64 = ev.target.result.split(',')[1];
-    document.getElementById('mssi').src = ev.target.result;
-    document.getElementById('mssp').classList.add('vis');
-    setMpist('reading', 'Reading with Claude...');
-    mOcr();
-  };
-  r.readAsDataURL(f);
-}
-function mOcr() {
-  var body = {model:'claude-sonnet-4-20250514', max_tokens:1000, messages:[{role:'user', content:[
-    {type:'image', source:{type:'base64', media_type:mim, data:mib64}},
-    {type:'text', text:'This is a personal notes screenshot. Extract the text as written. Return ONLY JSON: {"text":"the full text content","title":"a short title if visible or empty string"}'}
-  ]}]};
-  fetch(PROXY, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)})
-  .then(function(r){return r.json();})
-  .then(function(d){
-    var t = d.content && d.content.filter(function(x){return x.type==='text';})[0];
-    var txt = t ? t.text : '';
-    var clean = txt.replace(/```json/g,'').replace(/```/g,'').trim();
-    var p = JSON.parse(clean);
-    if (p.text) { document.getElementById('m-raw').value = p.text; if (p.title) document.getElementById('m-title').value = p.title; setMpist('done','Extracted — review below'); }
-    else { setMpist('error','Could not detect — type manually'); }
-  }).catch(function(){setMpist('error','Could not read — type manually');});
-}
+function updateNavTabs(){var b=curBook(),isM=b&&b.type==='memoir';var a=document.getElementById('tab-add'),m=document.getElementById('tab-mem');if(a)a.style.display=isM?'none':'';if(m)m.style.display=isM?'':'none';}
+function mdrp(e){e.preventDefault();document.getElementById('mdz').classList.remove('over');var f=e.dataTransfer.files[0];if(f&&f.type.startsWith('image/'))mloadImg(f);}
+function mfsel(e){var f=e.target.files[0];if(f)mloadImg(f);}
+function mloadImg(f){mim=f.type||'image/jpeg';var r=new FileReader();r.onload=function(ev){mib64=ev.target.result.split(',')[1];document.getElementById('mssi').src=ev.target.result;document.getElementById('mssp').classList.add('vis');setMpist('reading','Reading...');mOcr();};r.readAsDataURL(f);}
+function mOcr(){var body={model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:mim,data:mib64}},{type:'text',text:'Extract all text from this notes screenshot. Return ONLY JSON: {"text":"full text","title":"short title if visible or empty"}'}]}]};fetch(PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(function(r){return r.json();}).then(function(d){var t=d.content&&d.content.filter(function(x){return x.type==='text';})[0];var txt=t?t.text:'';var p=JSON.parse(txt.replace(/```json/g,'').replace(/```/g,'').trim());if(p.text){document.getElementById('m-raw').value=p.text;if(p.title)document.getElementById('m-title').value=p.title;setMpist('done','Extracted');}else{setMpist('error','Could not detect');}}).catch(function(){setMpist('error','Could not read');});}
 function setMpist(c,m){var e=document.getElementById('mpist');e.className='pi-st '+c;e.textContent=m;}
 function clrMSS(){mib64=null;document.getElementById('mssp').classList.remove('vis');document.getElementById('mssi').src='';document.getElementById('mdz').querySelector('input').value='';}
-function clrMem(){clrMSS();['m-title','m-memdate','m-place','m-raw'].forEach(function(i){document.getElementById(i).value='';});document.getElementById('ghostPanel').classList.remove('open');ghostElevated='';ghostQs=[];}
+function clrMem(){clrMSS();['m-title','m-memdate','m-place','m-raw'].forEach(function(i){document.getElementById(i).value='';});document.getElementById('ghostPanel').classList.remove('open');document.getElementById('mem-step1-acts').style.display='flex';ghostElevated='';ghostQs=[];editingMemId=null;document.getElementById('memFormTitle').textContent='Add a Memory';}
 
-// ── GHOST EDITOR ──────────────────────────────────────────────────────────────
-function doGhost() {
-  var raw = document.getElementById('m-raw').value.trim();
-  if (!raw) { alert('Please write your memory first.'); return; }
-  var btn = document.getElementById('ghostBtn');
-  btn.disabled = true; btn.textContent = 'Thinking...';
-  var title = document.getElementById('m-title').value.trim();
-  var place = document.getElementById('m-place').value.trim();
-  var memdate = document.getElementById('m-memdate').value.trim();
-  var context = (title ? 'Title: ' + title + '\n' : '') + (memdate ? 'When: ' + memdate + '\n' : '') + (place ? 'Where: ' + place + '\n' : '');
-  var prompt = 'You are a literary ghost editor helping Tarek write his memoirs. He has written a raw memory note. Your job is to do two things:\n\n1. ELEVATE the prose to a literary level. Keep every factual detail exactly as he wrote it. Do NOT invent facts, names, dates, or events. But you may imagine and describe: atmosphere, sensory details (light, smell, sound, temperature), emotional texture, the feeling of a place or moment. Write in his voice — first person, warm, reflective, a man looking back with clear eyes. Aim for 2-4 paragraphs.\n\n2. Ask 2-3 SHORT questions that would enrich this memory further. Questions about specific details, feelings, or context that only he would know. Keep them gentle and curious, not clinical.\n\n' + (context ? context + '\n' : '') + 'His raw memory:\n' + raw + '\n\nReturn ONLY this JSON:\n{"elevated":"the literary prose version","questions":["question 1","question 2","question 3"]}';
-  fetch(PROXY, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({model:'claude-sonnet-4-20250514', max_tokens:2000, messages:[{role:'user', content:prompt}]})})
-  .then(function(r){return r.json();})
-  .then(function(d){
-    var t = d.content && d.content.filter(function(x){return x.type==='text';})[0];
-    var txt = t ? t.text : '';
-    var clean = txt.replace(/```json/g,'').replace(/```/g,'').trim();
-    var p = JSON.parse(clean);
-    ghostElevated = p.elevated || '';
-    ghostQs = p.questions || [];
-    var panel = document.getElementById('ghostPanel');
-    document.getElementById('ghostText').innerHTML = '<p>' + ghostElevated.split('\n\n').join('</p><p>').split('\n').join('<br>') + '</p>';
-    var qHtml = ghostQs.map(function(q){return '<div class="ghost-q">' + q + '</div>';}).join('');
-    document.getElementById('ghostQs').innerHTML = qHtml;
-    panel.classList.add('open');
-    btn.disabled = false; btn.textContent = 'Re-elevate';
-  }).catch(function(){
-    alert('Could not connect. Check connection.');
-    btn.disabled = false; btn.textContent = 'Elevate & Ask';
-  });
+function doGhost(){
+  var raw=document.getElementById('m-raw').value.trim();
+  if(!raw){alert('Please write your memory first.');return;}
+  var btns=document.querySelectorAll('#vmem button');btns.forEach(function(b){b.disabled=true;});
+  var title=document.getElementById('m-title').value.trim(),place=document.getElementById('m-place').value.trim(),memdate=document.getElementById('m-memdate').value.trim();
+  var ctx=(title?'Title: '+title+'\n':'')+(memdate?'When: '+memdate+'\n':'')+(place?'Where: '+place+'\n':'');
+  var prompt='You are a literary ghost editor helping Tarek write his memoirs.\n\nDo two things:\n1. ELEVATE the prose to literary level. Keep all facts exactly as written. Do NOT invent facts, names, dates. But imagine atmosphere, sensory details, emotional texture. Write first person in his voice. 2-4 paragraphs.\n2. Ask 2-3 short enrichment questions. Gentle and curious.\n\n'+(ctx?ctx+'\n':'')+'Raw memory:\n'+raw+'\n\nReturn ONLY JSON: {"elevated":"literary version","questions":["q1","q2","q3"]}';
+  fetch(PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2000,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(d){var t=d.content&&d.content.filter(function(x){return x.type==='text';})[0];var txt=t?t.text:'';var p=JSON.parse(txt.replace(/```json/g,'').replace(/```/g,'').trim());ghostElevated=p.elevated||'';ghostQs=p.questions||[];showGhostPanel();btns.forEach(function(b){b.disabled=false;});}).catch(function(){alert('Could not connect.');btns.forEach(function(b){b.disabled=false;});});
 }
 
-function acceptMem() {
-  if (!ghostElevated) return;
-  var b = curBook();
-  var raw = document.getElementById('m-raw').value.trim();
-  var title = document.getElementById('m-title').value.trim() || 'Untitled memory';
-  var memdate = document.getElementById('m-memdate').value.trim();
-  var place = document.getElementById('m-place').value.trim();
-  // Suggest themes from the elevated text
-  var themes = suggestThemes(ghostElevated + ' ' + raw);
-  var entry = {
-    id: 'me' + Date.now(),
-    title: title,
-    raw: raw,
-    elevated: ghostElevated,
-    questions: ghostQs,
-    memdate: memdate,
-    place: place,
-    entrydate: new Date().toLocaleDateString('en-GB', {day:'numeric', month:'long', year:'numeric'}),
-    themes: themes,
-    isPublic: false
-  };
-  b.entries.push(entry);
-  clrMem();
-  D.activeBook = b.id;
-  renderAll();
+function doAsk(){
+  var raw=document.getElementById('m-raw').value.trim();
+  if(!raw){alert('Please write your memory first.');return;}
+  var btns=document.querySelectorAll('#vmem button');btns.forEach(function(b){b.disabled=true;});
+  var prompt='Help Tarek enrich his memoir. Ask 3 thoughtful questions to help him go deeper into this memory. Gentle, curious, specific.\n\nHis memory:\n'+raw+'\n\nReturn ONLY JSON: {"elevated":"","questions":["q1","q2","q3"]}';
+  fetch(PROXY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,messages:[{role:'user',content:prompt}]})}).then(function(r){return r.json();}).then(function(d){var t=d.content&&d.content.filter(function(x){return x.type==='text';})[0];var txt=t?t.text:'';var p=JSON.parse(txt.replace(/```json/g,'').replace(/```/g,'').trim());ghostElevated='';ghostQs=p.questions||[];showGhostPanel();btns.forEach(function(b){b.disabled=false;});}).catch(function(){alert('Could not connect.');btns.forEach(function(b){b.disabled=false;});});
+}
+
+function showGhostPanel(){var panel=document.getElementById('ghostPanel');document.getElementById('ghostText').innerHTML=ghostElevated?'<p>'+ghostElevated.split('\n\n').join('</p><p>').split('\n').join('<br>')+'</p>':'';document.getElementById('ghostQs').innerHTML=ghostQs.map(function(q){return '<div class="ghost-q">'+q+'</div>';}).join('');panel.classList.add('open');}
+function acceptMem(){saveMemoirEntry(ghostElevated);}
+function keepOriginalMem(){saveMemoirEntry('');}
+function saveMemAsIs(){saveMemoirEntry('');}
+
+function saveMemoirEntry(elevated){
+  var raw=document.getElementById('m-raw').value.trim();
+  if(!raw){alert('Please write your memory first.');return;}
+  var b=curBook();
+  var title=document.getElementById('m-title').value.trim()||'Untitled memory';
+  var memdate=document.getElementById('m-memdate').value.trim();
+  var place=document.getElementById('m-place').value.trim();
+  var themes=suggestThemes((elevated||raw)+' '+title+' '+place);
+  var now=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+  if(editingMemId){
+    var entry=b.entries.filter(function(e){return e.id===editingMemId;})[0];
+    if(entry){entry.title=title;entry.raw=raw;if(elevated)entry.elevated=elevated;entry.memdate=memdate;entry.place=place;entry.themes=themes;if(ghostQs.length)entry.questions=ghostQs;}
+  }else{
+    b.entries.push({id:'me'+Date.now(),title:title,raw:raw,elevated:elevated,questions:ghostQs,memdate:memdate,place:place,entrydate:now,themes:themes,isPublic:false});
+  }
+  clrMem();D.activeBook=b.id;
   document.querySelectorAll('.view').forEach(function(e){e.classList.remove('active');});
   document.querySelectorAll('.tab-btn').forEach(function(e){e.classList.remove('active');});
   document.getElementById('va').classList.add('active');
-  document.querySelector('.tab-btn').classList.add('active');
-  ss('log', document.querySelector('.sec-tab'));
-  doSave();
+  updateNavTabs();renderAll();ss('log',document.querySelector('.sec-tab'));doSave();
 }
 
-function reviseMem() {
+function suggestThemes(text){
+  var t=text.toLowerCase(),tags=[];
+  [['family','family'],['childhood','childhood'],['cairo','cairo'],['kuwait','kuwait'],['london','london'],['loss','loss'],['home','home'],['father','father'],['mother','mother'],['school','school'],['love','love'],['friendship','friendship'],['travel','travel'],['food','food'],['music','music'],['medicine','medicine'],['identity','identity'],['egypt','egypt'],['paris','paris'],['surgery','surgery'],['memory','memory']].forEach(function(c){if(t.indexOf(c[0])!==-1)tags.push(c[1]);});
+  return tags.slice(0,5);
+}
+
+function editMemEntry(bid,eid){
+  var bk=D.books.filter(function(b){return b.id===bid;})[0];
+  var entry=bk&&bk.entries.filter(function(e){return e.id===eid;})[0];
+  if(!entry)return;
+  editingMemId=eid;
+  document.getElementById('m-title').value=entry.title||'';
+  document.getElementById('m-memdate').value=entry.memdate||'';
+  document.getElementById('m-place').value=entry.place||'';
+  document.getElementById('m-raw').value=entry.raw||'';
   document.getElementById('ghostPanel').classList.remove('open');
-  document.getElementById('m-raw').focus();
+  ghostElevated=entry.elevated||'';ghostQs=entry.questions||[];
+  document.getElementById('memFormTitle').textContent='Edit Memory';
+  document.querySelectorAll('.view').forEach(function(e){e.classList.remove('active');});
+  document.querySelectorAll('.tab-btn').forEach(function(e){e.classList.remove('active');});
+  document.getElementById('vmem').classList.add('active');
+  var mt=document.getElementById('tab-mem');if(mt)mt.classList.add('active');
+  window.scrollTo(0,0);
 }
 
-function suggestThemes(text) {
-  var t = text.toLowerCase();
-  var tags = [];
-  var checks = [
-    ['family','family'],['childhood','childhood'],['cairo','cairo'],['kuwait','kuwait'],
-    ['london','london'],['loss','loss'],['memory','memory'],['home','home'],
-    ['father','father'],['mother','mother'],['school','school'],['work','work'],
-    ['love','love'],['friendship','friendship'],['war','conflict'],['travel','travel'],
-    ['food','food'],['music','music'],['medicine','medicine'],['identity','identity']
-  ];
-  checks.forEach(function(c){if(t.indexOf(c[0]) !== -1) tags.push(c[1]);});
-  return tags.slice(0,4);
-}
-
-// ── MEMOIR RENDER ─────────────────────────────────────────────────────────────
-function renderMemoirLog(b) {
-  var logEl = document.getElementById('s-log');
-  var entries = b.entries.slice();
-
-  // Sort
-  entries.sort(function(a,b2) {
-    if (memSort === 'place') return (a.place||'').localeCompare(b2.place||'');
-    if (memSort === 'memdate') return (a.memdate||'').localeCompare(b2.memdate||'');
-    if (memSort === 'theme') return (a.themes&&a.themes[0]||'').localeCompare(b2.themes&&b2.themes[0]||'');
-    return (b2.entrydate||'').localeCompare(a.entrydate||''); // newest first
+function renderMemoirLog(b){
+  var logEl=document.getElementById('s-log');
+  var entries=b.entries.slice();
+  entries.sort(function(a,b2){if(memSort==='place')return(a.place||'').localeCompare(b2.place||'');if(memSort==='memdate')return(a.memdate||'').localeCompare(b2.memdate||'');if(memSort==='theme')return(a.themes&&a.themes[0]||'').localeCompare(b2.themes&&b2.themes[0]||'');return(b2.entrydate||'').localeCompare(a.entrydate||'');});
+  logEl.innerHTML='';
+  var sb=document.createElement('div');sb.className='mem-sort-bar';
+  var sl=document.createElement('span');sl.textContent='Sort by:';sb.appendChild(sl);
+  [{k:'entrydate',l:'Written'},{k:'memdate',l:'When'},{k:'place',l:'Place'},{k:'theme',l:'Theme'}].forEach(function(s){
+    var btn=document.createElement('button');btn.className='sort-btn'+(memSort===s.k?' active':'');btn.textContent=s.l;btn.dataset.sort=s.k;
+    btn.onclick=function(){memSort=this.dataset.sort;renderAll();ss(D.activeSection,document.querySelector('.sec-tab'));};
+    sb.appendChild(btn);
   });
-
-  // Sort bar
-  var sortBar = document.createElement('div');
-  sortBar.className = 'mem-sort-bar';
-  sortBar.innerHTML = '<span>Sort by:</span>';
-  var sorts = [{k:'entrydate',l:'Written'},{k:'memdate',l:'When it happened'},{k:'place',l:'Place'},{k:'theme',l:'Theme'}];
-  sorts.forEach(function(s) {
-    var btn = document.createElement('button');
-    btn.className = 'sort-btn' + (memSort===s.k?' active':'');
-    btn.textContent = s.l;
-    btn.dataset.sort = s.k;
-    btn.onclick = function() { memSort = this.dataset.sort; renderAll(); ss(D.activeSection, document.querySelectorAll('.sec-tab')[0]); };
-    sortBar.appendChild(btn);
-  });
-
-  if (!entries.length) {
-    logEl.innerHTML = '';
-    logEl.appendChild(sortBar);
-    var empty = document.createElement('div');
-    empty.className = 'empty';
-    empty.textContent = 'No memories yet. Add your first memory above.';
-    logEl.appendChild(empty);
-    return;
-  }
-
-  logEl.innerHTML = '';
-  logEl.appendChild(sortBar);
-
-  entries.forEach(function(e) {
-    var div = document.createElement('div');
-    div.className = 'mem-entry';
-
-    // Header
-    var top = document.createElement('div');
-    top.className = 'mem-entry-top';
-    top.innerHTML = '<div class="mem-entry-title">' + e.title + '</div>';
-    div.appendChild(top);
-
-    // Meta
-    var meta = document.createElement('div');
-    meta.className = 'mem-meta';
-    if (e.memdate) meta.innerHTML += '<span class="memdate">&#9679; ' + e.memdate + '</span>';
-    if (e.place) meta.innerHTML += '<span class="place">&#128205; ' + e.place + '</span>';
-    meta.innerHTML += '<span class="entrydate">Written ' + (e.entrydate||'') + '</span>';
-    meta.innerHTML += '<span class="' + (e.isPublic?'pub-badge':'priv-badge') + '">' + (e.isPublic?'Public':'Private') + '</span>';
-    div.appendChild(meta);
-
-    // Elevated body
-    var body = document.createElement('div');
-    body.className = 'mem-body';
-    body.innerHTML = '<p>' + (e.elevated||e.raw||'').split('\n\n').join('</p><p>').split('\n').join('<br>') + '</p>';
+  logEl.appendChild(sb);
+  if(!entries.length){var em=document.createElement('div');em.className='empty';em.textContent='No memories yet.';logEl.appendChild(em);return;}
+  entries.forEach(function(e){
+    var div=document.createElement('div');div.className='mem-entry';
+    var meta=document.createElement('div');meta.className='mem-meta';
+    var td=document.createElement('div');td.className='mem-entry-title';td.textContent=e.title||'Untitled';meta.appendChild(td);
+    var dd=document.createElement('div');dd.className='mem-meta-details';
+    dd.innerHTML=(e.memdate?'<span class="memdate">\u25cf '+e.memdate+'</span>':'')+(e.place?'<span class="place">\U0001F4CD '+e.place+'</span>':'')+'<span class="entrydate">Written '+(e.entrydate||'')+'</span>'+'<span class="'+(e.isPublic?'pub-badge':'priv-badge')+'">'+(e.isPublic?'Public':'Private')+'</span>';
+    meta.appendChild(dd);div.appendChild(meta);
+    var body=document.createElement('div');body.className='mem-body';
+    body.innerHTML='<p>'+(e.elevated||e.raw||'').split('\n\n').join('</p><p>').split('\n').join('<br>')+'</p>';
     div.appendChild(body);
-
-    // Themes
-    if (e.themes && e.themes.length) {
-      var tags = document.createElement('div');
-      tags.className = 'mem-themes';
-      e.themes.forEach(function(t){
-        var tag = document.createElement('span');
-        tag.className = 'mem-theme-tag';
-        tag.textContent = t;
-        tags.appendChild(tag);
-      });
-      div.appendChild(tags);
+    if(e.elevated&&e.raw){
+      var rt=document.createElement('button');rt.className='mem-raw-toggle';rt.textContent='Show original';
+      rt.onclick=function(){var rd=this.nextElementSibling;rd.classList.toggle('open');this.textContent=rd.classList.contains('open')?'Hide original':'Show original';};
+      div.appendChild(rt);
+      var rd=document.createElement('div');rd.className='mem-raw';rd.textContent=e.raw;div.appendChild(rd);
     }
-
-    // Raw toggle
-    if (e.raw) {
-      var rawToggle = document.createElement('button');
-      rawToggle.className = 'mem-raw-toggle';
-      rawToggle.textContent = 'Show original';
-      rawToggle.dataset.eid = e.id;
-      rawToggle.onclick = function() {
-        var rawDiv = this.nextElementSibling;
-        rawDiv.classList.toggle('open');
-        this.textContent = rawDiv.classList.contains('open') ? 'Hide original' : 'Show original';
-      };
-      div.appendChild(rawToggle);
-      var rawDiv = document.createElement('div');
-      rawDiv.className = 'mem-raw';
-      rawDiv.textContent = e.raw;
-      div.appendChild(rawDiv);
+    if(e.themes&&e.themes.length){
+      var tgs=document.createElement('div');tgs.className='mem-themes';
+      e.themes.forEach(function(t){var tg=document.createElement('span');tg.className='mem-theme-tag';tg.textContent=t;tgs.appendChild(tg);});
+      div.appendChild(tgs);
     }
-
-    // Actions: public toggle + delete
-    var acts = document.createElement('div');
-    acts.className = 'pub-row';
-
-    var sw = document.createElement('label');
-    sw.className = 'sw';
-    var inp = document.createElement('input');
-    inp.type = 'checkbox';
-    inp.checked = !!e.isPublic;
-    inp.dataset.eid = e.id;
-    inp.onchange = function() {
-      var bid = curBook().id;
-      var entry = curBook().entries.filter(function(x){return x.id===this.dataset.eid;}.bind(this))[0];
-      if (entry) { entry.isPublic = this.checked; renderAll(); doSave(); }
+    var acts=document.createElement('div');acts.className='pub-row';
+    var sw=document.createElement('label');sw.className='sw';
+    var inp=document.createElement('input');inp.type='checkbox';inp.checked=!!e.isPublic;inp.dataset.eid=e.id;inp.dataset.bid=b.id;
+    inp.onchange=function(){
+      var bk=D.books.filter(function(x){return x.id===this.dataset.bid;}.bind(this))[0];
+      var en=bk&&bk.entries.filter(function(x){return x.id===this.dataset.eid;}.bind(this))[0];
+      if(en){en.isPublic=this.checked;renderAll();doSave();}
     };
-    var track = document.createElement('span');
-    track.className = 'sw-track';
-    var thumb = document.createElement('span');
-    thumb.className = 'sw-thumb';
-    sw.appendChild(inp);
-    sw.appendChild(track);
-    sw.appendChild(thumb);
-
-    var pubLabel = document.createElement('span');
-    pubLabel.className = e.isPublic ? 'pub-on' : 'pub-off';
-    pubLabel.textContent = e.isPublic ? 'Public' : 'Private';
-
-    var delBtn = document.createElement('button');
-    delBtn.className = 'mem-act-btn';
-    delBtn.style.marginLeft = 'auto';
-    delBtn.textContent = 'Remove';
-    delBtn.dataset.eid = e.id;
-    delBtn.onclick = function() {
-      if (!confirm('Remove this memory?')) return;
-      var bid = curBook().id;
-      var bk = D.books.filter(function(x){return x.id===bid;})[0];
-      bk.entries = bk.entries.filter(function(x){return x.id!==this.dataset.eid;}.bind(this));
-      renderAll(); doSave();
+    var tr=document.createElement('span');tr.className='sw-track';
+    var th=document.createElement('span');th.className='sw-thumb';
+    sw.appendChild(inp);sw.appendChild(tr);sw.appendChild(th);
+    var pl=document.createElement('span');pl.className=e.isPublic?'pub-on':'pub-off';pl.textContent=e.isPublic?'Public':'Private';
+    var eb=document.createElement('button');eb.className='mem-act-btn';eb.style.marginLeft='auto';eb.textContent='Edit';eb.dataset.eid=e.id;eb.dataset.bid=b.id;
+    eb.onclick=function(){editMemEntry(this.dataset.bid,this.dataset.eid);};
+    var db=document.createElement('button');db.className='mem-act-btn';db.style.marginLeft='.5rem';db.textContent='Delete';db.dataset.eid=e.id;db.dataset.bid=b.id;
+    db.onclick=function(){
+      if(!confirm('Delete this memory?'))return;
+      var bk=D.books.filter(function(x){return x.id===this.dataset.bid;}.bind(this))[0];
+      if(bk)bk.entries=bk.entries.filter(function(x){return x.id!==this.dataset.eid;}.bind(this));
+      renderAll();doSave();
     };
-
-    acts.appendChild(sw);
-    acts.appendChild(pubLabel);
-    acts.appendChild(delBtn);
-    div.appendChild(acts);
-
+    acts.appendChild(sw);acts.appendChild(pl);acts.appendChild(eb);acts.appendChild(db);div.appendChild(acts);
     logEl.appendChild(div);
   });
 }
