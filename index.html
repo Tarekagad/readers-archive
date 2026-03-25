@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v5 -->
+<!-- v6 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -242,10 +242,9 @@ nav{background:var(--ink);color:var(--sepia);display:flex;align-items:center;jus
 .add-ch-btn:hover{border-color:#6a4a8a;color:#6a4a8a}
 
 .mem-body{font-size:1.05rem;line-height:1.9;color:#2a2520}
-.mem-body.collapsed{max-height:5.7rem;overflow:hidden;position:relative}
-.entry-quote.collapsed{max-height:3.5rem;overflow:hidden;position:relative}
-.entry-resp.collapsed{max-height:3.5rem;overflow:hidden;position:relative}
-.mem-body.collapsed::after,.entry-quote.collapsed::after,.entry-resp.collapsed::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1.5rem;background:linear-gradient(transparent,var(--paper))}
+.mem-body.collapsed{max-height:100px!important;overflow:hidden!important}
+.entry-quote.collapsed{max-height:100px!important;overflow:hidden!important}
+.entry-resp.collapsed{max-height:100px!important;overflow:hidden!important}
 .read-more-btn{background:none;border:none;font-family:'Inconsolata',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);cursor:pointer;padding:0;margin-top:.3rem;display:block}
 .read-more-btn:hover{color:var(--rust)}
 </style>
