@@ -654,6 +654,18 @@ function expBook() {
   setTimeout(function() { window.print(); }, 150);
 }
 
+
+function toggleReadMore(btn) {
+  var entry = btn.parentElement;
+  var collapsed = entry.querySelector('.entry-quote.collapsed, .mem-body.collapsed');
+  var isCollapsed = !!collapsed;
+  entry.querySelectorAll('.entry-quote, .entry-resp, .mem-body').forEach(function(el) {
+    if (isCollapsed) { el.classList.remove('collapsed'); }
+    else { el.classList.add('collapsed'); }
+  });
+  btn.textContent = isCollapsed ? 'Read less' : 'Read more';
+}
+
 function memoirEntryHtml(e) {
   var body = e.elevated || e.raw || '';
   return '<div class="pfen">'
@@ -1144,9 +1156,23 @@ function renderAll() {
     b.entries.forEach(function(e, i) {
       var div = document.createElement('div');
       div.className = 'entry';
-      div.innerHTML = '<div class="entry-time">' + (e.time || '—') + '</div>'
-        + '<div class="entry-quote">“' + e.quote + '”</div>'
-        + '<div class="entry-resp">' + e.response + '</div>';
+      var timeEl = document.createElement('div');
+      timeEl.className = 'entry-time';
+      timeEl.textContent = e.time || '—';
+      var quoteEl = document.createElement('div');
+      quoteEl.className = 'entry-quote collapsed';
+      quoteEl.textContent = '“' + e.quote + '”';
+      var respEl = document.createElement('div');
+      respEl.className = 'entry-resp collapsed';
+      respEl.textContent = e.response;
+      var rmBtn = document.createElement('button');
+      rmBtn.className = 'read-more-btn';
+      rmBtn.textContent = 'Read more';
+      rmBtn.onclick = function() { toggleReadMore(this); };
+      div.appendChild(timeEl);
+      div.appendChild(quoteEl);
+      div.appendChild(respEl);
+      div.appendChild(rmBtn);
       var act = document.createElement('div');
       act.className = 'entry-act';
       var btn = document.createElement('button');
