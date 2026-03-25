@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v6 -->
+<!-- v7 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -242,9 +242,12 @@ nav{background:var(--ink);color:var(--sepia);display:flex;align-items:center;jus
 .add-ch-btn:hover{border-color:#6a4a8a;color:#6a4a8a}
 
 .mem-body{font-size:1.05rem;line-height:1.9;color:#2a2520}
-.mem-body.collapsed{max-height:100px!important;overflow:hidden!important}
-.entry-quote.collapsed{max-height:100px!important;overflow:hidden!important}
-.entry-resp.collapsed{max-height:100px!important;overflow:hidden!important}
+.mem-body{max-height:100px;overflow:hidden}
+.mem-body.expanded{max-height:none}
+.entry-quote{max-height:80px;overflow:hidden}
+.entry-quote.expanded{max-height:none}
+.entry-resp{max-height:80px;overflow:hidden}
+.entry-resp.expanded{max-height:none}
 .read-more-btn{background:none;border:none;font-family:'Inconsolata',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);cursor:pointer;padding:0;margin-top:.3rem;display:block}
 .read-more-btn:hover{color:var(--rust)}
 </style>
@@ -658,13 +661,11 @@ function expBook() {
 
 function toggleReadMore(btn) {
   var entry = btn.parentElement;
-  var collapsed = entry.querySelector('.entry-quote.collapsed, .mem-body.collapsed');
-  var isCollapsed = !!collapsed;
+  var isExpanded = !!entry.querySelector('.entry-quote.expanded, .mem-body.expanded');
   entry.querySelectorAll('.entry-quote, .entry-resp, .mem-body').forEach(function(el) {
-    if (isCollapsed) { el.classList.remove('collapsed'); }
-    else { el.classList.add('collapsed'); }
+    el.classList.toggle('expanded', !isExpanded);
   });
-  btn.textContent = isCollapsed ? 'Read less' : 'Read more';
+  btn.textContent = isExpanded ? 'Read more' : 'Read less';
 }
 
 function memoirEntryHtml(e) {
@@ -730,7 +731,7 @@ function renderMemoirLog(b){
     var dd=document.createElement('div');dd.className='mem-meta-details';
     dd.innerHTML=(e.memdate?'<span class="memdate">\u25cf '+e.memdate+'</span>':'')+(e.place?'<span class="place">&#128205; '+e.place+'</span>':'')+'<span class="entrydate">Written '+(e.entrydate||'')+'</span>'+'<span class="'+(e.isPublic?'pub-badge':'priv-badge')+'">'+(e.isPublic?'Public':'Private')+'</span>';
     meta.appendChild(dd);div.appendChild(meta);
-    var body=document.createElement('div');body.className='mem-body collapsed';
+    var body=document.createElement('div');body.className='mem-body';
     body.innerHTML='<p>'+(e.elevated||e.raw||'').split('\n\n').join('</p><p>').split('\n').join('<br>')+'</p>';
     div.appendChild(body);
     var rmBtn=document.createElement('button');rmBtn.className='read-more-btn';rmBtn.textContent='Read more';
@@ -1161,10 +1162,10 @@ function renderAll() {
       timeEl.className = 'entry-time';
       timeEl.textContent = e.time || '—';
       var quoteEl = document.createElement('div');
-      quoteEl.className = 'entry-quote collapsed';
+      quoteEl.className = 'entry-quote';
       quoteEl.textContent = '“' + e.quote + '”';
       var respEl = document.createElement('div');
-      respEl.className = 'entry-resp collapsed';
+      respEl.className = 'entry-resp';
       respEl.textContent = e.response;
       var rmBtn = document.createElement('button');
       rmBtn.className = 'read-more-btn';
